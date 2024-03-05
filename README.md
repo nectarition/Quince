@@ -1,47 +1,36 @@
-# Astro Starter Kit: Minimal
+![](./public/card.png)
 
-```sh
-npm create astro@latest -- --template minimal
+# Quince / 音声合成系イベント情報まとめサイト
+
+> 音声合成系イベントの開催情報を非公式にまとめています。
+
+## 情報提供について
+
+### 掲載基準
+
+- 日程が一般公開されている同人誌即売会・DJクラブイベントが対象です。
+
+### 情報提供テンプレート
+
+```
+- イベント名: 
+- ジャンル: 
+- 開催日: 
+- 会場名: 
+- 備考: 
+- WebサイトのURL: 
+- 運営者名: 
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+### GitHubの操作に慣れている方へ
+- `assets/event-source.tsv` にてイベント情報を管理しています。
+- このファイルを変更したプルリクエストを作成するか、[イベント情報提供用Issue](https://github.com/nectarition/Quince/issues/4)に上記の内容をコメントしてください。
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### メールでも受け付けています
 
-## 🚀 Project Structure
+- `blossom@nectarition.jp` に上記の情報提供テンプレートを使用してメールを送信してください。
 
-Inside of your Astro project, you'll see the following folders and files:
+## サイト開発に関して
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- サイトの生成にはAstroを使用しています。
+- 開発用ドキュメントは現在準備中です。今しばらくお待ちください。
