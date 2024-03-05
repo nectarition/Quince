@@ -81,15 +81,11 @@ const { events, today } = Astro.props;
   }
   .card {
     padding: 10px;
-    width: calc(100% / 3 - 6px);
+    width: calc(100% / 2 - 5px);
     display: grid;
     gap: 10px;
     grid-template-columns: 100px 1fr;
     background-color: var(--background-color);
-
-    @media screen and (max-width: 1200px) {
-      width: calc(100% / 2 - 5px);
-    }
 
     @media screen and (max-width: 840px) {
       width: 100%;
