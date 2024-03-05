@@ -1,16 +1,57 @@
 ---
+import eventLibs from "../libs/event";
+import dateLibs from "../libs/date";
+import BaseLayout from "../layouts/BaseLayout/BaseLayout.astro";
+import EventList from "../components/EventList.astro";
 
+const now = new Date();
+const today = new Date(
+  now.getUTCFullYear(),
+  now.getUTCMonth(),
+  now.getUTCDate()
+);
+
+const fetchedEvents = await eventLibs.getEventsAsync();
+const sortedEvents = fetchedEvents.sort(
+  (a, b) => a.date.getTime() - b.date.getTime()
+);
+
+const heldEvents = sortedEvents.filter((e) => {
+  const span = dateLibs.getSpan(e.date, today) / 86400000;
+  return span < 0 && span > -10;
+});
+
+const futureEvents = sortedEvents.filter((e) => e.date > today);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout>
+  <h2>開催が近い合成音声系イベント</h2>
+  <EventList events={futureEvents} today={today} />
+
+  <h2>最近終了したイベント</h2>
+  <EventList events={heldEvents} today={today} />
+
+  <h2>このサイトについて</h2>
+  <ul>
+    <li>
+      このWebサイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません
+    </li>
+    <li>Twitterや各Webサイトからの情報をもとに作成しています。</li>
+    <li>
+      内容は正確でない場合があります。必ず各イベントのWebサイトをご確認ください。
+    </li>
+    <li>
+      イベント情報は <a
+        href="https://github.com/nectarition/Quince/blob/master/src/event-source.tsv"
+        >GitHub nectarition/Quince</a
+      > にて管理しています。コントリビュートお待ちしております。
+    </li>
+    <li>
+      情報提供は <a
+        href="https://github.com/nectarition/Quince/blob/master/src/event-source.tsv"
+        >GitHubリポジトリ</a
+      >か、<a href="mailto:blossom@nectarition.jp">メール</a
+      >にてお寄せください。
+    </li>
+  </ul>
+</BaseLayout>

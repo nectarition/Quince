@@ -1,0 +1,41 @@
+---
+import dayjs from "dayjs";
+
+import "../styles/color.scss";
+import "../styles/style.scss";
+
+export interface Props {
+  title?: string;
+}
+
+const title =
+  (Astro.props.title && `${Astro.props.title} - Quince`) ?? "Quince";
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- <meta name="description" content={description} />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:site_name" content={`${eventContent}「${eventName}」`} />
+    <meta property="og:image" content={`${siteURL}/assets/brand/icon.png`} />
+    <meta property="og:url" content={`${siteURL}/`} />
+    <meta property="og:description" content={description} />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content={`@${eventTwitterId}`} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${siteURL}/assets/brand/icon.png`} /> -->
+
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

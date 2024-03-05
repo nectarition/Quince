@@ -1,3 +1,10 @@
 {
-  "extends": "astro/tsconfigs/strict"
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "typeRoots": ["./src/@types"],
+    "paths": {
+      "@types": ["./src/@types/index.d.ts"]
+    }
+  }
 }

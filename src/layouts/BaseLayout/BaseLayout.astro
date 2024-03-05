@@ -1,0 +1,24 @@
+---
+import Root from "../Root.astro";
+import Footer from "./Footer.astro";
+export interface Props {
+  title?: string;
+}
+---
+
+<Root title={Astro.props.title}>
+  <div class="container">
+    <slot />
+  </div>
+  <Footer />
+</Root>
+
+<style lang="scss">
+  .container {
+    padding: 40px 10%;
+
+    @media screen and (max-width: 840px) {
+      padding: 20px;
+    }
+  }
+</style>

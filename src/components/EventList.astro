@@ -1,0 +1,64 @@
+---
+import { type QuinceEvent } from "@types";
+import eventLibs from "../libs/event";
+import dateLibs from "../libs/date";
+
+export interface Props {
+  today: Date;
+  events: QuinceEvent[];
+}
+
+const { events, today } = Astro.props;
+---
+
+<div class="scroll">
+  <table>
+    <thead>
+      <tr>
+        <th>イベント名</th>
+        <th>開催日</th>
+        <th>ジャンル</th>
+        <th>場所</th>
+        <th>備考</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        events.map((e) => {
+          const span = Math.floor(dateLibs.getSpan(e.date, today) / 86400000);
+
+          return (
+            <tr>
+              <td>
+                <a href={e.websiteURL} target="_blank">
+                  <b>{e.name}</b>
+                </a>
+              </td>
+              <td>
+                {dateLibs.format(e.date, "YYYY.M.D(ddd)")}
+                <br />
+                {span > 0 && <small>あと {span}日</small>}
+              </td>
+              <td>{eventLibs.convertGenre(e.genreType)}</td>
+              <td>
+                <>
+                  <b>{e.place.name}</b>
+                  <br />
+                  <small>
+                    <a
+                      href={`https://www.google.co.jp/maps/search/${encodeURIComponent(e.place.address)}`}
+                      target="_blank"
+                    >
+                      {e.place.address}
+                    </a>
+                  </small>
+                </>
+              </td>
+              <td>{e.remarks}</td>
+            </tr>
+          );
+        })
+      }
+    </tbody>
+  </table>
+</div>

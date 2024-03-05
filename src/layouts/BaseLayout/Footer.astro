@@ -1,0 +1,37 @@
+<div class="footer">
+  <p>
+    このWebサイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。
+  </p>
+  <div class="brandArea">
+    <p>&copy; 2024 ねくたりしょん</p>
+    <p class="logoArea">
+      <a href="https://nectarition.jp">
+        <img class="logo" src="https://nectarition.jp/logo/footer.svg" />
+      </a>
+    </p>
+  </div>
+</div>
+
+<style lang="scss">
+  .footer {
+    padding: 40px 10%;
+    padding-bottom: calc(40px + env(safe-area-inset-bottom));
+    background-color: #202020;
+    color: #ffffff;
+
+    @media screen and (max-width: 840px) {
+      padding: 20px;
+    }
+    .brandArea {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .logoArea {
+      text-align: right;
+      .logo {
+        height: 32px;
+        filter: brightness(100%);
+      }
+    }
+  }
+</style>
