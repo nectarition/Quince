@@ -2,7 +2,7 @@ import { promises as fs } from "fs";
 import { type QuinceEvent } from "@types";
 
 const getEventsAsync = async (): Promise<QuinceEvent[]> => {
-  const url = new URL("../event-source.tsv", import.meta.url);
+  const url = new URL("../../assets/event-source.tsv", import.meta.url);
   const rawEvents = await fs.readFile(url, 'utf-8');
   const eventLines = rawEvents.split('\n');
 
