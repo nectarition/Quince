@@ -26,6 +26,7 @@ const futureEvents = sortedEvents.filter((e) => e.date > today);
 
 <BaseLayout>
   <h2>開催が近い音声合成系イベント</h2>
+  <p>表を横にスクロールすると各種情報を確認することができます</p>
   <EventList events={futureEvents} today={today} />
 
   <h2>最近終了したイベント</h2>
