@@ -42,19 +42,17 @@ const { events, today } = Astro.props;
                 {span > 0 && <small>あと {span}日</small>}
               </td>
               <td>
-                <>
-                  <b>{e.place.name}</b>
-                  <br />
-                  <small>
-                    <a
-                      href={`https://www.google.co.jp/maps/search/${encodeURIComponent(e.place.address)}`}
-                      target="_blank"
-                    >
-                      〒{eventLibs.convertPostalCode(e.place.postalCode)}{" "}
-                      {e.place.address}
-                    </a>
-                  </small>
-                </>
+                <b>{e.place.name}</b>
+                <br />
+                <small>
+                  <a
+                    href={`https://www.google.co.jp/maps/search/${encodeURIComponent(e.place.address)}`}
+                    target="_blank"
+                  >
+                    〒{eventLibs.convertPostalCode(e.place.postalCode)}{" "}
+                    {e.place.address}
+                  </a>
+                </small>
               </td>
               <td>{e.remarks}</td>
               <td>{e.organizer.name}</td>
