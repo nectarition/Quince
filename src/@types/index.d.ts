@@ -9,4 +9,7 @@ export type QuinceEvent = {
   }
   remarks: string;
   websiteURL: string;
-}
+  organizer: {
+    name: string;
+  }
+};

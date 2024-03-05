@@ -17,9 +17,9 @@ const { events, today } = Astro.props;
       <tr>
         <th>イベント名</th>
         <th>開催日</th>
-        <th>ジャンル</th>
         <th>場所</th>
         <th>備考</th>
+        <th>運営</th>
       </tr>
     </thead>
     <tbody>
@@ -30,6 +30,8 @@ const { events, today } = Astro.props;
           return (
             <tr>
               <td>
+                <small>{eventLibs.convertGenre(e.genreType)}</small>
+                <br />
                 <a href={e.websiteURL} target="_blank">
                   <b>{e.name}</b>
                 </a>
@@ -39,7 +41,6 @@ const { events, today } = Astro.props;
                 <br />
                 {span > 0 && <small>あと {span}日</small>}
               </td>
-              <td>{eventLibs.convertGenre(e.genreType)}</td>
               <td>
                 <>
                   <b>{e.place.name}</b>
@@ -49,12 +50,14 @@ const { events, today } = Astro.props;
                       href={`https://www.google.co.jp/maps/search/${encodeURIComponent(e.place.address)}`}
                       target="_blank"
                     >
+                      〒{eventLibs.convertPostalCode(e.place.postalCode)}{" "}
                       {e.place.address}
                     </a>
                   </small>
                 </>
               </td>
               <td>{e.remarks}</td>
+              <td>{e.organizer.name}</td>
             </tr>
           );
         })

@@ -21,7 +21,10 @@ const getEventsAsync = async (): Promise<QuinceEvent[]> => {
           address: event[5]
         },
         remarks: event[6],
-        websiteURL: event[7]
+        websiteURL: event[7],
+        organizer: {
+          name: event[8]
+        }
       }
     })
 
@@ -30,13 +33,20 @@ const getEventsAsync = async (): Promise<QuinceEvent[]> => {
 
 const convertGenre = (genreType: string): string => {
   if (genreType === 'all-genre') {
-    return 'オールジャンル'
+    return '音声合成オールジャンル'
   }
 
   return genreType
 }
 
+const convertPostalCode = (rawPostalCode: string): string => {
+  const code = rawPostalCode.match(/^([0-9]{3})([0-9]{4})$/)
+  if (!code) return ''
+  return `${code[1]}-${code[2]}`
+}
+
 export default {
   getEventsAsync,
-  convertGenre
+  convertGenre,
+  convertPostalCode
 }
