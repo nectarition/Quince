@@ -2,6 +2,7 @@
 import { type QuinceEvent } from "@types";
 import eventLibs from "../libs/event";
 import dateLibs from "../libs/date";
+import { map } from "astro/zod";
 
 export interface Props {
   today: Date;
@@ -11,55 +12,127 @@ export interface Props {
 const { events, today } = Astro.props;
 ---
 
-<div class="scroll">
-  <table>
-    <thead>
-      <tr>
-        <th>イベント名</th>
-        <th>開催日</th>
-        <th>場所</th>
-        <th>備考</th>
-        <th>運営</th>
-      </tr>
-    </thead>
-    <tbody>
-      {
-        events.map((e) => {
-          const span = Math.floor(dateLibs.getSpan(e.date, today) / 86400000);
+<div class="cardRack">
+  {
+    events.map((e) => {
+      const span = Math.floor(dateLibs.getSpan(e.date, today) / 86400000);
 
-          return (
-            <tr>
-              <td>
-                <small>{eventLibs.convertGenre(e.genreType)}</small>
-                <br />
-                <a href={e.websiteURL} target="_blank">
-                  <b>{e.name}</b>
-                </a>
-              </td>
-              <td>
-                {dateLibs.format(e.date, "YYYY.M.D(ddd)")}
-                <br />
-                {span > 0 && <small>あと {span}日</small>}
-              </td>
-              <td>
-                <b>{e.place.name}</b>
-                <br />
-                <small>
-                  <a
-                    href={`https://www.google.co.jp/maps/search/${encodeURIComponent(e.place.address)}`}
-                    target="_blank"
-                  >
-                    〒{eventLibs.convertPostalCode(e.place.postalCode)}{" "}
-                    {e.place.address}
-                  </a>
-                </small>
-              </td>
-              <td>{e.remarks}</td>
-              <td>{e.organizer.name}</td>
-            </tr>
-          );
-        })
-      }
-    </tbody>
-  </table>
+      return (
+        <div class="card">
+          <div class="card_dateMeta_wrap">
+            <div class="card_dateMeta_container">
+              <div class="card_dateMeta_year">
+                {dateLibs.format(e.date, "YYYY.")}
+              </div>
+              <div class="card_dateMeta_date">
+                {dateLibs.format(e.date, "M.D(ddd)")}
+              </div>
+              {span > 0 && (
+                <div class="card_dateMeta_count">
+                  <small>あと</small>
+                  <b>{span}</b>
+                  <small>日</small>
+                </div>
+              )}
+            </div>
+          </div>
+          <div class="card_eventMeta">
+            <div class="card_eventMeta_genre">
+              {eventLibs.convertGenre(e.genreType)}
+            </div>
+            <div class="card_eventMeta_name">
+              <a href={e.websiteURL} target="_blank">
+                <b>{e.name}</b>
+              </a>
+            </div>
+            <div class="card_eventMeta_place">{e.place.name}</div>
+            <div class="card_eventMeta_placeDetail">
+              <a
+                href={`https://www.google.co.jp/maps/search/${encodeURIComponent(
+                  e.place.address
+                )}`}
+                target="_blank"
+              >
+                〒{eventLibs.convertPostalCode(e.place.postalCode)}{" "}
+                {e.place.address}
+              </a>
+            </div>
+            <div class="card_eventMeta_remarks">備考: {e.remarks}</div>
+            <div class="card_eventMeta_organizer">運営: {e.organizer.name}</div>
+          </div>
+        </div>
+      );
+    })
+  }
 </div>
+
+<style lang="scss">
+  .cardRack {
+    margin-bottom: 20px;
+
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    gap: 9px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .card {
+    padding: 10px;
+    width: calc(100% / 3 - 6px);
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 100px 1fr;
+    background-color: var(--background-color);
+
+    @media screen and (max-width: 1200px) {
+      width: calc(100% / 2 - 5px);
+    }
+
+    @media screen and (max-width: 840px) {
+      width: 100%;
+    }
+
+    &_dateMeta {
+      &_wrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #e0e0e0;
+      }
+      &_container {
+        padding: 10px;
+        text-align: center;
+      }
+      &_year {
+        font-size: 0.8em;
+      }
+      &_date {
+        font-weight: bold;
+      }
+    }
+
+    &_eventMeta {
+      &_genre {
+        font-size: 0.8em;
+      }
+      &_name {
+        font-weight: bold;
+        font-size: 1.25em;
+      }
+      &_place {
+      }
+      &_placeDetail {
+        font-size: 0.8em;
+      }
+      &_remarks {
+        font-size: 0.8em;
+      }
+      &_organizer {
+        font-size: 0.8em;
+      }
+    }
+  }
+</style>

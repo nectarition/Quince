@@ -25,8 +25,8 @@ const futureEvents = sortedEvents.filter((e) => e.date > today);
 ---
 
 <BaseLayout>
+  <h1>合成音声系イベント開催情報まとめサイト</h1>
   <h2>開催が近い音声合成系イベント</h2>
-  <p>表を横にスクロールすると各種情報を確認することができます</p>
   <EventList events={futureEvents} today={today} />
 
   <h2>最近終了したイベント</h2>
@@ -38,10 +38,10 @@ const futureEvents = sortedEvents.filter((e) => e.date > today);
       このWebサイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません
     </li>
     <li>Twitterや各Webサイトからの情報をもとに作成しています。</li>
+    <li>日程がWeb上で一般公開されている同人誌即売会を掲載しています。</li>
     <li>
-      日程がWeb上で一般公開されている同人誌即売会を掲載しています。
+      DJクラブイベントは、近郊で開催される即売会に合わせて開催されるもののみを掲載しています。
     </li>
-    <li>DJクラブイベントは、近郊で開催される即売会に合わせて開催されるもののみを掲載しています。</li>
     <li>
       内容は正確でない場合があります。必ず各イベントのWebサイトをご確認ください。
     </li>
