@@ -39,7 +39,7 @@ const futureEvents = sortedEvents.filter((e) => e.date > today);
   <p>Googleカレンダー等への追加には以下のURLを使用してください。</p>
   <pre>{siteConfig.siteURL}/event-schedule.ics</pre>
 
-  <h3>Googleカレンダーへの追加方法(PCのみ)</h3>
+  <h3>Googleカレンダーへの追加方法(PC)</h3>
 
   <ol>
     <li>Googleカレンダーを開きます</li>
@@ -48,6 +48,16 @@ const futureEvents = sortedEvents.filter((e) => e.date > today);
     <li>「カレンダーの URL」に上述のURLを入力します</li>
     <li>「カレンダーを追加」をクリックすると同期が始まります</li>
   </ol>
+
+  <h3>スマホでの追加方法</h3>
+
+  <div class="btnRack">
+    <a href="webcal://vo.nrsy.jp/event-schedule.ics" class="btn">追加ボタン</a>
+  </div>
+
+  <p>
+    上のボタンをタップすると許可を求めるダイアログが表示され「許可」を押すと追加できます。
+  </p>
 
   <h2>このサイトについて</h2>
   <ul>
