@@ -1,9 +1,11 @@
 export type QuinceEvent = {
   name: string;
-  genreType: QuinceEventGenreTypes;
+  genreType: string;
+  eventType: string;
   date: Date;
   place: {
     name: string;
+    prefecture: string;
     address: string;
     postalCode: string;
   }

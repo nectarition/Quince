@@ -16,19 +16,22 @@ const { events, today } = Astro.props;
   {
     events.map((e) => {
       const span = Math.floor(dateLibs.getSpan(e.date, today) / 86400000);
+      const eventType = eventLibs.convertEventType(e.eventType);
 
       return (
-        <div class="card">
-          <div class="card_dateMeta_wrap">
-            <div class="card_dateMeta_container">
-              <div class="card_dateMeta_year">
+        <div class="card" style={`border-left: 8px solid ${eventType.color}`}>
+          <div
+            class={`card_dateArea_wrap ${(span > 0 && span <= 10 && "card_dateArea_wrap-near") ?? ""}`}
+          >
+            <div class="card_dateArea_container">
+              <div class="card_dateArea_year">
                 {dateLibs.format(e.date, "YYYY.")}
               </div>
-              <div class="card_dateMeta_date">
+              <div class="card_dateArea_date">
                 {dateLibs.format(e.date, "M.D(ddd)")}
               </div>
               {span > 0 && (
-                <div class="card_dateMeta_count">
+                <div class="card_dateArea_count">
                   <small>あと</small>
                   <b>{span}</b>
                   <small>日</small>
@@ -36,17 +39,27 @@ const { events, today } = Astro.props;
               )}
             </div>
           </div>
-          <div class="card_eventMeta">
-            <div class="card_eventMeta_genre">
+          <div class="card_labelArea">
+            <span class="label" style={`background-color: ${eventType.color}`}>
+              {eventType.name}
+            </span>
+          </div>
+          <div class="card_eventArea">
+            <div class="card_eventArea_genre">
               {eventLibs.convertGenre(e.genreType)}
             </div>
-            <div class="card_eventMeta_name">
+            <div class="card_eventArea_name">
               <a href={e.websiteURL} target="_blank">
                 <b>{e.name}</b>
               </a>
             </div>
-            <div class="card_eventMeta_place">{e.place.name}</div>
-            <div class="card_eventMeta_placeDetail">
+          </div>
+          <div class="card_placeArea">
+            <div class="card_placeArea_place">
+              <span class="label">{e.place.prefecture}</span>
+              {e.place.name}
+            </div>
+            <div class="card_placeArea_placeDetail">
               <a
                 href={`https://www.google.co.jp/maps/search/${encodeURIComponent(
                   e.place.address
@@ -57,8 +70,12 @@ const { events, today } = Astro.props;
                 {e.place.address}
               </a>
             </div>
-            <div class="card_eventMeta_remarks">備考: {e.remarks}</div>
-            <div class="card_eventMeta_organizer">運営: {e.organizer.name}</div>
+          </div>
+          <div class="card_remarksArea">
+            <div class="card_remarksArea_remarks">備考: {e.remarks}</div>
+            <div class="card_remarksArea_organizer">
+              運営: {e.organizer.name}
+            </div>
           </div>
         </div>
       );
@@ -73,7 +90,7 @@ const { events, today } = Astro.props;
     display: flex;
     flex-flow: row;
     flex-wrap: wrap;
-    gap: 9px;
+    gap: 10px;
 
     &:last-child {
       margin-bottom: 0;
@@ -81,22 +98,38 @@ const { events, today } = Astro.props;
   }
   .card {
     padding: 10px;
-    width: calc(100% / 2 - 5px);
-    display: grid;
-    gap: 10px;
-    grid-template-columns: 100px 1fr;
     background-color: var(--background-color);
+    display: grid;
+    width: 100%;
+    grid-template-columns: 100px 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 5px 10px;
+
+    @media screen and (max-width: 840px) {
+      width: calc(100% / 2 - 5px);
+      grid-template-columns: 100px 1fr;
+      grid-template-rows: auto auto auto auto;
+    }
 
     @media screen and (max-width: 840px) {
       width: 100%;
     }
 
-    &_dateMeta {
+    &_dateArea {
       &_wrap {
         display: flex;
         justify-content: center;
         align-items: center;
         background-color: #e0e0e0;
+        grid-row: 1 / 4;
+
+        &-near {
+          background-color: #f5a5a5;
+        }
+
+        @media screen and (max-width: 840px) {
+          grid-row: 1 / 5;
+        }
       }
       &_container {
         padding: 10px;
@@ -110,7 +143,19 @@ const { events, today } = Astro.props;
       }
     }
 
-    &_eventMeta {
+    &_labelArea {
+      grid-column: 2 / 4;
+      grid-row: 1;
+    }
+
+    &_eventArea {
+      grid-column: 2 / 4;
+      grid-row: 2;
+
+      @media screen and (max-width: 840px) {
+        grid-column: 2;
+      }
+
       &_genre {
         font-size: 0.8em;
       }
@@ -118,11 +163,27 @@ const { events, today } = Astro.props;
         font-weight: bold;
         font-size: 1.25em;
       }
+    }
+
+    &_placeArea {
+      grid-column: 2 / 3;
+      grid-row: 3;
       &_place {
       }
       &_placeDetail {
         font-size: 0.8em;
       }
+    }
+
+    &_remarksArea {
+      grid-column: 3;
+      grid-row: 3;
+
+      @media screen and (max-width: 840px) {
+        grid-row: 4;
+        grid-column: 2;
+      }
+
       &_remarks {
         font-size: 0.8em;
       }
@@ -130,5 +191,13 @@ const { events, today } = Astro.props;
         font-size: 0.8em;
       }
     }
+  }
+
+  .label {
+    display: inline-block;
+    background-color: #404040;
+    color: #ffffff;
+    padding: 2px 10px 3px;
+    font-size: 0.8em;
   }
 </style>

@@ -16,15 +16,17 @@ const getEventsAsync = async (): Promise<QuinceEvent[]> => {
         genreType: event[1],
         date: new Date(event[2]),
         place: {
-          name: event[3],
-          postalCode: event[4],
-          address: event[5]
+          prefecture: event[3],
+          name: event[4],
+          postalCode: event[5],
+          address: event[6]
         },
-        remarks: event[6],
-        websiteURL: event[7],
+        remarks: event[7],
+        websiteURL: event[8],
         organizer: {
-          name: event[8]
-        }
+          name: event[9]
+        },
+        eventType: event[10]
       }
     })
 
@@ -39,6 +41,26 @@ const convertGenre = (genreType: string): string => {
   return genreType
 }
 
+const convertEventType = (eventType: string): { name: string; color: string; } => {
+  if (eventType === 'fanzine') {
+    return {
+      name: '同人誌即売会',
+      color: '#d54c00'
+    }
+  }
+  else if (eventType === 'djclub') {
+    return {
+      name: 'DJクラブイベント',
+      color: '#603885'
+    }
+  }
+
+  return {
+    name: eventType,
+    color: '#404040',
+  }
+}
+
 const convertPostalCode = (rawPostalCode: string): string => {
   const code = rawPostalCode.match(/^([0-9]{3})([0-9]{4})$/)
   if (!code) return ''
@@ -48,5 +70,6 @@ const convertPostalCode = (rawPostalCode: string): string => {
 export default {
   getEventsAsync,
   convertGenre,
-  convertPostalCode
+  convertPostalCode,
+  convertEventType
 }
