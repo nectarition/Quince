@@ -1,4 +1,5 @@
 ---
+import siteConfig from "../config";
 import eventLibs from "../libs/event";
 import dateLibs from "../libs/date";
 import BaseLayout from "../layouts/BaseLayout/BaseLayout.astro";
@@ -32,6 +33,21 @@ const futureEvents = sortedEvents.filter((e) => e.date > today);
 
   <h2>最近終了したイベント</h2>
   <EventList events={heldEvents} today={today} />
+
+  <h2>ics形式でも配信しています</h2>
+
+  <p>Googleカレンダー等への追加には以下のURLを使用してください。</p>
+  <pre>{siteConfig.siteURL}/event-schedule.ics</pre>
+
+  <h3>Googleカレンダーへの追加方法(PCのみ)</h3>
+
+  <ol>
+    <li>Googleカレンダーを開きます</li>
+    <li>左メニューの「他のカレンダー」横にある「＋」ボタンをクリックします</li>
+    <li>「URL で追加」をクリックします</li>
+    <li>「カレンダーの URL」に上述のURLを入力します</li>
+    <li>「カレンダーを追加」をクリックすると同期が始まります</li>
+  </ol>
 
   <h2>このサイトについて</h2>
   <ul>
