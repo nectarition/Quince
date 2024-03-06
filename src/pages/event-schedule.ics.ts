@@ -1,11 +1,12 @@
-import ics, { type EventAttributes } from 'ics'
+import ics, { ICalEvent, type ICalEventData } from 'ical-generator'
 import eventLib from '../libs/event'
+import siteConfig from '../config'
 
 export const GET = async () => {
 
   const fetchedEvents = await eventLib.getEventsAsync();
   const events = fetchedEvents
-    .map<EventAttributes>(e => {
+    .map<ICalEventData>(e => {
       const date = e.date
       const pref = eventLib.getPrefecture(e.place.address)
       const description = [
@@ -19,33 +20,27 @@ export const GET = async () => {
       ].join('\n')
 
       return {
-        title: `${pref}: ${e.name}`,
+        summary: `${pref}: ${e.name}`,
         description,
         location: e.place.name,
         url: e.websiteURL,
-        start: [
-          date.getFullYear(),
-          date.getMonth() + 1,
-          date.getDate()
-        ],
-        end: [
-          date.getFullYear(),
-          date.getMonth() + 1,
-          date.getDate() + 1
-        ],
-        startInputType: 'local',
-        startOutputType: 'utc',
-        endInputType: 'local',
-        endOutputType: 'utc'
+        start: new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
+        end: new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + 1),
+        allday: true,
       }
     })
 
-  const { error: _, value } = ics.createEvents(events)
+
+  const cal = ics({
+    name: siteConfig.siteName,
+    timezone: 'Asia/Tokyo',
+    events
+  })
 
   return new Response(
-    value, {
+    cal.toString(), {
     headers: {
-      "Content-Type": "text/plain"
+      "Content-Type": "text/calendar"
     }
   })
 }

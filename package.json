@@ -15,7 +15,7 @@
     "@types/tsv": "^0.2.4",
     "astro": "^4.4.11",
     "dayjs": "^1.11.10",
-    "ics": "^3.7.2",
+    "ical-generator": "^6.0.1",
     "sass": "^1.71.1",
     "typescript": "^5.3.3"
   }
