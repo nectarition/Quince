@@ -10,6 +10,7 @@ export const GET = async () => {
       const description = [
         `ジャンル: ${eventLib.convertGenre(e.genreType)}`,
         `イベント種類: ${eventLib.convertEventType(e.eventType).name}`,
+        `運営: ${e.organizer.name}`,
         ...(e.remarks && [
           '---',
           e.remarks
@@ -32,10 +33,7 @@ export const GET = async () => {
         startInputType: 'utc',
         startOutputType: 'local',
         endInputType: 'utc',
-        endOutputType: 'local',
-        organizer: {
-          name: e.organizer.name
-        }
+        endOutputType: 'local'
       }
     })
 
