@@ -26,16 +26,16 @@ export const GET = async () => {
         start: [
           date.getFullYear(),
           date.getMonth() + 1,
-          date.getDate(),
-          0,
+          date.getDate() - 1,
+          15,
           0
         ],
         duration: {
           seconds: 0
         },
-        startInputType: 'local',
+        startInputType: 'utc',
         startOutputType: 'local',
-        endInputType: 'local',
+        endInputType: 'utc',
         endOutputType: 'local'
       }
     })
