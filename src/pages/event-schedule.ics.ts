@@ -45,7 +45,7 @@ export const GET = async () => {
   return new Response(
     value, {
     headers: {
-      "Content-Type": "text/plain"
+      "Content-Type": "text/calendar"
     }
   })
 }
