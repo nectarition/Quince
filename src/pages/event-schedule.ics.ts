@@ -28,9 +28,11 @@ export const GET = async () => {
           date.getMonth() + 1,
           date.getDate()
         ],
-        duration: {
-          minutes: 0
-        },
+        end: [
+          date.getFullYear(),
+          date.getMonth() + 1,
+          date.getDate() + 1
+        ],
         startInputType: 'utc',
         startOutputType: 'utc',
         endInputType: 'utc',
