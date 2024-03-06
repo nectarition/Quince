@@ -20,6 +20,7 @@ export const GET = async () => {
         title: `${e.place.prefecture}: ${e.name}`,
         description,
         location: e.place.name,
+        url: e.websiteURL,
         start: [
           date.getFullYear(),
           date.getMonth() + 1,
