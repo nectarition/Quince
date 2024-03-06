@@ -96,6 +96,7 @@ const { events, today } = Astro.props;
       margin-bottom: 0;
     }
   }
+
   .card {
     padding: 10px;
     background-color: var(--background-color);
@@ -107,8 +108,8 @@ const { events, today } = Astro.props;
 
     @media screen and (max-width: 840px) {
       width: calc(100% / 2 - 5px);
-      grid-template-columns: 100px 1fr;
-      grid-template-rows: auto auto auto auto;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto auto auto;
     }
 
     @media screen and (max-width: 840px) {
@@ -128,12 +129,17 @@ const { events, today } = Astro.props;
         }
 
         @media screen and (max-width: 840px) {
-          grid-row: 1 / 5;
+          grid-row: 5;
+          display: block;
         }
       }
       &_container {
         padding: 10px;
         text-align: center;
+
+        @media screen and (max-width: 840px) {
+          text-align: left;
+        }
       }
       &_year {
         font-size: 0.8em;
@@ -141,11 +147,24 @@ const { events, today } = Astro.props;
       &_date {
         font-weight: bold;
       }
+
+      @media screen and (max-width: 840px) {
+        &_year,
+        &_date,
+        &_count {
+          display: inline;
+        }
+      }
     }
 
     &_labelArea {
-      grid-column: 2 / 4;
+      grid-column: 2;
       grid-row: 1;
+
+      @media screen and (max-width: 840px) {
+        grid-column: 1;
+        grid-row: 1;
+      }
     }
 
     &_eventArea {
@@ -153,7 +172,8 @@ const { events, today } = Astro.props;
       grid-row: 2;
 
       @media screen and (max-width: 840px) {
-        grid-column: 2;
+        grid-column: 1;
+        grid-row: 2;
       }
 
       &_genre {
@@ -166,8 +186,14 @@ const { events, today } = Astro.props;
     }
 
     &_placeArea {
-      grid-column: 2 / 3;
+      grid-column: 2;
       grid-row: 3;
+
+      @media screen and (max-width: 840px) {
+        grid-column: 1;
+        grid-row: 3;
+      }
+
       &_place {
       }
       &_placeDetail {
@@ -180,8 +206,8 @@ const { events, today } = Astro.props;
       grid-row: 3;
 
       @media screen and (max-width: 840px) {
+        grid-column: 1;
         grid-row: 4;
-        grid-column: 2;
       }
 
       &_remarks {
