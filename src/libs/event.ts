@@ -16,17 +16,16 @@ const getEventsAsync = async (): Promise<QuinceEvent[]> => {
         genreType: event[1],
         date: new Date(event[2]),
         place: {
-          prefecture: event[3],
-          name: event[4],
-          postalCode: event[5],
-          address: event[6]
+          name: event[3],
+          postalCode: event[4],
+          address: event[5]
         },
-        remarks: event[7],
-        websiteURL: event[8],
+        remarks: event[6],
+        websiteURL: event[7],
         organizer: {
-          name: event[9]
+          name: event[8]
         },
-        eventType: event[10]
+        eventType: event[9]
       }
     })
 
@@ -67,9 +66,16 @@ const convertPostalCode = (rawPostalCode: string): string => {
   return `${code[1]}-${code[2]}`
 }
 
+const getPrefecture = (rawAddress: string): string => {
+  const pref = rawAddress.match(/^(.+)[都道府県]/)
+  if (!pref) return ''
+  return pref[1]
+}
+
 export default {
   getEventsAsync,
   convertGenre,
   convertPostalCode,
-  convertEventType
+  convertEventType,
+  getPrefecture
 }

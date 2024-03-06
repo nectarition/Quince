@@ -1,8 +1,7 @@
 ---
 import { type QuinceEvent } from "@types";
-import eventLibs from "../libs/event";
-import dateLibs from "../libs/date";
-import { map } from "astro/zod";
+import eventLib from "../libs/event";
+import dateLib from "../libs/date";
 
 export interface Props {
   today: Date;
@@ -15,8 +14,8 @@ const { events, today } = Astro.props;
 <div class="cardRack">
   {
     events.map((e) => {
-      const span = Math.floor(dateLibs.getSpan(e.date, today) / 86400000);
-      const eventType = eventLibs.convertEventType(e.eventType);
+      const span = Math.floor(dateLib.getSpan(e.date, today) / 86400000);
+      const eventType = eventLib.convertEventType(e.eventType);
 
       return (
         <div class="card" style={`border-left: 8px solid ${eventType.color}`}>
@@ -25,10 +24,10 @@ const { events, today } = Astro.props;
           >
             <div class="card_dateArea_container">
               <div class="card_dateArea_year">
-                {dateLibs.format(e.date, "YYYY.")}
+                {dateLib.format(e.date, "YYYY.")}
               </div>
               <div class="card_dateArea_date">
-                {dateLibs.format(e.date, "M.D(ddd)")}
+                {dateLib.format(e.date, "M.D(ddd)")}
               </div>
               {span > 0 && (
                 <div class="card_dateArea_count">
@@ -46,7 +45,7 @@ const { events, today } = Astro.props;
           </div>
           <div class="card_eventArea">
             <div class="card_eventArea_genre">
-              {eventLibs.convertGenre(e.genreType)}
+              {eventLib.convertGenre(e.genreType)}
             </div>
             <div class="card_eventArea_name">
               <a href={e.websiteURL} target="_blank">
@@ -56,7 +55,9 @@ const { events, today } = Astro.props;
           </div>
           <div class="card_placeArea">
             <div class="card_placeArea_place">
-              <span class="label">{e.place.prefecture}</span>
+              <span class="label">
+                {eventLib.getPrefecture(e.place.address)}
+              </span>
               {e.place.name}
             </div>
             <div class="card_placeArea_placeDetail">
@@ -66,7 +67,7 @@ const { events, today } = Astro.props;
                 )}`}
                 target="_blank"
               >
-                〒{eventLibs.convertPostalCode(e.place.postalCode)}{" "}
+                〒{eventLib.convertPostalCode(e.place.postalCode)}{" "}
                 {e.place.address}
               </a>
             </div>

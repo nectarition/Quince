@@ -5,7 +5,6 @@ export type QuinceEvent = {
   date: Date;
   place: {
     name: string;
-    prefecture: string;
     address: string;
     postalCode: string;
   }

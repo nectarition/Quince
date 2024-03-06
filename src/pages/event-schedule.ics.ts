@@ -7,6 +7,7 @@ export const GET = async () => {
   const events = fetchedEvents
     .map<EventAttributes>(e => {
       const date = e.date
+      const pref = eventLib.getPrefecture(e.place.address)
       const description = [
         `ジャンル: ${eventLib.convertGenre(e.genreType)}`,
         `イベント種類: ${eventLib.convertEventType(e.eventType).name}`,
@@ -18,7 +19,7 @@ export const GET = async () => {
       ].join('\n')
 
       return {
-        title: `${e.place.prefecture}: ${e.name}`,
+        title: `${pref}: ${e.name}`,
         description,
         location: e.place.name,
         url: e.websiteURL,
