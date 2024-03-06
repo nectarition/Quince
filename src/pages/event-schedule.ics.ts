@@ -42,7 +42,7 @@ export const GET = async () => {
   return new Response(
     value, {
     headers: {
-      "Content-Type": "text/calendar; charset=UTF-8"
+      "Content-Type": "text/calendar"
     }
   })
 }
