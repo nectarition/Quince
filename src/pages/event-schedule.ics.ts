@@ -34,9 +34,9 @@ export const GET = async () => {
           seconds: 0
         },
         startInputType: 'local',
-        startOutputType: 'utc',
+        startOutputType: 'local',
         endInputType: 'local',
-        endOutputType: 'utc'
+        endOutputType: 'local'
       }
     })
 
