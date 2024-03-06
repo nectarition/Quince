@@ -26,17 +26,15 @@ export const GET = async () => {
         start: [
           date.getFullYear(),
           date.getMonth() + 1,
-          date.getDate() - 1,
-          15,
-          0
+          date.getDate()
         ],
         duration: {
-          seconds: 0
+          minutes: 0
         },
         startInputType: 'utc',
-        startOutputType: 'local',
+        startOutputType: 'utc',
         endInputType: 'utc',
-        endOutputType: 'local'
+        endOutputType: 'utc'
       }
     })
 
@@ -45,7 +43,7 @@ export const GET = async () => {
   return new Response(
     value, {
     headers: {
-      "Content-Type": "text/calendar"
+      "Content-Type": "text/plain"
     }
   })
 }
