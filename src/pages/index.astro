@@ -31,7 +31,7 @@ const futureEvents = sortedEvents.filter((e) => e.date > today);
   <h2>ics形式でも配信しています</h2>
 
   <p>Googleカレンダー等への追加には以下のURLを使用してください。</p>
-  <pre>{siteConfig.siteURL}/event-schedule.ics</pre>
+  <p class="codeBlock">{siteConfig.siteURL}/event-schedule.ics</p>
 
   <h3>Googleカレンダーへの追加方法(PC)</h3>
 
@@ -66,14 +66,30 @@ const futureEvents = sortedEvents.filter((e) => e.date > today);
     <li>このWebサイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。</li>
     <li>Twitterや各Webサイトからの情報をもとに作成しています。</li>
     <li>内容は正確でない場合があります。各イベントのWebサイトを必ずご確認ください。</li>
-    <li>
-      イベント情報は <a href="https://github.com/nectarition/Quince">GitHub nectarition/Quince</a> にて管理しています。
-    </li>
+  </ul>
+
+  <h2>相互リンク募集</h2>
+  <p>
+    <a href="https://vo.nrsy.jp" target="_blank"><img src="https://vo.nrsy.jp/banner.png" alt="音声合成系イベント開催情報まとめサイト" style="height: 40px" /></a>
+  </p>
+  <p class="codeBlock">
+    &lt;a href="https://vo.nrsy.jp" target="_blank"&gt;&lt;img src="https://vo.nrsy.jp/banner.png" alt="音声合成系イベント開催情報まとめサイト" style="height: 40px"&gt;&lt;/a&gt;
+  </p>
+  <p>
+    当サイトの周知にご協力いただけるイベント運営様は、上のコードをトップページなどに挿入しバナーを掲示していただけますと幸いです。<br />
+    直リンクでも可です。
+  </p>
+
+  <h2>お知らせ</h2>
+  <ul>
+    <li>2024/03/08: バナーを追加しました</li>
+    <li>2024/03/06: デザインを変更しました, ics形式での配信を開始しました</li>
+    <li>2024/03/05: 本サイトをリリースしました</li>
   </ul>
 </BaseLayout>
 
-<h2>お知らせ</h2>
-<ul>
-  <li>2024/03/06: デザインを変更しました, ics形式での配信を開始しました</li>
-  <li>2024/03/05: 本サイトをリリースしました</li>
-</ul>
+<style lang="scss">
+  .codeBlock {
+    font-family: monospace;
+  }
+</style>
