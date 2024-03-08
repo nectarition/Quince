@@ -154,6 +154,22 @@
     ]
   },
   {
+    "name": "コトノハピバ2024",
+    "genreType": "琴葉姉妹 お誕生日お祝いイベント",
+    "date": "2024-05-03",
+    "place": {
+      "name": "大田区産業プラザPiO 小展示ホール",
+      "postalCode": "1440035",
+      "address": "東京都大田区南蒲田1-20-20"
+    },
+    "remarks": "「声音の宴 3次会」と同時開催",
+    "websiteURL": "https://twitter.com/kotohapi_xth",
+    "organizer": {
+      "name": "コトノハピバ運営"
+    },
+    "eventType": "special"
+  },
+  {
     "name": "声音文脈",
     "genreType": "『文脈』✕トーク系ソフトキャラクター関連楽曲中心DJクラブイベント",
     "date": "2024-05-04",

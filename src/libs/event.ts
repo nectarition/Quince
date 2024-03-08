@@ -37,6 +37,12 @@ const convertEventType = (eventType: string): { name: string; color: string; } =
       color: '#603885'
     }
   }
+  else if (eventType === 'special') {
+    return {
+      name: '特別イベント',
+      color: '#2d8965'
+    }
+  }
 
   return {
     name: eventType,
