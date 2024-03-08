@@ -1,7 +1,7 @@
 ---
-import { type QuinceEvent } from "@types";
-import eventLib from "../libs/event";
-import dateLib from "../libs/date";
+import { type QuinceEvent } from '@types';
+import eventLib from '../libs/event';
+import dateLib from '../libs/date';
 
 export interface Props {
   today: Date;
@@ -19,16 +19,10 @@ const { events, today } = Astro.props;
 
       return (
         <div class="card" style={`border: 1px solid ${eventType.color}; border-left: 8px solid ${eventType.color};`}>
-          <div
-            class={`card_dateArea_wrap ${(span > 0 && span <= 10 && "card_dateArea_wrap-near") ?? ""}`}
-          >
+          <div class={`card_dateArea_wrap ${(span > 0 && span <= 10 && 'card_dateArea_wrap-near') ?? ''}`}>
             <div class="card_dateArea_container">
-              <div class="card_dateArea_year">
-                {dateLib.format(e.date, "YYYY.")}
-              </div>
-              <div class="card_dateArea_date">
-                {dateLib.format(e.date, "M.D(ddd)")}
-              </div>
+              <div class="card_dateArea_year">{dateLib.format(e.date, 'YYYY.')}</div>
+              <div class="card_dateArea_date">{dateLib.format(e.date, 'M.D(ddd)')}</div>
               {span > 0 && (
                 <div class="card_dateArea_count">
                   <small>あと</small>
@@ -44,9 +38,7 @@ const { events, today } = Astro.props;
             </span>
           </div>
           <div class="card_eventArea">
-            <div class="card_eventArea_genre">
-              {eventLib.convertGenre(e.genreType)}
-            </div>
+            <div class="card_eventArea_genre">{eventLib.convertGenre(e.genreType)}</div>
             <div class="card_eventArea_name">
               <a href={e.websiteURL} target="_blank">
                 <b>{e.name}</b>
@@ -55,18 +47,11 @@ const { events, today } = Astro.props;
           </div>
           <div class="card_placeArea">
             <div class="card_placeArea_place">
-              <span class="label">
-                {eventLib.getPrefecture(e.place.address)}
-              </span>
+              <span class="label">{eventLib.getPrefecture(e.place.address)}</span>
               {e.place.name}
             </div>
             <div class="card_placeArea_placeDetail">
-              <a
-                href={`https://www.google.co.jp/maps/search/${encodeURIComponent(
-                  e.place.address
-                )}`}
-                target="_blank"
-              >
+              <a href={`https://www.google.co.jp/maps/search/${encodeURIComponent(e.place.address)}`} target="_blank">
                 〒{eventLib.convertPostalCode(e.place.postalCode)}&nbsp;
                 {e.place.address}
               </a>
@@ -76,9 +61,7 @@ const { events, today } = Astro.props;
             <div class="card_linkArea">
               <ul>
                 {e.links.map((l) => {
-                  const limitSpan =
-                    l.limit &&
-                    Math.floor(dateLib.getSpan(l.limit, today) / 86400000);
+                  const limitSpan = l.limit && Math.floor(dateLib.getSpan(l.limit, today) / 86400000);
                   return (
                     <li>
                       <a href={l.url} target="_blank">
@@ -86,12 +69,16 @@ const { events, today } = Astro.props;
                       </a>
                       {l.limit && limitSpan !== undefined && limitSpan >= 0 && (
                         <>
-                        &nbsp;
-                          <b>{dateLib.format(l.limit, "M月 D日")}</b>
+                          &nbsp;
+                          <b>{dateLib.format(l.limit, 'M月 D日')}</b>
                           <small>まで</small>
-                          {limitSpan >= 0 &&<small>あと</small>
-                          <b>{limitSpan}</b>
-                          <small>日</small>}
+                          {limitSpan >= 0 && (
+                            <>
+                              <small>あと</small>
+                              <b>{limitSpan}</b>
+                              <small>日</small>
+                            </>
+                          )}
                         </>
                       )}
                     </li>
@@ -102,9 +89,7 @@ const { events, today } = Astro.props;
           )}
           <div class="card_remarksArea">
             <div class="card_remarksArea_remarks">備考: {e.remarks}</div>
-            <div class="card_remarksArea_organizer">
-              運営: {e.organizer.name}
-            </div>
+            <div class="card_remarksArea_organizer">運営: {e.organizer.name}</div>
           </div>
         </div>
       );
@@ -266,5 +251,5 @@ const { events, today } = Astro.props;
         content: '・';
       }
     }
-}
+  }
 </style>

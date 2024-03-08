@@ -1,0 +1,11 @@
+{
+  "editor.formatOnSave": true,
+  "prettier.enable": true,
+  "prettier.requireConfig": false,
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

@@ -1,10 +1,11 @@
-@import "https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap";
+@import 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap';
 
 * {
   box-sizing: border-box;
 }
 
-html, body,
+html,
+body,
 p,
 h1,
 h2,
@@ -48,7 +49,9 @@ h6 {
   color: var(--primary-brand-color);
 }
 
-h1 { font-size: 2em; }
+h1 {
+  font-size: 2em;
+}
 h2 {
   font-size: 1.75em;
   padding-bottom: 5px;
@@ -59,9 +62,15 @@ h3 {
   border-left: 8px solid var(--border-color);
   padding-left: 8px;
 }
-h4 { font-size: 1.25em; }
-h5 { font-size: 1em; }
-h6 { font-size: 0.9em; }
+h4 {
+  font-size: 1.25em;
+}
+h5 {
+  font-size: 1em;
+}
+h6 {
+  font-size: 0.9em;
+}
 
 table {
   width: 100%;
@@ -74,7 +83,7 @@ table {
       background-color: #f8f8f8;
     }
   }
-  
+
   th,
   td {
     padding: 10px;

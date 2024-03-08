@@ -1,21 +1,15 @@
 ---
-import siteConfig from "../config";
-import eventLibs from "../libs/event";
-import dateLibs from "../libs/date";
-import BaseLayout from "../layouts/BaseLayout/BaseLayout.astro";
-import EventList from "../components/EventList.astro";
+import siteConfig from '../config';
+import eventLibs from '../libs/event';
+import dateLibs from '../libs/date';
+import BaseLayout from '../layouts/BaseLayout/BaseLayout.astro';
+import EventList from '../components/EventList.astro';
 
 const now = new Date();
-const today = new Date(
-  now.getUTCFullYear(),
-  now.getUTCMonth(),
-  now.getUTCDate()
-);
+const today = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
 
 const fetchedEvents = await eventLibs.getEventsAsync();
-const sortedEvents = fetchedEvents.sort(
-  (a, b) => a.date.getTime() - b.date.getTime()
-);
+const sortedEvents = fetchedEvents.sort((a, b) => a.date.getTime() - b.date.getTime());
 
 const heldEvents = sortedEvents.filter((e) => {
   const span = dateLibs.getSpan(e.date, today) / 86400000;
@@ -55,40 +49,31 @@ const futureEvents = sortedEvents.filter((e) => e.date > today);
     <a href="webcal://vo.nrsy.jp/event-schedule.ics" class="btn">追加ボタン</a>
   </div>
 
-  <p>
-    上のボタンをタップすると許可を求めるダイアログが表示され「許可」を押すと追加できます。
-  </p>
+  <p>上のボタンをタップすると許可を求めるダイアログが表示され「許可」を押すと追加できます。</p>
+
+  <h2>イベントの掲載基準について</h2>
+  <ul>
+    <li>Web上で日程が一般公開されている同人誌即売会を掲載しています。</li>
+    <li>即売会以外のイベントは、近郊の即売会にあわせて開催されるイベントのみ掲載しています。</li>
+    <li>Webオンリーなど実地開催しないイベントは掲載していません。</li>
+    <li>
+      イベント情報の提供は、<a href="mailto:blossom@nectarition.jp">メール blossom@nectarition.jp</a> か <a href="https://github.com/nectarition/Quince">GitHubリポジトリ</a> までお寄せください。
+    </li>
+  </ul>
 
   <h2>このサイトについて</h2>
   <ul>
-    <li>
-      このWebサイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。
-    </li>
+    <li>このWebサイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。</li>
     <li>Twitterや各Webサイトからの情報をもとに作成しています。</li>
-    <li>Web上で日程が一般公開されている同人誌即売会を掲載しています。</li>
-    <li>Webオンリーなど実地開催しないイベントは掲載していません。</li>
+    <li>内容は正確でない場合があります。各イベントのWebサイトを必ずご確認ください。</li>
     <li>
-      即売会以外のイベントは、近郊の即売会にあわせて開催されるイベントのみ掲載しています。
+      イベント情報は <a href="https://github.com/nectarition/Quince">GitHub nectarition/Quince</a> にて管理しています。
     </li>
-    <li>
-      内容は正確でない場合があります。各イベントのWebサイトを必ずご確認ください。
-    </li>
-    <li>
-      イベント情報は <a href="https://github.com/nectarition/Quince"
-        >GitHub nectarition/Quince</a
-      > にて管理しています。
-    </li>
-    <li>
-      情報提供や要望は <a href="https://github.com/nectarition/Quince"
-        >GitHubリポジトリ</a
-      >か、<a href="mailto:blossom@nectarition.jp">メール</a
-      >にてお寄せください。
-    </li>
-  </ul>
-
-  <h2>お知らせ</h2>
-  <ul>
-    <li>2024/03/06: デザインを変更しました, ics形式での配信を開始しました</li>
-    <li>2024/03/05: 本サイトをリリースしました</li>
   </ul>
 </BaseLayout>
+
+<h2>お知らせ</h2>
+<ul>
+  <li>2024/03/06: デザインを変更しました, ics形式での配信を開始しました</li>
+  <li>2024/03/05: 本サイトをリリースしました</li>
+</ul>
