@@ -13,4 +13,9 @@ export type QuinceEvent = {
   organizer: {
     name: string;
   }
+  links?: {
+    name: string;
+    url: string;
+    limit?: Date;
+  }[]
 };
