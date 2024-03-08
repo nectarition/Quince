@@ -18,7 +18,7 @@ const { events, today } = Astro.props;
       const eventType = eventLib.convertEventType(e.eventType);
 
       return (
-        <div class="card" style={`border-left: 8px solid ${eventType.color}`}>
+        <div class="card" style={`border: 1px solid ${eventType.color}; border-left: 8px solid ${eventType.color};`}>
           <div
             class={`card_dateArea_wrap ${(span > 0 && span <= 10 && "card_dateArea_wrap-near") ?? ""}`}
           >
