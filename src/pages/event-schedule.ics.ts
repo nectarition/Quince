@@ -8,10 +8,13 @@ export const GET = async () => {
     const date = e.date;
     const pref = eventLib.getPrefecture(e.place.address);
     const description = [
+      `Webサイト: ${e.websiteURL}`,
       `ジャンル: ${eventLib.convertGenre(e.genreType)}`,
       `イベント種類: ${eventLib.convertEventType(e.eventType).name}`,
       `運営: ${e.organizer.name}`,
-      ...(e.remarks && ['---', e.remarks]),
+      ...(e.remarks && ['-----', `備考: ${e.remarks}`]),
+      ``,
+      `https://vo.nrsy.jp`,
     ].join('\n');
 
     return {
