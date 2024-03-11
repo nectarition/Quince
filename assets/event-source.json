@@ -328,7 +328,14 @@
     "organizer": {
       "name": "ねくたりしょん"
     },
-    "eventType": "fanzine"
+    "eventType": "fanzine",
+    "links": [
+      {
+        "name": "サークル参加(1次)",
+        "url": "https://ahsesession.com/join",
+        "limit": "2024-03-31"
+      }
+    ]
   },
   {
     "name": "AHSession",
@@ -344,7 +351,14 @@
     "organizer": {
       "name": "えいちせ準備会"
     },
-    "eventType": "fanzine"
+    "eventType": "fanzine",
+    "links": [
+      {
+        "name": "サークル参加(1次)",
+        "url": "https://ahsesession.com/join",
+        "limit": "2024-03-31"
+      }
+    ]
   },
   {
     "name": "ずんだぱ～てぃ10",
