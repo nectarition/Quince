@@ -78,6 +78,10 @@
       {
         "name": "サークルリスト",
         "url": "https://pachicalmirai.wixsite.com/my-site/%E3%82%B5%E3%83%BC%E3%82%AF%E3%83%AB%E4%B8%80%E8%A6%A7"
+      },
+      {
+        "name": "一般参加ガイド",
+        "url": "https://pachicalmirai.wixsite.com/my-site/general"
       }
     ]
   },
@@ -120,9 +124,8 @@
     "eventType": "fanzine",
     "links": [
       {
-        "name": "サークル参加(最終)",
-        "url": "https://ketto.com/tvm/tvm55circle.htm",
-        "limit": "2024-03-09"
+        "name": "サークルリスト",
+        "url": "https://ketto.xsrv.jp/html/mimiken/clist.cgi?tvm55"
       }
     ]
   },
@@ -145,11 +148,6 @@
       {
         "name": "サークルリスト",
         "url": "https://kowa-uta.com/circleList"
-      },
-      {
-        "name": "サークル参加(最終)",
-        "url": "https://kowa-uta.com/circleEntry",
-        "limit": "2024-03-04"
       }
     ]
   },
@@ -226,11 +224,6 @@
       {
         "name": "サークルリスト",
         "url": "https://adachinoippo.net/list/"
-      },
-      {
-        "name": "サークル参加(1次)",
-        "url": "https://adachinoippo.net/join/",
-        "limit": "2024-02-17"
       }
     ]
   },
@@ -253,11 +246,6 @@
       {
         "name": "サークルリスト",
         "url": "https://futabastep.net/list/"
-      },
-      {
-        "name": "サークル参加(1次)",
-        "url": "https://futabastep.net/join/",
-        "limit": "2024-02-17"
       }
     ]
   },
@@ -412,6 +400,11 @@
         "name": "サークル参加(1次)",
         "url": "https://t.livepocket.jp/e/ibzzn",
         "limit": "2024-05-31"
+      },
+      {
+        "name": "スタッフ参加",
+        "url": "https://docs.google.com/forms/d/e/1FAIpQLSdo6ProwCe3DHSZKQ2USxZzzDrCGQK3Vxkhbtm8gGUaAlHgUg/viewform",
+        "limit": "2024-07-31"
       }
     ]
   },
