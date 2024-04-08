@@ -319,9 +319,9 @@
     "eventType": "fanzine",
     "links": [
       {
-        "name": "サークル参加(1次)",
-        "url": "https://ahsesession.com/join",
-        "limit": "2024-03-31"
+        "name": "サークル参加(2次)",
+        "url": "https://kohatabe.com/join",
+        "limit": "2024-05-06"
       }
     ]
   },
@@ -342,9 +342,9 @@
     "eventType": "fanzine",
     "links": [
       {
-        "name": "サークル参加(1次)",
+        "name": "サークル参加(2次)",
         "url": "https://ahsesession.com/join",
-        "limit": "2024-03-31"
+        "limit": "2024-05-06"
       }
     ]
   },
@@ -377,6 +377,38 @@
     "websiteURL": "https://voicevox.net/",
     "organizer": {
       "name": "ボイボ寮祭実行委員会"
+    },
+    "eventType": "fanzine"
+  },
+  {
+    "name": "VOCALOID STREET 09",
+    "genreType": "VOCALOIDオンリー",
+    "date": "2024-09-23",
+    "place": {
+      "name": "京都市勧業館みやこめっせ",
+      "postalCode": "6068343",
+      "address": "京都府京都市左京区岡崎成勝寺町9-1"
+    },
+    "remarks": "「CoMIC CeVIO」と併催",
+    "websiteURL": "https://voca-st.com/",
+    "organizer": {
+      "name": "ボカスト準備会"
+    },
+    "eventType": "fanzine"
+  },
+  {
+    "name": "CoMIC CeVIO",
+    "genreType": "CeVIOオンリー",
+    "date": "2024-09-23",
+    "place": {
+      "name": "京都市勧業館みやこめっせ",
+      "postalCode": "6068343",
+      "address": "京都府京都市左京区岡崎成勝寺町9-1"
+    },
+    "remarks": "「VOCALOID STREET 09」と併催",
+    "websiteURL": "https://comic-cevio.com/",
+    "organizer": {
+      "name": "コミチェビ準備会"
     },
     "eventType": "fanzine"
   },
