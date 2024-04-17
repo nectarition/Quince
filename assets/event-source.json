@@ -394,7 +394,14 @@
     "organizer": {
       "name": "ボカスト準備会"
     },
-    "eventType": "fanzine"
+    "eventType": "fanzine",
+    "links": [
+      {
+        "name": "サークル参加(1次)",
+        "url": "https://voca-st.com/circleEntry",
+        "limit": "2024-06-17"
+      }
+    ]
   },
   {
     "name": "CoMIC CeVIO",
@@ -410,7 +417,14 @@
     "organizer": {
       "name": "コミチェビ準備会"
     },
-    "eventType": "fanzine"
+    "eventType": "fanzine",
+    "links": [
+      {
+        "name": "サークル参加(1次)",
+        "url": "https://comic-cevio.com/circleEntry",
+        "limit": "2024-06-17"
+      }
+    ]
   },
   {
     "name": "UTAって創る君の声",
