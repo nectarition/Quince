@@ -23,8 +23,8 @@ export const GET = async () => {
       location: e.place.name,
       url: e.websiteURL,
       start: new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
-      end: new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + 1),
-      allday: true,
+      end: new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
+      allDay: true,
     };
   });
 
@@ -36,7 +36,8 @@ export const GET = async () => {
 
   return new Response(cal.toString(), {
     headers: {
-      'Content-Type': 'text/calendar',
+      'Content-Type': 'text/plain',
+      // 'Content-Type': 'text/calendar',
     },
   });
 };

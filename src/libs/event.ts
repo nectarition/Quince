@@ -54,7 +54,7 @@ const convertPostalCode = (rawPostalCode: string): string => {
 };
 
 const getPrefecture = (rawAddress: string): string => {
-  const pref = rawAddress.match(/^(.+)[都道府県]/);
+  const pref = rawAddress.match(/^(.{2,3})[都道府県]/);
   if (!pref) return '';
   return pref[1];
 };

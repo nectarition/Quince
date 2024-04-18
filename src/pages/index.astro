@@ -26,7 +26,7 @@ const futureEvents = sortedEvents.filter((e) => e.date > today);
   <EventList events={futureEvents} today={today} />
 
   <h2>最近終了したイベント</h2>
-  <EventList events={heldEvents} today={today} />
+  {heldEvents.length > 0 ? <EventList events={heldEvents} today={today} /> : <p>最近終了したイベントがある場合ここに表示されます</p>}
 
   <h2>ics形式でも配信しています</h2>
 
@@ -82,9 +82,17 @@ const futureEvents = sortedEvents.filter((e) => e.date > today);
 
   <h2>お知らせ</h2>
   <ul>
-    <li>2024/03/08: バナーを追加しました</li>
-    <li>2024/03/06: デザインを変更しました, ics形式での配信を開始しました</li>
-    <li>2024/03/05: 本サイトをリリースしました</li>
+    <li>
+      2024/04/18: v1.2.0
+      <ul>
+        <li>一覧の自動更新時刻を0時に変更しました</li>
+        <li>カレンダーインポート機能で終日扱いが正しく行われない不具合を修正しました</li>
+        <li>軽妙な不具合を修正しました</li>
+      </ul>
+    </li>
+    <li>2024/03/08: v1.1.1 バナーを追加しました</li>
+    <li>2024/03/06: v1.1.0 デザインを変更しました, ics形式での配信を開始しました</li>
+    <li>2024/03/05: v1.0.0 本サイトをリリースしました</li>
   </ul>
 </BaseLayout>
 

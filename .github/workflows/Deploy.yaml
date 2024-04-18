@@ -5,12 +5,14 @@ on:
     branches:
       - master
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '0 15 * * *'
 env:
   TZ: Asia/Tokyo
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      BUILD_NUMBER: ${{ github.run_number }}
     steps:
       - uses: actions/checkout@v2
       - run: yarn install

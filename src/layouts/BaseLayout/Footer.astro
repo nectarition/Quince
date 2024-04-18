@@ -1,7 +1,12 @@
 <div class="footer">
   <p>このWebサイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。</p>
   <div class="brandArea">
-    <p>&copy; 2024 ねくたりしょん</p>
+    <div>
+      <div>&copy; 2024 ねくたりしょん</div>
+      <div class="version">
+        v{APP_VERSION}.{import.meta.env.BUILD_NUMBER}
+      </div>
+    </div>
     <p class="logoArea">
       <a href="https://nectarition.jp">
         <img class="logo" src="https://nectarition.jp/logo/footer.svg" />
@@ -31,5 +36,9 @@
         filter: brightness(100%);
       }
     }
+  }
+  .version {
+    font-size: 0.75em;
+    color: #c0c0c0;
   }
 </style>
