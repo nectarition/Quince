@@ -36,8 +36,8 @@ export const GET = async () => {
 
   return new Response(cal.toString(), {
     headers: {
-      'Content-Type': 'text/plain',
-      // 'Content-Type': 'text/calendar',
+      // 'Content-Type': 'text/plain',
+      'Content-Type': 'text/calendar',
     },
   });
 };
