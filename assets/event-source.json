@@ -484,7 +484,19 @@
     "organizer": {
       "name": "コトノハーズフェスタ準備会"
     },
-    "eventType": "fanzine"
+    "eventType": "fanzine",
+    "links": [
+      {
+        "name": "サークル参加(1次)",
+        "url": "https://koto-fes.com/circle-entry.html",
+        "limit": "2024-07-10"
+      },
+      {
+        "name": "サークル参加(最終)",
+        "url": "https://koto-fes.com/circle-entry.html",
+        "limit": "2024-09-10"
+      }
+    ]
   },
   {
     "name": "ゆかりコレクト",
@@ -500,7 +512,19 @@
     "organizer": {
       "name": "ゆかりコレクト準備会"
     },
-    "eventType": "fanzine"
+    "eventType": "fanzine",
+    "links": [
+      {
+        "name": "サークル参加(1次)",
+        "url": "https://yukari-collect.com/circle-entry.html",
+        "limit": "2024-07-10"
+      },
+      {
+        "name": "サークル参加(最終)",
+        "url": "https://yukari-collect.com/circle-entry.html",
+        "limit": "2024-09-10"
+      }
+    ]
   },
   {
     "name": "きずなフリークス",
@@ -516,7 +540,19 @@
     "organizer": {
       "name": "きずなフリークス準備会"
     },
-    "eventType": "fanzine"
+    "eventType": "fanzine",
+    "links": [
+      {
+        "name": "サークル参加(1次)",
+        "url": "https://kizuna-freaks.com/circle-entry.html",
+        "limit": "2024-07-10"
+      },
+      {
+        "name": "サークル参加(最終)",
+        "url": "https://kizuna-freaks.com/circle-entry.html",
+        "limit": "2024-09-10"
+      }
+    ]
   },
   {
     "name": "鏡音みのり！",
