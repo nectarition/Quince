@@ -349,6 +349,33 @@
     ]
   },
   {
+    "name": "THE VOC@LOiD M@STER 56",
+    "genreType": "VOCALOIDオンリー",
+    "date": "2024-07-21",
+    "place": {
+      "name": "大田区産業プラザPiO 大展示ホール",
+      "postalCode": "1440035",
+      "address": "東京都大田区南蒲田1-20-20"
+    },
+    "remarks": "",
+    "websiteURL": "https://ketto.com/tvm/",
+    "organizer": {
+      "name": "ケットコム"
+    },
+    "eventType": "fanzine",
+    "links": [
+      {
+        "name": "サークル参加",
+        "url": "https://ketto.com/tvm/tvm56circle.htm",
+        "limit": "2024-05-21"
+      },
+      {
+        "name": "サークルリスト",
+        "url": "https://ketto.xsrv.jp/html/mimiken/clist.cgi?tvm56"
+      }
+    ]
+  },
+  {
     "name": "ずんだぱ～てぃ10",
     "genreType": "「ずんだホライずん」オンリー",
     "date": "2024-09-22",
