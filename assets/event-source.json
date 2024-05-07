@@ -319,6 +319,10 @@
     "eventType": "fanzine",
     "links": [
       {
+        "name": "サークルリスト",
+        "url": "https://kohatabe.jp/list"
+      },
+      {
         "name": "サークル参加(2次)",
         "url": "https://kohatabe.com/join",
         "limit": "2024-05-06"
@@ -341,6 +345,10 @@
     },
     "eventType": "fanzine",
     "links": [
+      {
+        "name": "サークルリスト",
+        "url": "https://ahsesession.com/list"
+      },
       {
         "name": "サークル参加(2次)",
         "url": "https://ahsesession.com/join",
