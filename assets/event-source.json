@@ -323,9 +323,9 @@
         "url": "https://kohatabe.jp/list"
       },
       {
-        "name": "サークル参加(2次)",
+        "name": "サークル参加(3次)",
         "url": "https://kohatabe.com/join",
-        "limit": "2024-05-06"
+        "limit": "2024-06-07"
       }
     ]
   },
@@ -350,9 +350,9 @@
         "url": "https://ahsesession.com/list"
       },
       {
-        "name": "サークル参加(2次)",
+        "name": "サークル参加(3次)",
         "url": "https://ahsesession.com/join",
-        "limit": "2024-05-06"
+        "limit": "2024-06-07"
       }
     ]
   },
@@ -604,5 +604,38 @@
       "name": "鏡音イベント準備会"
     },
     "eventType": "fanzine"
+  },
+  {
+    "name": "声音の宴 4次会",
+    "genreType": "all-genre",
+    "date": "2024-02-01",
+    "place": {
+      "name": "大田区産業プラザPiO",
+      "postalCode": "1440035",
+      "address": "東京都大田区南蒲田1-20-20"
+    },
+    "remarks": "",
+    "websiteURL": "https://kowa-uta.com/",
+    "organizer": {
+      "name": "声音の宴準備会"
+    },
+    "eventType": "fanzine",
+    "links": [
+      {
+        "name": "サークル参加(1次)",
+        "url": "https://kowa-uta.com/circleEntry",
+        "limit": "2024-09-26"
+      },
+      {
+        "name": "サークル参加(2次)",
+        "url": "https://kowa-uta.com/circleEntry",
+        "limit": "2024-11-14"
+      },
+      {
+        "name": "サークル参加(最終)",
+        "url": "https://kowa-uta.com/circleEntry",
+        "limit": "2024-12-12"
+      }
+    ]
   }
 ]
