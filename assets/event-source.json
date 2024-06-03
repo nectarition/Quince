@@ -637,5 +637,21 @@
         "limit": "2024-12-12"
       }
     ]
+  },
+  {
+    "name": "ふたばすてっぷ２",
+    "genreType": "双葉湊音オンリー",
+    "date": "2025-06-01",
+    "place": {
+      "name": "川崎市産業振興会館 4階企画展示場",
+      "postalCode": "2120013",
+      "address": "神奈川県川崎市幸区堀川町66-20"
+    },
+    "remarks": "「つのせのせかい」と併催",
+    "websiteURL": "https://futabastep.net/",
+    "organizer": {
+      "name": "ねくたりしょん"
+    },
+    "eventType": "fanzine"
   }
 ]
