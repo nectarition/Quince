@@ -487,6 +487,11 @@
         "name": "サークル参加(1次)",
         "url": "https://voca-st.com/circleEntry",
         "limit": "2024-06-17"
+      },
+      {
+        "name": "サークル参加(最終)",
+        "url": "https://voca-st.com/circleEntry",
+        "limit": "2024-07-29"
       }
     ]
   },
@@ -510,6 +515,11 @@
         "name": "サークル参加(1次)",
         "url": "https://comic-cevio.com/circleEntry",
         "limit": "2024-06-17"
+      },
+      {
+        "name": "サークル参加(最終)",
+        "url": "https://comic-cevio.com/circleEntry",
+        "limit": "2024-07-29"
       }
     ]
   },
