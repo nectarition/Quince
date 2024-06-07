@@ -392,12 +392,24 @@
       "postalCode": "9890218",
       "address": "宮城県白石市鷹巣東2-1-1"
     },
-    "remarks": "「ボイボ寮祭」と併催",
+    "remarks": "「ボイボ寮祭」「青っぽいな」と併催",
     "websiteURL": "https://zunko.moe/",
     "organizer": {
       "name": "ずんだぱ～てぃ準備会"
     },
-    "eventType": "fanzine"
+    "eventType": "fanzine",
+    "links": [
+      {
+        "name": "サークル参加(1次)",
+        "url": "https://zunko.moe/circle.html",
+        "limit": "2024-06-17"
+      },
+      {
+        "name": "サークル参加(最終)",
+        "url": "https://zunko.moe/circle.html",
+        "limit": "2024-07-22"
+      }
+    ]
   },
   {
     "name": "ボイボ寮祭",
@@ -408,12 +420,52 @@
       "postalCode": "9890218",
       "address": "宮城県白石市鷹巣東2-1-1"
     },
-    "remarks": "「ずんだぱ～てぃ10」と併催",
+    "remarks": "「ずんだぱ～てぃ10」「青っぽいな」と併催",
     "websiteURL": "https://voicevox.net/",
     "organizer": {
       "name": "ボイボ寮祭実行委員会"
     },
-    "eventType": "fanzine"
+    "eventType": "fanzine",
+    "links": [
+      {
+        "name": "サークル参加(1次)",
+        "url": "https://voicevox.net/circle.html",
+        "limit": "2024-06-17"
+      },
+      {
+        "name": "サークル参加(最終)",
+        "url": "https://voicevox.net/circle.html",
+        "limit": "2024-07-22"
+      }
+    ]
+  },
+  {
+    "name": "青っぽいな",
+    "genreType": "「あお」を基調とした”トークソフト”オンリー",
+    "date": "2024-09-22",
+    "place": {
+      "name": "ホワイトキューブ",
+      "postalCode": "9890218",
+      "address": "宮城県白石市鷹巣東2-1-1"
+    },
+    "remarks": "「ずんだぱ～てぃ10」「ボイボ寮祭」と併催",
+    "websiteURL": "http://wtst.net/blue/",
+    "organizer": {
+      "name": "Wide to Sing & Talks"
+    },
+    "eventType": "fanzine",
+    "links": [
+      {
+        "name": "サークル参加(1次)",
+        "url": "http://wtst.net/blue/circle.html",
+        "limit": "2024-06-17"
+      },
+      {
+        "name": "サークル参加(最終)",
+        "url": "http://wtst.net/blue/circle.html",
+        "limit": "2024-07-22"
+      }
+    ]
   },
   {
     "name": "VOCALOID STREET 09",
