@@ -384,6 +384,33 @@
     ]
   },
   {
+    "name": "SEIKAキャラクター音声合成フェス 2024",
+    "genreType": "音声合成キャラクター中心 オールジャンル",
+    "date": "2024-09-15",
+    "place": {
+      "name": "けいはんなプラザ イベントホール",
+      "postalCode": "6190237",
+      "address": "京都府相楽郡精華町光台1-7"
+    },
+    "remarks": "",
+    "websiteURL": "https://x.com/kyomachi_seika/status/1800388722036527333",
+    "organizer": {
+      "name": "セイカクリエイト株式会社"
+    },
+    "eventType": "fanzine",
+    "links": [
+      {
+        "name": "開催概要",
+        "url": "https://drive.google.com/file/d/16NS1vkFHJiIXqIt80e2SjV1hos-UpV7s/view"
+      },
+      {
+        "name": "サークル参加",
+        "url": "https://docs.google.com/forms/d/e/1FAIpQLSddZCGvgG7qYuD2XKJXvn4_yMfl3py10xw_8YC9PeClK2y2oA/viewform",
+        "limit": "2024-06-30"
+      }
+    ]
+  },
+  {
     "name": "ずんだぱ～てぃ10",
     "genreType": "「ずんだホライずん」オンリー",
     "date": "2024-09-22",
