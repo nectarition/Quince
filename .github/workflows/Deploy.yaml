@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BUILD_NUMBER: ${{ github.run_number }}
+      GOOGLE_SERVICE_ACCOUNT_CREDENTIAL_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_CREDENTIAL_JSON }}
     steps:
       - uses: actions/checkout@v2
       - run: yarn install
