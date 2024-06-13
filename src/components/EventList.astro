@@ -1,11 +1,11 @@
 ---
-import { type QuinceEvent } from '@types';
 import eventLib from '../libs/event';
 import dateLib from '../libs/date';
+import type { PearEventViewModel } from '@types';
 
 export interface Props {
   today: Date;
-  events: QuinceEvent[];
+  events: PearEventViewModel[];
 }
 
 const { events, today } = Astro.props;
@@ -14,8 +14,8 @@ const { events, today } = Astro.props;
 <div class="cardRack">
   {
     events.map((e) => {
-      const span = Math.floor(dateLib.getSpan(e.date, today) / 86400000);
-      const eventType = eventLib.convertEventType(e.eventType);
+      const span = Math.floor(dateLib.getSpan(e.date, today.getTime()) / 86400000);
+      const eventType = eventLib.convertEventType(e.type);
 
       return (
         <div class="card" style={`border: 1px solid ${eventType.color}; border-left: 8px solid ${eventType.color};`}>
@@ -38,7 +38,7 @@ const { events, today } = Astro.props;
             </span>
           </div>
           <div class="card_eventArea">
-            <div class="card_eventArea_genre">{eventLib.convertGenre(e.genreType)}</div>
+            <div class="card_eventArea_genre">{eventLib.convertGenre(e.genre)}</div>
             <div class="card_eventArea_name">
               <a href={e.websiteURL} target="_blank">
                 <b>{e.name}</b>
@@ -47,21 +47,21 @@ const { events, today } = Astro.props;
           </div>
           <div class="card_placeArea">
             <div class="card_placeArea_place">
-              <span class="label">{eventLib.getPrefecture(e.place.address)}</span>
-              {e.place.name}
+              <span class="label">{eventLib.getPrefecture(e.venue.address)}</span>
+              {e.venue.name}{e.roomName && ` ${e.roomName}`}
             </div>
             <div class="card_placeArea_placeDetail">
-              <a href={`https://www.google.co.jp/maps/search/${encodeURIComponent(e.place.address)}`} target="_blank">
-                〒{eventLib.convertPostalCode(e.place.postalCode)}&nbsp;
-                {e.place.address}
+              <a href={`https://www.google.co.jp/maps/search/${encodeURIComponent(e.venue.address)}`} target="_blank">
+                〒{eventLib.convertPostalCode(e.venue.postalCode)}&nbsp;
+                {e.venue.address}
               </a>
             </div>
           </div>
-          {e.links && (
+          {e.links.length > 0 && (
             <div class="card_linkArea">
               <ul>
                 {e.links.map((l) => {
-                  const limitSpan = l.limit && Math.floor(dateLib.getSpan(l.limit, today) / 86400000);
+                  const limitSpan = l.limit && Math.floor(dateLib.getSpan(l.limit, today.getTime()) / 86400000);
                   return (
                     <li>
                       <a href={l.url} target="_blank">

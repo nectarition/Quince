@@ -10,14 +10,16 @@ now.setUTCHours(now.getUTCHours() + 9);
 const today = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
 
 const fetchedEvents = await eventLibs.getEventsAsync();
-const sortedEvents = fetchedEvents.sort((a, b) => a.date.getTime() - b.date.getTime());
+const sortedEvents = fetchedEvents
+  .sort((a, b) => a.order - b.order)
+  .sort((a, b) => a.date - b.date);
 
 const heldEvents = sortedEvents.filter((e) => {
-  const span = dateLibs.getSpan(e.date, today) / 86400000;
+  const span = dateLibs.getSpan(e.date, today.getTime()) / 86400000;
   return span < 0 && span > -10;
 });
 
-const futureEvents = sortedEvents.filter((e) => e.date > today);
+const futureEvents = sortedEvents.filter((e) => e.date > today.getTime());
 ---
 
 <BaseLayout>
@@ -83,6 +85,12 @@ const futureEvents = sortedEvents.filter((e) => e.date > today);
 
   <h2>お知らせ</h2>
   <ul>
+    <li>
+      2024/06/13: v1.3.0
+      <ul>
+        <li>データの取得方法を変更しました</li>
+      </ul>
+    </li>
     <li>
       2024/04/18: v1.2.0
       <ul>
