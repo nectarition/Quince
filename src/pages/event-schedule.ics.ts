@@ -13,8 +13,9 @@ export const GET = async () => {
       `ジャンル: ${eventLib.convertGenre(e.genre)}`,
       `イベント種類: ${eventLib.convertEventType(e.type).name}`,
       `運営: ${e.organizer.name}`,
-      ...(e.remarks ? ['-----', `備考: ${e.remarks}`] : []),
-      ``,
+      ...(e.remarks ? [`備考: ${e.remarks}`] : []),
+      '-----',
+      '',
       `https://vo.nrsy.jp`,
     ].join('\n');
 
