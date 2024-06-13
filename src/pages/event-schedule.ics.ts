@@ -4,15 +4,16 @@ import siteConfig from '../config';
 
 export const GET = async () => {
   const fetchedEvents = await eventLib.getEventsAsync();
+
   const events = fetchedEvents.map<ICalEventData>((e) => {
-    const date = e.date;
-    const pref = eventLib.getPrefecture(e.place.address);
+    const date = new Date(e.date);
+    const pref = eventLib.getPrefecture(e.venue.address);
     const description = [
       `Webサイト: ${e.websiteURL}`,
-      `ジャンル: ${eventLib.convertGenre(e.genreType)}`,
-      `イベント種類: ${eventLib.convertEventType(e.eventType).name}`,
+      `ジャンル: ${eventLib.convertGenre(e.genre)}`,
+      `イベント種類: ${eventLib.convertEventType(e.type).name}`,
       `運営: ${e.organizer.name}`,
-      ...(e.remarks && ['-----', `備考: ${e.remarks}`]),
+      ...(e.remarks ? ['-----', `備考: ${e.remarks}`] : []),
       ``,
       `https://vo.nrsy.jp`,
     ].join('\n');
@@ -20,7 +21,7 @@ export const GET = async () => {
     return {
       summary: `${pref}: ${e.name}`,
       description,
-      location: e.place.name,
+      location: `${e.venue.name}${e.roomName && ` ${e.roomName}`}`,
       url: e.websiteURL,
       start: new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
       end: new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),

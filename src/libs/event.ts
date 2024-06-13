@@ -1,19 +1,40 @@
 import { promises as fs } from 'fs';
-import { type QuinceEvent } from '@types';
+import { getFirebaseAdmin } from './FirebaseAdmin';
+import { eventConverter, venueConverter } from './converters';
+import type { PearEventDbModel, PearEventViewModel, PearVenueDbModel } from '@types';
 
-const getEventsAsync = async (): Promise<QuinceEvent[]> => {
-  const url = new URL('../../assets/event-source.json', import.meta.url);
-  const rawEvents = await fs.readFile(url, 'utf-8');
-  const eventLines = JSON.parse(rawEvents) as QuinceEvent[];
-  const events = eventLines.map<QuinceEvent>((e) => ({
-    ...e,
-    date: new Date(e.date),
-    links: e.links?.map((l) => ({
-      ...l,
-      limit: l.limit && new Date(l.limit),
+const admin = getFirebaseAdmin();
+const db = admin.firestore();
+
+const getEventsAsync = async (): Promise<PearEventViewModel[]> => {
+  const eventDocs = await db.collection('events').withConverter(eventConverter).get();
+  const events = eventDocs.docs.filter((e) => e.exists).map((e) => e.data());
+  if (events.length === 0) return [];
+
+  const venueIds = [...new Set(events.map((e) => e.venue.id))];
+  const fetchedVenues = await Promise.all(
+    venueIds.map(async (id) => ({
+      id,
+      data: await getVenueAsync(id),
     })),
-  }));
-  return events;
+  ).then((venues) => venues.reduce<Record<string, PearVenueDbModel>>((p, c) => ({ ...p, [c.id]: c.data }), {}));
+
+  return events.map<PearEventViewModel>((e) => {
+    const venue = fetchedVenues[e.venue.id];
+    return {
+      ...e,
+      venue,
+    };
+  });
+};
+
+const getVenueAsync = async (venueId: string): Promise<PearVenueDbModel> => {
+  const venueDoc = await db.doc(`venues/${venueId}`).withConverter(venueConverter).get();
+  const venue = venueDoc.data();
+  if (!venue) {
+    throw new Error('venue not found');
+  }
+  return venue;
 };
 
 const convertGenre = (genreType: string): string => {
