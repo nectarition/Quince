@@ -22,7 +22,7 @@ const { events, today } = Astro.props;
           <div class={`card_dateArea_wrap ${(span > 0 && span <= 10 && 'card_dateArea_wrap-near') ?? ''}`}>
             <div class="card_dateArea_container">
               <div class="card_dateArea_year">{dateLib.format(e.date, 'YYYY.')}</div>
-              <div class="card_dateArea_date">{dateLib.format(e.date, 'M.D(ddd)')}</div>
+              <div class="card_dateArea_date">{dateLib.format(e.date, 'M.D (ddd)')}</div>
               {span > 0 && (
                 <div class="card_dateArea_count">
                   <small>あと</small>
