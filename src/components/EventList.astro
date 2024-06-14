@@ -23,17 +23,22 @@ const { events, today } = Astro.props;
             <div class="card_dateArea_container">
               <div class="card_dateArea_year">{dateLib.format(e.date, 'YYYY.')}</div>
               <div class="card_dateArea_date">{dateLib.format(e.date, 'M.D (ddd)')}</div>
+              <div class="card_dateArea_count">
               {span === 0
-                ? <div class="card_dateArea_count">
-                  <b>本日開催！</b>
-                </div>
+                ? <b>本日開催！</b>
                 : span > 0
-                  ? <div class="card_dateArea_count">
+                  ? <>
                     <small>あと</small>
                     <b>{span}</b>
                     <small>日</small>
-                  </div>
-                  : <></>}
+                  </>
+                  : span >= -10
+                    ? <>
+                      <b>{Math.abs(span)}日目</b>
+                      <small>({Math.abs(span)}日前に終了)</small>
+                    </>
+                    : <></>}
+                    </div>
             </div>
           </div>
           <div class="card_labelArea">
