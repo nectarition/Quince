@@ -19,17 +19,21 @@ const { events, today } = Astro.props;
 
       return (
         <div class="card" style={`border: 1px solid ${eventType.color}; border-left: 8px solid ${eventType.color};`}>
-          <div class={`card_dateArea_wrap ${(span > 0 && span <= 10 && 'card_dateArea_wrap-near') ?? ''}`}>
+          <div class={`card_dateArea_wrap ${(span >= 0 && span <= 10 && 'card_dateArea_wrap-near') ?? ''}`}>
             <div class="card_dateArea_container">
               <div class="card_dateArea_year">{dateLib.format(e.date, 'YYYY.')}</div>
               <div class="card_dateArea_date">{dateLib.format(e.date, 'M.D (ddd)')}</div>
-              {span > 0 && (
-                <div class="card_dateArea_count">
-                  <small>あと</small>
-                  <b>{span}</b>
-                  <small>日</small>
+              {span === 0
+                ? <div class="card_dateArea_count">
+                  <b>本日開催！</b>
                 </div>
-              )}
+                : span > 0
+                  ? <div class="card_dateArea_count">
+                    <small>あと</small>
+                    <b>{span}</b>
+                    <small>日</small>
+                  </div>
+                  : <></>}
             </div>
           </div>
           <div class="card_labelArea">
