@@ -34,8 +34,7 @@ const { events, today } = Astro.props;
                   </>
                   : span >= -10
                     ? <>
-                      <b>{Math.abs(span)}日目</b>
-                      <small>({Math.abs(span)}日前に終了)</small>
+                      <small>{Math.abs(span)}日目 ({Math.abs(span)}日前に終了)</small>
                     </>
                     : <></>}
                     </div>

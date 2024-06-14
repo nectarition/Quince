@@ -1,7 +1,6 @@
-import { promises as fs } from 'fs';
 import { getFirebaseAdmin } from './FirebaseAdmin';
 import { eventConverter, venueConverter } from './converters';
-import type { PearEventDbModel, PearEventViewModel, PearVenueDbModel } from '@types';
+import type { PearEventViewModel, PearVenueDbModel } from '@types';
 
 const admin = getFirebaseAdmin();
 const db = admin.firestore();
