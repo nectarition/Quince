@@ -8,7 +8,11 @@ const db = admin.firestore();
 
 const getEventsAsync = async (): Promise<PearEventViewModel[]> => {
   const eventDocs = await db.collection('events').withConverter(eventConverter).get();
-  const events = eventDocs.docs.filter((e) => e.exists).map((e) => e.data());
+  const events = eventDocs.docs
+    .filter((e) => e.exists)
+    .map((e) => e.data())
+    .sort((a, b) => a.order - b.order)
+    .sort((a, b) => a.date - b.date);
   if (events.length === 0) return [];
 
   const venueIds = [...new Set(events.map((e) => e.venue.id))];

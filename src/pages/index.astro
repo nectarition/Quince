@@ -10,16 +10,13 @@ now.setUTCHours(now.getUTCHours() + 9);
 const today = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
 
 const fetchedEvents = await eventLibs.getEventsAsync();
-const sortedEvents = fetchedEvents
-  .sort((a, b) => a.order - b.order)
-  .sort((a, b) => a.date - b.date);
 
-const heldEvents = sortedEvents.filter((e) => {
+const heldEvents = fetchedEvents.filter((e) => {
   const span = dateLibs.getSpan(e.date, today.getTime()) / 86400000;
   return span < 0 && span > -10;
 });
 
-const futureEvents = sortedEvents.filter((e) => e.date > today.getTime());
+const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
 ---
 
 <BaseLayout>
