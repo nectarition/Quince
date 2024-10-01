@@ -1,11 +1,11 @@
 ---
 import eventLib from '../libs/event';
 import dateLib from '../libs/date';
-import type { PearEventViewModel } from '@types';
+import type { PearEventAppModel } from '@types';
 
 export interface Props {
   today: Date;
-  events: PearEventViewModel[];
+  events: PearEventAppModel[];
 }
 
 const { events, today } = Astro.props;

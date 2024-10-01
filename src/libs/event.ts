@@ -1,11 +1,11 @@
 import { getFirebaseAdmin } from './FirebaseAdmin';
 import { eventConverter, venueConverter } from './converters';
-import type { PearEventViewModel, PearVenueDbModel } from '@types';
+import type { PearEventAppModel, PearVenueDbModel } from '@types';
 
 const admin = getFirebaseAdmin();
 const db = admin.firestore();
 
-const getEventsAsync = async (): Promise<PearEventViewModel[]> => {
+const getEventsAsync = async (): Promise<PearEventAppModel[]> => {
   const eventDocs = await db.collection('events').withConverter(eventConverter).get();
   const events = eventDocs.docs
     .filter((e) => e.exists)
@@ -22,7 +22,7 @@ const getEventsAsync = async (): Promise<PearEventViewModel[]> => {
     })),
   ).then((venues) => venues.reduce<Record<string, PearVenueDbModel>>((p, c) => ({ ...p, [c.id]: c.data }), {}));
 
-  return events.map<PearEventViewModel>((e) => {
+  return events.map<PearEventAppModel>((e) => {
     const venue = fetchedVenues[e.venue.id];
     return {
       ...e,

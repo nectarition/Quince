@@ -16,11 +16,10 @@ export interface PearEvent {
     limit?: number;
   }[];
 }
-
-export type PearEventDocument = PearEvent & {
+type PearEventDocument = PearEvent & {
   id: string;
 };
-export type PearEventViewModel = PearEventDocument & {
+export type PearEventAppModel = PearEventDocument & {
   venue: PearVenue;
 };
 export type PearEventDbModel = PearEventDocument & {
@@ -32,6 +31,8 @@ export interface PearVenue {
   postalCode: string;
   address: string;
 }
-export type PearVenueDbModel = PearVenue & {
+type PearVenueDocument = PearVenue & {
   id: string;
 };
+export type PearVenueDbModel = PearVenueDocument;
+export type PearVenueAppModel = PearVenueDocument;
