@@ -1,6 +1,6 @@
 import { getFirebaseAdmin } from './FirebaseAdmin';
-import { eventConverter, venueConverter } from './converters';
-import type { PearEventAppModel, PearVenueDbModel } from '@types';
+import { eventConverter, eventLinkConverter, venueConverter } from './converters';
+import type { PearEventAppModel, PearEventLink, PearEventLinkAppModel, PearVenueDbModel } from '@types';
 
 const admin = getFirebaseAdmin();
 const db = admin.firestore();
@@ -29,6 +29,20 @@ const getEventsAsync = async (): Promise<PearEventAppModel[]> => {
       venue,
     };
   });
+};
+
+const getLinksAsync = async (): Promise<Record<string, PearEventLink[]>> => {
+  const links = await db.collection('eventLinks').withConverter(eventLinkConverter).get();
+  const linkDocs = links.docs.map((l) => l.data());
+  if (linkDocs.length === 0) return {};
+
+  const eventIds = [...new Set(linkDocs.map((l) => l.event.id))];
+  return eventIds
+    .map((id) => {
+      const links = linkDocs.filter((l) => l.event.id === id);
+      return { id, links };
+    })
+    .reduce<Record<string, PearEventLink[]>>((p, c) => ({ ...p, [c.id]: c.links }), {});
 };
 
 const getVenueAsync = async (venueId: string): Promise<PearVenueDbModel> => {
@@ -87,6 +101,7 @@ const getPrefecture = (rawAddress: string): string => {
 
 export default {
   getEventsAsync,
+  getLinksAsync,
   convertGenre,
   convertPostalCode,
   convertEventType,

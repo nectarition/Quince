@@ -10,20 +10,30 @@ export interface PearEvent {
   organizer: {
     name: string;
   };
-  links: {
-    name: string;
-    url: string;
-    limit?: number;
-  }[];
 }
-type PearEventDocument = PearEvent & {
+export type PearEventDocument = PearEvent & {
   id: string;
 };
 export type PearEventAppModel = PearEventDocument & {
-  venue: PearVenue;
+  venue: PearVenueDocument;
 };
 export type PearEventDbModel = PearEventDocument & {
-  venue: FirebaseFirestore.DocumentReference<PearVenue>;
+  venue: FirebaseFirestore.DocumentReference<PearVenueDocument>;
+};
+
+export interface PearEventLink {
+  name: string;
+  url: string;
+  limit: number | null;
+}
+export type PearEventLinkDocument = PearEventLink & {
+  id: string;
+};
+export type PearEventLinkAppModel = PearEventLinkDocument & {
+  event: PearEventDocument;
+};
+export type PearEventLinkDbModel = PearEventLinkDocument & {
+  event: FirebaseFirestore.DocumentReference<PearEventDocument>;
 };
 
 export interface PearVenue {
