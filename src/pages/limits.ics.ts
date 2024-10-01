@@ -1,5 +1,6 @@
 import ics, { type ICalEventData } from 'ical-generator';
 import eventLib from '../libs/event';
+import dateLib from '../libs/date';
 import siteConfig from '../config';
 
 export const GET = async () => {
@@ -13,15 +14,21 @@ export const GET = async () => {
         throw new Error('event not found');
       }
 
+      const eventDate = dateLib.format(event.date, 'YYYY/M/D');
+      const baseDescriptions = ['-----', '', `https://vo.nrsy.jp`];
+
       return links
         .filter((link) => link.limit)
         .reduce((p, c) => {
           if (!c.limit) return p;
           const limitDate = new Date(c.limit);
+          const descriptions = [`${event.name} (${eventDate} 開催)`, `リンク: ${c.url}`, ...baseDescriptions];
+
           return [
             ...p,
             {
-              summary: `〆 ${c.name} (${event.name})`,
+              summary: `〆 ${event.name} ${c.name}`,
+              description: descriptions.join('\n'),
               url: c.url,
               start: new Date(limitDate.getUTCFullYear(), limitDate.getUTCMonth(), limitDate.getUTCDate()),
               end: new Date(limitDate.getUTCFullYear(), limitDate.getUTCMonth(), limitDate.getUTCDate()),
@@ -33,7 +40,7 @@ export const GET = async () => {
     .flat();
 
   const cal = ics({
-    name: `締め切り (${siteConfig.siteName})`,
+    name: `音声合成系イベント 締め切りカレンダー`,
     timezone: 'Asia/Tokyo',
     events,
   });
