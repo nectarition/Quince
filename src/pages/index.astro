@@ -10,6 +10,7 @@ now.setUTCHours(now.getUTCHours() + 9);
 const today = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
 
 const fetchedEvents = await eventLibs.getEventsAsync();
+const fetchedLinks = await eventLibs.getLinksAsync();
 
 const heldEvents = fetchedEvents.filter((e) => {
   const span = dateLibs.getSpan(e.date, today.getTime()) / 86400000;
@@ -25,10 +26,18 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
   <h1>音声合成系イベント開催情報まとめサイト</h1>
 
   <h2>開催が近い音声合成系イベント</h2>
-  <EventList events={futureEvents} today={today} />
+  <EventList
+    events={futureEvents}
+    today={today}
+    links={fetchedLinks} />
 
   <h2>最近終了したイベント</h2>
-  {heldEvents.length > 0 ? <EventList events={heldEvents} today={today} /> : <p>最近終了したイベントがある場合ここに表示されます</p>}
+  {heldEvents.length > 0
+    ? <EventList
+      events={heldEvents}
+      today={today}
+      links={fetchedLinks} />
+    : <p>最近終了したイベントがある場合ここに表示されます</p>}
 
   <h2>ics形式でも配信しています</h2>
 
@@ -48,7 +57,7 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
   <h3>スマホでの追加方法</h3>
 
   <div class="btnRack">
-    <a href="webcal://vo.nrsy.jp/event-schedule.ics" class="btn">追加ボタン</a>
+    <a href="webcal://vo.nrsy.jp/event-schedule.ics" class="btn">端末のカレンダーに追加</a>
   </div>
 
   <p>上のボタンをタップすると許可を求めるダイアログが表示され「許可」を押すと追加できます。</p>

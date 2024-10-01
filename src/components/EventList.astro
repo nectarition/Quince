@@ -1,28 +1,30 @@
 ---
 import eventLib from '../libs/event';
 import dateLib from '../libs/date';
-import type { PearEventAppModel } from '@types';
+import type { PearEventAppModel, PearEventLink } from '@types';
 
 export interface Props {
   today: Date;
   events: PearEventAppModel[];
+  links: Record<string, PearEventLink[]>;
 }
 
-const { events, today } = Astro.props;
+const props = Astro.props;
 ---
 
 <div class="cardRack">
   {
-    events.map((e) => {
-      const span = Math.floor(dateLib.getSpan(e.date, today.getTime()) / 86400000);
-      const eventType = eventLib.convertEventType(e.type);
+    props.events.map((event) => {
+      const span = Math.floor(dateLib.getSpan(event.date, props.today.getTime()) / 86400000);
+      const eventType = eventLib.convertEventType(event.type);
+      const links = props.links[event.id] ?? [];
 
       return (
         <div class="card" style={`border: 1px solid ${eventType.color}; border-left: 8px solid ${eventType.color};`}>
           <div class={`card_dateArea_wrap ${(span >= 0 && span <= 10 && 'card_dateArea_wrap-near') ?? ''}`}>
             <div class="card_dateArea_container">
-              <div class="card_dateArea_year">{dateLib.format(e.date, 'YYYY.')}</div>
-              <div class="card_dateArea_date">{dateLib.format(e.date, 'M.D (ddd)')}</div>
+              <div class="card_dateArea_year">{dateLib.format(event.date, 'YYYY.')}</div>
+              <div class="card_dateArea_date">{dateLib.format(event.date, 'M.D (ddd)')}</div>
               <div class="card_dateArea_count">
               {span === 0
                 ? <b>本日開催！</b>
@@ -46,36 +48,38 @@ const { events, today } = Astro.props;
             </span>
           </div>
           <div class="card_eventArea">
-            <div class="card_eventArea_genre">{eventLib.convertGenre(e.genre)}</div>
+            <div class="card_eventArea_genre">{eventLib.convertGenre(event.genre)}</div>
             <div class="card_eventArea_name">
-              <a href={e.websiteURL} target="_blank">
-                <b>{e.name}</b>
+              <a href={event.websiteURL} target="_blank">
+                <b>{event.name}</b>
               </a>
             </div>
           </div>
           <div class="card_placeArea">
             <div class="card_placeArea_place">
-              <span class="label">{eventLib.getPrefecture(e.venue.address)}</span>
-              {e.venue.name}{e.roomName && ` ${e.roomName}`}
+              <span class="label">{eventLib.getPrefecture(event.venue.address)}</span>
+              {event.venue.name}{event.roomName && ` ${event.roomName}`}
             </div>
             <div class="card_placeArea_placeDetail">
-              <a href={`https://www.google.co.jp/maps/search/${encodeURIComponent(e.venue.address)}`} target="_blank">
-                〒{eventLib.convertPostalCode(e.venue.postalCode)}&nbsp;
-                {e.venue.address}
+              <a href={`https://www.google.co.jp/maps/search/${encodeURIComponent(event.venue.address)}`} target="_blank">
+                〒{eventLib.convertPostalCode(event.venue.postalCode)}&nbsp;
+                {event.venue.address}
               </a>
             </div>
           </div>
-          {e.links.length > 0 && (
+          {links.length > 0 && (
             <div class="card_linkArea">
               <ul>
-                {e.links.map((l) => {
-                  const limitSpan = l.limit && Math.floor(dateLib.getSpan(l.limit, today.getTime()) / 86400000);
+                {links.map((l) => {
+                  const limitSpan = l.limit !== null
+                    ? Math.floor(dateLib.getSpan(l.limit, props.today.getTime()) / 86400000)
+                    : null;
                   return (
                     <li>
                       <a href={l.url} target="_blank">
                         {!l.limit || (limitSpan ?? -1) >= 0 ? <b>{l.name}</b> : <s>{l.name}</s>}
                       </a>
-                      {l.limit && limitSpan !== undefined && limitSpan >= 0 && (
+                      {l.limit && limitSpan !== null && limitSpan >= 0 && (
                         <>
                           &nbsp;
                           <b>{dateLib.format(l.limit, 'M月 D日')}</b>
@@ -96,8 +100,8 @@ const { events, today } = Astro.props;
             </div>
           )}
           <div class="card_remarksArea">
-            <div class="card_remarksArea_remarks">備考: {e.remarks}</div>
-            <div class="card_remarksArea_organizer">運営: {e.organizer.name}</div>
+            <div class="card_remarksArea_remarks">備考: {event.remarks}</div>
+            <div class="card_remarksArea_organizer">運営: {event.organizer.name}</div>
           </div>
         </div>
       );

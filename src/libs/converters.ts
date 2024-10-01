@@ -1,4 +1,4 @@
-import type { PearEventDbModel, PearVenueDbModel } from '@types';
+import type { PearEventDbModel, PearEventLinkDbModel, PearVenueDbModel } from '@types';
 import type { FirestoreDataConverter, QueryDocumentSnapshot } from 'firebase-admin/firestore';
 
 export const eventConverter: FirestoreDataConverter<PearEventDbModel> = {
@@ -19,7 +19,20 @@ export const eventConverter: FirestoreDataConverter<PearEventDbModel> = {
       organizer: {
         name: eventDoc.organizer.name,
       },
-      links: eventDoc.links,
+    };
+  },
+};
+
+export const eventLinkConverter: FirestoreDataConverter<PearEventLinkDbModel> = {
+  toFirestore: () => ({}),
+  fromFirestore: (snapshot: QueryDocumentSnapshot) => {
+    const linkDoc = snapshot.data();
+    return {
+      id: snapshot.id,
+      event: linkDoc.event,
+      name: linkDoc.name,
+      url: linkDoc.url,
+      limit: linkDoc.limit,
     };
   },
 };
