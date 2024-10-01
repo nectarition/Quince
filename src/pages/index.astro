@@ -42,7 +42,20 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
   <h2>ics形式でも配信しています</h2>
 
   <p>Googleカレンダー等への追加には以下のURLを使用してください。</p>
+
+  <h4>イベント</h4>
   <p class="codeBlock">{siteConfig.siteURL}/event-schedule.ics</p>
+
+  <div class="btnRack">
+    <a href="webcal://vo.nrsy.jp/event-schedule.ics" class="btn">端末に追加 (イベント)</a>
+  </div>
+
+  <h4>締め切り</h4>
+  <p class="codeBlock">{siteConfig.siteURL}/limits.ics</p>
+
+  <div class="btnRack">
+    <a href="webcal://vo.nrsy.jp/limits.ics" class="btn">端末に追加 (締め切り)</a>
+  </div>
 
   <h3>Googleカレンダーへの追加方法(PC)</h3>
 
@@ -55,10 +68,6 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
   </ol>
 
   <h3>スマホでの追加方法</h3>
-
-  <div class="btnRack">
-    <a href="webcal://vo.nrsy.jp/event-schedule.ics" class="btn">端末のカレンダーに追加</a>
-  </div>
 
   <p>上のボタンをタップすると許可を求めるダイアログが表示され「許可」を押すと追加できます。</p>
 
@@ -93,7 +102,12 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
 
   <h2>お知らせ</h2>
   <ul>
-    <li>2024/10/01: v1.4.0 各リンクの情報を柔軟に扱えるように変更しました</li>
+    <li>2024/10/01: v1.4.0
+      <ul>
+        <li>締め切りカレンダーの提供を開始しました</li>
+        <li>各リンクの情報を柔軟に扱えるように変更しました</li>
+      </ul>
+    </li>
     <li>2024/06/14: v1.3.1 「本日開催！」「N日前に終了」を実装しました</li>
     <li>2024/06/13: v1.3.0 データの取得方法を変更しました</li>
     <li>
