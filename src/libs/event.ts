@@ -1,6 +1,6 @@
 import { getFirebaseAdmin } from './FirebaseAdmin';
 import { eventConverter, eventLinkConverter, venueConverter } from './converters';
-import type { PearEventAppModel, PearEventLink, PearEventLinkAppModel, PearVenueDbModel } from '@types';
+import type { PearEventAppModel, PearEventLink, PearVenueDbModel } from '@types';
 
 const admin = getFirebaseAdmin();
 const db = admin.firestore();
