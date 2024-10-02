@@ -4,6 +4,7 @@ import eventLibs from '../libs/event';
 import dateLibs from '../libs/date';
 import BaseLayout from '../layouts/BaseLayout/BaseLayout.astro';
 import EventList from '../components/EventList.astro';
+import Alert from 'src/components/Alert.astro';
 
 const now = new Date();
 now.setUTCHours(now.getUTCHours() + 9);
@@ -25,7 +26,14 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
 <BaseLayout>
   <h1>音声合成系イベント開催情報まとめサイト</h1>
 
+  <Alert type="info" title="愛称を募集します！">
+    いつもご利用いただきありがとうございます。<br />
+    「音声合成系イベント開催情報まとめサイト」という名前が長いので愛称を募集します。<br />
+    <a href="https://forms.gle/iDR5bcPx1kQHZ2V18">こちらのフォーム</a>からぜひご応募ください！
+  </Alert>
+  
   <h2>開催が近い音声合成系イベント</h2>
+
   <EventList
     events={futureEvents}
     today={today}

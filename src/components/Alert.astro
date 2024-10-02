@@ -1,0 +1,95 @@
+---
+import { Sprite } from 'astro-icon';
+type AlertType = 'info' | 'success' | 'warning' | 'error'
+
+const iconMap: Record<AlertType, string> = {
+  info: 'mdi:information-outline',
+  success: 'mdi:check',
+  warning: 'mdi:warning-outline',
+  error: 'mdi:warning-octagon-outline'
+}
+
+export interface Props {
+  type: AlertType
+  title: string
+}
+
+const props = Astro.props
+---
+
+<div class={`container container-${props.type}`}>
+  <div class="header">
+    <div class={`header_icon header_icon-${props.type}`}>
+      <Sprite name={iconMap[props.type]} />
+    </div>
+    <div class="header_title">
+      {props.title}
+    </div>
+  </Header>
+  <div class="body">
+    <slot />
+  </div>
+</div>
+
+<style lang="scss">
+  .container {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    &-info {
+      border: 1px solid var(--info-color);
+      border-left: 8px solid var(--info-color);
+    }
+    &-success {
+      border: 1px solid var(--success-color);
+      border-left: 8px solid var(--success-color);
+    }
+    &-warning {
+      border: 1px solid var(--warning-color);
+      border-left: 8px solid var(--warning-color);
+    }
+    &-error {
+      border: 1px solid var(--danger-color);
+      border-left: 8px solid var(--danger-color);
+    }
+  }
+  .header {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 10px;
+
+    &_icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      &-info svg {
+        color: var(--info-color);
+      }
+      &-success svg {
+        color: var(--success-color);
+      }
+      &-warning svg {
+        color: var(--warning-color);
+      }
+      &-error svg {
+        color: var(--danger-color);
+      }
+    }
+
+    &_title {
+      font-weight: bold;
+    }
+  }
+  .body {}
+</style>
