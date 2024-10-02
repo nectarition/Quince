@@ -19,6 +19,7 @@ export const eventConverter: FirestoreDataConverter<PearEventDbModel> = {
       organizer: {
         name: eventDoc.organizer.name,
       },
+      subEvents: eventDoc.subEvents,
     };
   },
 };

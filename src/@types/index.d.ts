@@ -10,6 +10,7 @@ export interface PearEvent {
   organizer: {
     name: string;
   };
+  subEvents: PearSubEvent[];
 }
 export type PearEventDocument = PearEvent & {
   id: string;
@@ -19,6 +20,13 @@ export type PearEventAppModel = PearEventDocument & {
 };
 export type PearEventDbModel = PearEventDocument & {
   venue: FirebaseFirestore.DocumentReference<PearVenueDocument>;
+};
+
+export type PearSubEvent = {
+  order: number;
+  name: string;
+  genre: string;
+  url: string | null;
 };
 
 export interface PearEventLink {

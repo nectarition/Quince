@@ -9,6 +9,7 @@ export const GET = async () => {
     const date = new Date(e.date);
     const pref = eventLib.getPrefecture(e.venue.address);
     const description = [
+      ...(e.subEvents.length > 0 ? ['開催イベント', ...e.subEvents.map((se) => `・${se.name}`)] : []),
       `Webサイト: ${e.websiteURL}`,
       `ジャンル: ${eventLib.convertGenre(e.genre)}`,
       `イベント種類: ${eventLib.convertEventType(e.type).name}`,

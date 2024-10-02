@@ -54,6 +54,20 @@ const props = Astro.props;
                 <b>{event.name}</b>
               </a>
             </div>
+            {event.subEvents.length > 0 && (
+              <ul class="card_eventArea_subEvents">
+                {event.subEvents.map((subEvent) => (
+                  <li><span class="label label-secondary">{subEvent.genre}</span>
+                    <span class="card_eventArea_subEvents_name none-break">
+                      {(
+                        subEvent.url
+                          ? <a href={subEvent.url} target="_blank">{subEvent.name}</a> 
+                          : subEvent.name
+                      )}
+                    </span></li>
+                ))}
+                </ul>
+            )}
           </div>
           <div class="card_placeArea">
             <div class="card_placeArea_place">
@@ -75,10 +89,7 @@ const props = Astro.props;
                     ? Math.floor(dateLib.getSpan(l.limit, props.today.getTime()) / 86400000)
                     : null;
                   return (
-                    <li>
-                      <a href={l.url} target="_blank">
-                        {!l.limit || (limitSpan ?? -1) >= 0 ? <b>{l.name}</b> : <s>{l.name}</s>}
-                      </a>
+                    <li><a href={l.url} target="_blank">{!l.limit || (limitSpan ?? -1) >= 0 ? <b>{l.name}</b> : <s>{l.name}</s>}</a>
                       {l.limit && limitSpan !== null && limitSpan >= 0 && (
                         <>
                           &nbsp;
@@ -92,8 +103,7 @@ const props = Astro.props;
                             </>
                           )}
                         </>
-                      )}
-                    </li>
+                      )}</li>
                   );
                 })}
               </ul>
@@ -204,6 +214,20 @@ const props = Astro.props;
         font-weight: bold;
         font-size: 1.25em;
       }
+
+      &_subEvents {
+        font-size: 0.9em;
+        margin-top: 5px;
+        &_name {
+          font-weight: bold;
+        }
+        li {
+          margin-bottom: 2px;
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
     }
 
     &_placeArea {
@@ -252,14 +276,26 @@ const props = Astro.props;
     background-color: #404040;
     color: #ffffff;
     padding: 2px 10px 3px;
-    font-size: 0.8em;
+    font-size: 0.9em;
+
+    &-secondary {
+      background-color: transparent;
+      border: 1px solid #202020;
+      color: #202020;
+    }
+  }
+
+  .none-break {
+    white-space: nowrap;
   }
 
   ul {
     padding: 0;
     list-style: none;
     li {
+      margin-left: 1em;
       &::before {
+        margin-left: -1em;
         content: '・';
       }
     }
