@@ -17,8 +17,8 @@ const props = Astro.props;
     props.events.map((event) => {
       const span = Math.floor(dateLib.getSpan(event.date, props.today.getTime()) / 86400000);
       const eventType = eventLib.convertEventType(event.type);
-      const links = props.links[event.id]
-        .sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER)) ?? [];
+      const links: PearEventLink[] = props.links[event.id] ?? []
+      const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER)) ;
 
       return (
         <div class="card" style={`border: 1px solid ${eventType.color}; border-left: 8px solid ${eventType.color};`}>
@@ -82,11 +82,10 @@ const props = Astro.props;
               </a>
             </div>
           </div>
-          {links.length > 0 && (
+          {sortedLinks.length > 0 && (
             <div class="card_linkArea">
               <ul>
-                {links
-                  .sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER))
+                {sortedLinks
                   .map((l) => {
                   const limitSpan = l.limit !== null
                     ? Math.floor(dateLib.getSpan(l.limit, props.today.getTime()) / 86400000)
