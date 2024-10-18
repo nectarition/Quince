@@ -19,6 +19,7 @@ export const GET = async () => {
 
       return links
         .filter((link) => link.limit)
+        .sort((a, b) => (a.limit ?? Number.MIN_SAFE_INTEGER) - (b.limit ?? Number.MAX_SAFE_INTEGER))
         .reduce((p, c) => {
           if (!c.limit) return p;
           const limitDate = new Date(c.limit);

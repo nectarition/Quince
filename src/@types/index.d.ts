@@ -33,6 +33,7 @@ export interface PearEventLink {
   name: string;
   url: string;
   limit: number | null;
+  order?: number;
 }
 export type PearEventLinkDocument = PearEventLink & {
   id: string;
