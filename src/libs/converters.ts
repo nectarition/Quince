@@ -34,6 +34,7 @@ export const eventLinkConverter: FirestoreDataConverter<PearEventLinkDbModel> = 
       name: linkDoc.name,
       url: linkDoc.url,
       limit: linkDoc.limit,
+      order: linkDoc.order,
     };
   },
 };
