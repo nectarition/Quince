@@ -52,28 +52,28 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
       links={fetchedLinks} />
     : <p>最近終了したイベントがある場合ここに表示されます</p>}
 
-  <h2>ics形式でも配信しています</h2>
+  <h2>Google カレンダーなども追加できます！</h2>
 
-  <p>Googleカレンダー等への追加には以下のURLを使用してください。</p>
+  <p>Google カレンダーなどへの追加には以下のURLを使用してください。</p>
 
-  <h4>イベント</h4>
+  <h4>イベントカレンダー</h4>
   <p class="codeBlock">{siteConfig.siteURL}/event-schedule.ics</p>
 
   <div class="btnRack">
     <a href="webcal://vo.nrsy.jp/event-schedule.ics" class="btn">端末に追加 (イベント)</a>
   </div>
 
-  <h4>締め切り</h4>
+  <h4>締め切りカレンダー</h4>
   <p class="codeBlock">{siteConfig.siteURL}/limits.ics</p>
 
   <div class="btnRack">
     <a href="webcal://vo.nrsy.jp/limits.ics" class="btn">端末に追加 (締め切り)</a>
   </div>
 
-  <h3>Googleカレンダーへの追加方法(PC)</h3>
+  <h3>Google カレンダーへの追加方法 (PC)</h3>
 
   <ol>
-    <li>Googleカレンダーを開きます</li>
+    <li>Google カレンダーを開きます</li>
     <li>左メニューの「他のカレンダー」横にある「＋」ボタンをクリックします</li>
     <li>「URL で追加」をクリックします</li>
     <li>「カレンダーの URL」に上述のURLを入力します</li>
@@ -86,9 +86,9 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
 
   <h2>イベントの掲載基準について</h2>
   <ul>
-    <li>Web上で日程が一般公開されている同人誌即売会を掲載しています。</li>
-    <li>即売会以外のイベントは、近郊の即売会にあわせて開催されるイベントのみ掲載しています。</li>
-    <li>Webオンリーなど実地開催しないイベントは掲載していません。</li>
+    <li>日程及び会場が Web 上で公開されている同人誌即売会などのイベントを掲載しています。</li>
+    <li>同人誌即売会以外のイベントは、即売会と同日・前翌日に</li>
+    <li>Webオンリーなどオフライン開催しないイベントは掲載していません。</li>
     <li>
       イベント情報の提供は <a href="https://admin.vo.nrsy.jp/" target="_blank">こちらのフォーム (QuincePear)</a> からお寄せください。
     </li>
@@ -96,9 +96,9 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
 
   <h2>このサイトについて</h2>
   <ul>
-    <li>このWebサイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。</li>
-    <li>Twitterや各Webサイトからの情報をもとに作成しています。</li>
-    <li>内容は正確でない場合があります。各イベントのWebサイトを必ずご確認ください。</li>
+    <li>この Web サイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。</li>
+    <li>X (Twitter) や各 Web サイトからの情報をもとに作成しています。</li>
+    <li>内容は正確でない場合があります。各イベントの Web サイトを必ずご確認ください。</li>
   </ul>
 
   <h2>相互リンク募集</h2>
