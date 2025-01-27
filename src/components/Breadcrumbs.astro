@@ -1,0 +1,45 @@
+---
+interface Props {
+  items: {
+    name: string;
+    path: string;
+  }[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="breadcrumbs">
+  {
+    items.map((i) => (
+      <li>
+        <a href={i.path}>{i.name}</a>
+      </li>
+    ))
+  }
+</ul>
+
+<style lang="scss">
+  .breadcrumbs {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 5px;
+
+    list-style: none;
+
+    li {
+      display: inline-block;
+      padding-right: 16px;
+
+      &::after {
+        display: inline-block;
+        content: '';
+        width: 6px;
+        height: 6px;
+        transform: rotate(-45deg);
+        border-bottom: 2px solid var(--border-color);
+        border-right: 2px solid var(--border-color);
+      }
+    }
+  }
+</style>

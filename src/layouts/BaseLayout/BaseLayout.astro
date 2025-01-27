@@ -8,13 +8,20 @@ export interface Props {
 
 <Root title={Astro.props.title}>
   <div class="container">
-    <slot />
+    <div class="content">
+      <slot />
+    </div>
+    <Footer />
   </div>
-  <Footer />
 </Root>
 
 <style lang="scss">
   .container {
+    height: 100%;
+    display: grid;
+    grid-template-rows: 1fr auto;
+  }
+  .content {
     padding: 40px 10%;
 
     @media screen and (max-width: 840px) {

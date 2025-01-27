@@ -1,0 +1,25 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import BaseLayout from '../layouts/BaseLayout/BaseLayout.astro';
+---
+
+<BaseLayout title="プライバシーポリシー">
+  <Breadcrumbs items={[{ name: 'ホーム', path: '/' }]} />
+  <h1>プライバシーポリシー</h1>
+  <section>
+    <h2>Google アナリティクスの使用について</h2>
+    <p>
+      当サイトでは、サービス向上のためにGoogle アナリティクスを使用しています。<br />
+      Google アナリティクスは、トラフィックデータの収集のためにCookieを使用しています。<br />
+      このトラフィックデータは匿名で収集されており、個人を特定するものではありません。
+    </p>
+    <p>
+      Google アナリティクスのCookieは、Googleによって管理され、Googleのプライバシーポリシーに従って使用されます。<br />
+      詳細については、<a href="https://policies.google.com/privacy">Googleのプライバシーポリシー</a>をご覧ください。
+    </p>
+    <p>
+      Cookieの使用を拒否したい場合は、ブラウザの設定からCookieを無効にすることができます。<br
+      />ただし、Cookieを無効にした場合、当サイトの一部の機能がご利用いただけなくなる場合がありますので、ご了承ください。
+    </p>
+  </section>
+</BaseLayout>

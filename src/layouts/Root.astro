@@ -34,6 +34,17 @@ const title = (Astro.props.title && `${Astro.props.title} - ${siteName}`) ?? sit
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={`${siteURL}/card.png`} />
 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZJMRCR6LXH"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-ZJMRCR6LXH');
+    </script>
+
     <title>{title}</title>
   </head>
   <body>
