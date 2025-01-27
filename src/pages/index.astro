@@ -13,44 +13,67 @@ const today = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()
 const fetchedEvents = await eventLibs.getEventsAsync();
 const fetchedLinks = await eventLibs.getLinksAsync();
 
-const heldEvents = fetchedEvents.filter((e) => {
-  const span = dateLibs.getSpan(e.date, today.getTime()) / 86400000;
-  return span < 0 && span >= -10;
-})
+const heldEvents = fetchedEvents
+  .filter((e) => {
+    const span = dateLibs.getSpan(e.date, today.getTime()) / 86400000;
+    return span < 0 && span >= -10;
+  })
   .sort((a, b) => a.order - b.order)
-  .sort((a, b) => b.date - a.date)
+  .sort((a, b) => b.date - a.date);
 
 const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
 ---
 
 <BaseLayout>
-  <h1>音声合成系イベント開催情報まとめサイト</h1>
+  <h1>ボイベまとめ: 音声合成系イベント開催情報まとめサイト</h1>
+
+  <Alert type="success" title="愛称決まりました！">
+    このサイトの愛称が「<b>ボイベまとめ</b>」に決定しました！<br />
+    ご提案いただいた皆様、ありがとうございました！
+  </Alert>
 
   <Alert type="info" title="追加通知 Discord サーバはじめました">
     イベントの追加通知を Discord サーバで行っています。<br />
     <a href="https://discord.gg/ggFnwgsUd3">こちらのリンク</a>からぜひご参加ください！
   </Alert>
-  
-  <Alert type="info" title="愛称を募集します！">
-    いつもご利用いただきありがとうございます。<br />
-    「音声合成系イベント開催情報まとめサイト」という名前が長いので愛称を募集します。<br />
-    <a href="https://forms.gle/iDR5bcPx1kQHZ2V18">こちらのフォーム</a>からご応募ください！
-  </Alert>
 
-  <h2>開催が近い音声合成系イベント</h2>
+  <h2 id="future-events">開催が近い音声合成系イベント</h2>
 
-  <EventList
-    events={futureEvents}
-    today={today}
-    links={fetchedLinks} />
+  <table>
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>種類</th>
+        <th>都道府県</th>
+        <th>イベント</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        futureEvents.map((e) => (
+          <tr>
+            <td>{dateLibs.format(e.date, 'YYYY.M.D (ddd)')}</td>
+            <td>{eventLibs.convertEventTypeShorten(e.type).name}</td>
+            <td>{eventLibs.getPrefecture(e.venue.address)}</td>
+            <td class="allBreak">
+              {e.genre && (
+                <>
+                  <small>{eventLibs.convertGenre(e.genre)}</small>
+                  <br />
+                </>
+              )}
+              <a href={`#${e.id}`}>「{e.name}」</a>
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
 
-  <h2>最近終了したイベント</h2>
-  {heldEvents.length > 0
-    ? <EventList
-      events={heldEvents}
-      today={today}
-      links={fetchedLinks} />
-    : <p>最近終了したイベントがある場合ここに表示されます</p>}
+  <EventList events={futureEvents} today={today} links={fetchedLinks} />
+
+  <h2 id="held-events">開催が終了した音声合成系イベント</h2>
+  <EventList events={heldEvents} today={today} links={fetchedLinks} />
 
   <h2>あなたのカレンダーにも追加できます！</h2>
 
@@ -59,16 +82,14 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
   <h4>イベントカレンダー</h4>
   <p class="codeBlock">{siteConfig.siteURL}/event-schedule.ics</p>
 
-  <div class="btnRack">
-    <a href="webcal://vo.nrsy.jp/event-schedule.ics" class="btn">端末に追加 (イベント)</a>
-  </div>
+  <h4>イベント</h4>
+  <p class="codeBlock">{siteConfig.siteURL}/event-schedule.ics</p>
 
   <h4>締め切りカレンダー</h4>
   <p class="codeBlock">{siteConfig.siteURL}/limits.ics</p>
 
-  <div class="btnRack">
-    <a href="webcal://vo.nrsy.jp/limits.ics" class="btn">端末に追加 (締め切り)</a>
-  </div>
+  <h4>締め切り</h4>
+  <p class="codeBlock">{siteConfig.siteURL}/limits.ics</p>
 
   <h3>Google カレンダーへの追加方法 (PC)</h3>
 
@@ -80,9 +101,15 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
     <li>「カレンダーを追加」をクリックすると同期が始まります</li>
   </ol>
 
-  <h3>スマホでの追加方法</h3>
+  <ol>
+    <li>Googleカレンダーを開きます</li>
+    <li>左メニューの「他のカレンダー」横にある「＋」ボタンをクリックします</li>
+    <li>「URL で追加」をクリックします</li>
+    <li>「カレンダーの URL」に上述のURLを入力します</li>
+    <li>「カレンダーを追加」をクリックすると同期が始まります</li>
+  </ol>
 
-  <p>上のボタンをタップすると許可を求めるダイアログが表示され「許可」を押すと追加できます。</p>
+  <h3>スマホでの追加方法</h3>
 
   <h2>イベントの掲載基準について</h2>
   <ul>
@@ -101,42 +128,45 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
     <li>内容は正確でない場合があります。各イベントの Web サイトを必ずご確認ください。</li>
   </ul>
 
-  <h2>相互リンク募集</h2>
+  <h2>このサイトについて</h2>
+  <ul>
+    <li>このWebサイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。</li>
+    <li>Twitterや各Webサイトからの情報をもとに作成しています。</li>
+    <li>内容は正確でない場合があります。各イベントのWebサイトを必ずご確認ください。</li>
+  </ul>
+
+  <h2>リリースノート</h2>
+  <details>
+    <ul>
+      <li>2025/01/27: v1.5.0 概要一覧を追加しました</li>
+      <li>2024/10/02: v1.4.2 リンク表示順を変更しました</li>
+      <li>2024/10/02: v1.4.1 オンリー集合イベントに対応しました</li>
+      <li>
+        2024/10/01: v1.4.0
+        <ul>
+          <li>締め切りカレンダーの提供を開始しました</li>
+          <li>各リンクの情報を柔軟に扱えるように変更しました</li>
+        </ul>
+      </li>
+      <li>2024/06/14: v1.3.1 「本日開催！」「N日前に終了」を実装しました</li>
+      <li>2024/06/13: v1.3.0 データの取得方法を変更しました</li>
+      <li>
+        2024/04/18: v1.2.0
+        <ul>
+          <li>一覧の自動更新時刻を0時に変更しました</li>
+          <li>カレンダーインポート機能で終日扱いが正しく行われない不具合を修正しました</li>
+          <li>軽妙な不具合を修正しました</li>
+        </ul>
+      </li>
+      <li>2024/03/08: v1.1.1 バナーを追加しました</li>
+      <li>2024/03/06: v1.1.0 デザインを変更しました, ics形式での配信を開始しました</li>
+      <li>2024/03/05: v1.0.0 本サイトをリリースしました</li>
+    </ul>
+  </details>
+
   <p>
     <a href="https://vo.nrsy.jp" target="_blank"><img src="https://vo.nrsy.jp/banner.png" alt="音声合成系イベント開催情報まとめサイト" style="width: 200px; height: 40px" /></a>
   </p>
-  <p class="codeBlock">
-    &lt;a href="https://vo.nrsy.jp" target="_blank"&gt;&lt;img src="https://vo.nrsy.jp/banner.png" alt="音声合成系イベント開催情報まとめサイト" style="width: 200px; height: 40px;"&gt;&lt;/a&gt;
-  </p>
-  <p>
-    当サイトの周知にご協力いただけるイベント運営様は、上のコードをトップページなどに挿入しバナーを掲示していただけますと幸いです。<br />
-    直リンクでも可です。
-  </p>
-
-  <h2>お知らせ</h2>
-  <ul>
-    <li>2024/10/02: v1.4.2 リンク表示順を変更しました</li>
-    <li>2024/10/02: v1.4.1 オンリー集合イベントに対応しました</li>
-    <li>2024/10/01: v1.4.0
-      <ul>
-        <li>締め切りカレンダーの提供を開始しました</li>
-        <li>各リンクの情報を柔軟に扱えるように変更しました</li>
-      </ul>
-    </li>
-    <li>2024/06/14: v1.3.1 「本日開催！」「N日前に終了」を実装しました</li>
-    <li>2024/06/13: v1.3.0 データの取得方法を変更しました</li>
-    <li>
-      2024/04/18: v1.2.0
-      <ul>
-        <li>一覧の自動更新時刻を0時に変更しました</li>
-        <li>カレンダーインポート機能で終日扱いが正しく行われない不具合を修正しました</li>
-        <li>軽妙な不具合を修正しました</li>
-      </ul>
-    </li>
-    <li>2024/03/08: v1.1.1 バナーを追加しました</li>
-    <li>2024/03/06: v1.1.0 デザインを変更しました, ics形式での配信を開始しました</li>
-    <li>2024/03/05: v1.0.0 本サイトをリリースしました</li>
-  </ul>
 </BaseLayout>
 
 <style lang="scss">
