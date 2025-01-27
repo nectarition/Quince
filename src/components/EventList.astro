@@ -28,8 +28,9 @@ const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>(
     .sort(([a], [b]) => Number(a) - Number(b))
     .map(([month, events]) => {
       const monthDate = new Date(Number(month));
+      const monthId = dateLib.format(monthDate.getTime(), 'YYYY-MM');
       return (
-        <details>
+        <details id={monthId}>
           <summary>{monthDate.getFullYear()}年 {monthDate.getMonth() + 1}月</summary>
           <div class="cardRack">
             {

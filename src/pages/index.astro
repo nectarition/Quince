@@ -62,7 +62,7 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
                   <br />
                 </>
               )}
-              <a href={`#${e.id}`}>「{e.name}」</a>
+              <a href={`#${dateLibs.format(e.date, 'YYYY-MM')}`}>「{e.name}」</a>
             </td>
           </tr>
         ))
