@@ -1,7 +1,6 @@
 import ics, { type ICalEventData } from 'ical-generator';
 import eventLib from '../libs/event';
 import dateLib from '../libs/date';
-import siteConfig from '../config';
 
 export const GET = async () => {
   const fetchedEvents = await eventLib.getEventsAsync();
