@@ -10,121 +10,146 @@ export interface Props {
 }
 
 const props = Astro.props;
-console.log(props.links)
+const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>(
+  (acc, event) => {
+    const date = new Date(event.date);
+    const month = new Date(date.getFullYear(), date.getMonth(), 1);
+    const key = month.getTime();
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(event);
+    return acc;
+  }, {});
 ---
 
-<div class="cardRack">
-  {
-    props.events.map((event) => {
-      const span = Math.floor(dateLib.getSpan(event.date, props.today.getTime()) / 86400000);
-      const eventType = eventLib.convertEventType(event.type);
-      const links: PearEventLink[] = props.links[event.id] ?? []
-      const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER)) ;
-
+{
+  Object.entries(eventsByMonth)
+    .sort(([a], [b]) => Number(a) - Number(b))
+    .map(([month, events]) => {
+      const monthDate = new Date(Number(month));
       return (
-        <div class="card" style={`border: 1px solid ${eventType.color}; border-left: 8px solid ${eventType.color};`}>
-          <div class={`card_dateArea_wrap ${(span >= 0 && span <= 10 && 'card_dateArea_wrap-near') ?? ''}`}>
-            <div class="card_dateArea_container">
-              <div class="card_dateArea_year">{dateLib.format(event.date, 'YYYY.')}</div>
-              <div class="card_dateArea_date">{dateLib.format(event.date, 'M.D (ddd)')}</div>
-              <div class="card_dateArea_count">
-              {span === 0
-                ? <b>本日開催！</b>
-                : span > 0
-                  ? <>
-                    <small>あと</small>
-                    <b>{span}</b>
-                    <small>日</small>
-                  </>
-                  : span >= -10
-                    ? <>
-                      <small>{Math.abs(span)}日前に終了</small>
-                    </>
-                    : <></>}
-                    </div>
-            </div>
-          </div>
-          <div class="card_labelArea">
-            <span class="label" style={`background-color: ${eventType.color}`}>
-              {eventType.name}
-            </span>
-          </div>
-          <div class="card_eventArea">
-            <div class="card_eventArea_genre">{eventLib.convertGenre(event.genre)}</div>
-            <div class="card_eventArea_name">
-              <a href={event.websiteURL} target="_blank">
-                <b>{event.name}</b>
-              </a>
-            </div>
-            {event.subEvents.length > 0 && (
-              <ul class="card_eventArea_subEvents">
-                {event.subEvents.map((subEvent) => (
-                  <li><span class="label label-secondary">{subEvent.genre}</span>
-                    <span class="card_eventArea_subEvents_name none-break">
-                      {(
-                        subEvent.url
-                          ? <a href={subEvent.url} target="_blank">{subEvent.name}</a> 
-                          : subEvent.name
-                      )}
-                    </span></li>
-                ))}
-                </ul>
-            )}
-          </div>
-          <div class="card_placeArea">
-            <div class="card_placeArea_place">
-              <span class="label">{eventLib.getPrefecture(event.venue.address)}</span>
-              {event.venue.name}{event.roomName && ` ${event.roomName}`}
-            </div>
-            <div class="card_placeArea_placeDetail">
-              <a href={`https://www.google.co.jp/maps/search/${encodeURIComponent(event.venue.address)}`} target="_blank">
-                〒{eventLib.convertPostalCode(event.venue.postalCode)}&nbsp;
-                {event.venue.address}
-              </a>
-            </div>
-          </div>
-          {sortedLinks.length > 0 && (
-            <div class="card_linkArea">
-              <ul>
-                {sortedLinks
-                  .map((l) => {
-                  const limitSpan = l.limit !== null
-                    ? Math.floor(dateLib.getSpan(l.limit, props.today.getTime()) / 86400000)
-                    : null;
-                  return (
-                    <li><a href={l.url} target="_blank">{!l.limit || (limitSpan ?? -1) >= 0 ? <b>{l.name}</b> : <s>{l.name}</s>}</a>
-                      {l.limit && limitSpan !== null && limitSpan >= 0 && (
-                        <>
-                          &nbsp;
-                          <b>{dateLib.format(l.limit, 'M月 D日')}</b>
-                          <small>まで</small>
-                          {limitSpan >= 0 && (
-                            <>
+        <details>
+          <summary>{monthDate.getFullYear()}年 {monthDate.getMonth() + 1}月</summary>
+          <div class="cardRack">
+            {
+              events.map((event) => {
+                const span = Math.floor(dateLib.getSpan(event.date, props.today.getTime()) / 86400000);
+                const eventType = eventLib.convertEventType(event.type);
+                const links: PearEventLink[] = props.links[event.id] ?? []
+                const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER)) ;
+
+                return (
+                  <div id={event.id} class="card" style={`border: 1px solid ${eventType.color}; border-left: 8px solid ${eventType.color};`}>
+                    <div class={`card_dateArea_wrap ${(span >= 0 && span <= 10 && 'card_dateArea_wrap-near') ?? ''}`}>
+                      <div class="card_dateArea_container">
+                        <div class="card_dateArea_year">{dateLib.format(event.date, 'YYYY.')}</div>
+                        <div class="card_dateArea_date">{dateLib.format(event.date, 'M.D (ddd)')}</div>
+                        <div class="card_dateArea_count">
+                        {span === 0
+                          ? <b>本日開催！</b>
+                          : span > 0
+                            ? <>
                               <small>あと</small>
-                              <b>{limitSpan}</b>
+                              <b>{span}</b>
                               <small>日</small>
                             </>
-                          )}
-                        </>
-                      )}</li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
-          <div class="card_remarksArea">
-            <div class="card_remarksArea_remarks">備考: {event.remarks}</div>
-            <div class="card_remarksArea_organizer">運営: {event.organizer.name}</div>
+                            : span >= -10
+                              ? <>
+                                <small>{Math.abs(span)}日前に終了</small>
+                              </>
+                              : <></>}
+                              </div>
+                      </div>
+                    </div>
+                    <div class="card_labelArea">
+                      <span class="label" style={`background-color: ${eventType.color}`}>
+                        {eventType.name}
+                      </span>
+                    </div>
+                    <div class="card_eventArea">
+                      <div class="card_eventArea_genre">{eventLib.convertGenre(event.genre)}</div>
+                      <div class="card_eventArea_name">
+                        <a href={event.websiteURL} target="_blank">
+                          <b>{event.name}</b>
+                        </a>
+                      </div>
+                      {event.subEvents.length > 0 && (
+                        <ul class="card_eventArea_subEvents">
+                          {event.subEvents.map((subEvent) => (
+                            <li><span class="label label-secondary">{subEvent.genre}</span>
+                              <span class="card_eventArea_subEvents_name noneBreak">
+                                {(
+                                  subEvent.url
+                                    ? <a href={subEvent.url} target="_blank">{subEvent.name}</a> 
+                                    : subEvent.name
+                                )}
+                              </span></li>
+                          ))}
+                          </ul>
+                      )}
+                    </div>
+                    <div class="card_placeArea">
+                      <div class="card_placeArea_place">
+                        <span class="label">{eventLib.getPrefecture(event.venue.address)}</span>
+                        {event.venue.name}{event.roomName && ` ${event.roomName}`}
+                      </div>
+                      <div class="card_placeArea_placeDetail">
+                        <a href={`https://www.google.co.jp/maps/search/${encodeURIComponent(event.venue.address)}`} target="_blank">
+                          〒{eventLib.convertPostalCode(event.venue.postalCode)}&nbsp;
+                          {event.venue.address}
+                        </a>
+                      </div>
+                    </div>
+                    {sortedLinks.length > 0 && (
+                      <div class="card_linkArea">
+                        <ul>
+                          {sortedLinks
+                            .map((l) => {
+                            const limitSpan = l.limit !== null
+                              ? Math.floor(dateLib.getSpan(l.limit, props.today.getTime()) / 86400000)
+                              : null;
+                            return (
+                              <li><a href={l.url} target="_blank">{!l.limit || (limitSpan ?? -1) >= 0 ? <b>{l.name}</b> : <s>{l.name}</s>}</a>
+                                {l.limit && limitSpan !== null && limitSpan >= 0 && (
+                                  <>
+                                    &nbsp;
+                                    <b>{dateLib.format(l.limit, 'M月 D日')}</b>
+                                    <small>まで</small>
+                                    {limitSpan >= 0 && (
+                                      <>
+                                        <small>あと</small>
+                                        <b>{limitSpan}</b>
+                                        <small>日</small>
+                                      </>
+                                    )}
+                                  </>
+                                )}</li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    )}
+                    <div class="card_remarksArea">
+                      <div class="card_remarksArea_remarks">備考: {event.remarks}</div>
+                      <div class="card_remarksArea_organizer">運営: {event.organizer.name}</div>
+                    </div>
+                  </div>
+                );
+              })
+            }
           </div>
-        </div>
+          <p class="text-right">
+            <a href="#future-events">一番上に戻る</a>
+          </p>
+        </details>
       );
     })
-  }
-</div>
+}
 
 <style lang="scss">
   .cardRack {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 
     display: flex;
     flex-flow: row;
@@ -280,6 +305,7 @@ console.log(props.links)
     color: #ffffff;
     padding: 2px 10px 3px;
     font-size: 0.9em;
+    margin-right: 5px;
 
     &-secondary {
       background-color: transparent;
@@ -288,8 +314,9 @@ console.log(props.links)
     }
   }
 
-  .none-break {
-    white-space: nowrap;
+  .monthTitle {
+    font-size: 1.25em;
+    margin-bottom: 10px;
   }
 
   ul {
@@ -302,5 +329,9 @@ console.log(props.links)
         content: '・';
       }
     }
+  }
+
+  .text-right {
+    text-align: right;
   }
 </style>

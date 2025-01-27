@@ -85,6 +85,30 @@ const convertEventType = (eventType: string): { name: string; color: string } =>
   };
 };
 
+const convertEventTypeShorten = (eventType: string): { name: string; color: string } => {
+  if (eventType === 'fanzine') {
+    return {
+      name: '即売会',
+      color: '#d54c00',
+    };
+  } else if (eventType === 'djclub') {
+    return {
+      name: 'クラブ',
+      color: '#603885',
+    };
+  } else if (eventType === 'special') {
+    return {
+      name: '特別',
+      color: '#2d8965',
+    };
+  }
+
+  return {
+    name: eventType,
+    color: '#404040',
+  };
+};
+
 const convertPostalCode = (rawPostalCode: string): string => {
   const code = rawPostalCode.match(/^([0-9]{3})([0-9]{4})$/);
   if (!code) return '';
@@ -105,5 +129,6 @@ export default {
   convertGenre,
   convertPostalCode,
   convertEventType,
+  convertEventTypeShorten,
   getPrefecture,
 };
