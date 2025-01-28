@@ -62,7 +62,7 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
                   <br />
                 </>
               )}
-              <a href={`#${dateLibs.format(e.date, 'YYYY-MM')}`}>「{e.name}」</a>
+              <a href={`#${e.id}`}>「{e.name}」</a>
             </td>
           </tr>
         ))
@@ -82,27 +82,13 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
   <h4>イベントカレンダー</h4>
   <p class="codeBlock">{siteConfig.siteURL}/event-schedule.ics</p>
 
-  <h4>イベント</h4>
-  <p class="codeBlock">{siteConfig.siteURL}/event-schedule.ics</p>
-
   <h4>締め切りカレンダー</h4>
-  <p class="codeBlock">{siteConfig.siteURL}/limits.ics</p>
-
-  <h4>締め切り</h4>
   <p class="codeBlock">{siteConfig.siteURL}/limits.ics</p>
 
   <h3>Google カレンダーへの追加方法 (PC)</h3>
 
   <ol>
     <li>Google カレンダーを開きます</li>
-    <li>左メニューの「他のカレンダー」横にある「＋」ボタンをクリックします</li>
-    <li>「URL で追加」をクリックします</li>
-    <li>「カレンダーの URL」に上述のURLを入力します</li>
-    <li>「カレンダーを追加」をクリックすると同期が始まります</li>
-  </ol>
-
-  <ol>
-    <li>Googleカレンダーを開きます</li>
     <li>左メニューの「他のカレンダー」横にある「＋」ボタンをクリックします</li>
     <li>「URL で追加」をクリックします</li>
     <li>「カレンダーの URL」に上述のURLを入力します</li>
@@ -126,13 +112,6 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
     <li>この Web サイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。</li>
     <li>情報投稿フォームや X (Twitter)、イベント Web サイトからの情報をもとに作成しています。</li>
     <li>内容は正確でない場合があります。各イベントの Web サイトを必ずご確認ください。</li>
-  </ul>
-
-  <h2>このサイトについて</h2>
-  <ul>
-    <li>このWebサイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。</li>
-    <li>Twitterや各Webサイトからの情報をもとに作成しています。</li>
-    <li>内容は正確でない場合があります。各イベントのWebサイトを必ずご確認ください。</li>
   </ul>
 
   <h2>リリースノート</h2>

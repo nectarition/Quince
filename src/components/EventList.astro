@@ -28,10 +28,9 @@ const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>(
     .sort(([a], [b]) => Number(a) - Number(b))
     .map(([month, events]) => {
       const monthDate = new Date(Number(month));
-      const monthId = dateLib.format(monthDate.getTime(), 'YYYY-MM');
       return (
-        <details id={monthId}>
-          <summary>{monthDate.getFullYear()}年 {monthDate.getMonth() + 1}月</summary>
+        <>
+          <h3 class="monthTitle">{monthDate.getFullYear()}年 {monthDate.getMonth() + 1}月</h3>
           <div class="cardRack">
             {
               events.map((event) => {
@@ -143,7 +142,7 @@ const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>(
           <p class="text-right">
             <a href="#future-events">一番上に戻る</a>
           </p>
-        </details>
+        </>
       );
     })
 }
@@ -208,6 +207,9 @@ const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>(
       }
       &_date {
         font-weight: bold;
+      }
+      &_count {
+        padding-left: 5px;
       }
 
       @media screen and (max-width: 840px) {
