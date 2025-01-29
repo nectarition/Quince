@@ -82,8 +82,16 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
   <h4>イベントカレンダー</h4>
   <p class="codeBlock">{siteConfig.siteURL}/event-schedule.ics</p>
 
+  <div class="btnRack">
+    <a href="webcal://vo.nrsy.jp/event-schedule.ics" class="btn">端末に追加 (イベント)</a>
+  </div>
+
   <h4>締め切りカレンダー</h4>
   <p class="codeBlock">{siteConfig.siteURL}/limits.ics</p>
+
+  <div class="btnRack">
+    <a href="webcal://vo.nrsy.jp/limits.ics" class="btn">端末に追加 (締め切り)</a>
+  </div>
 
   <h3>Google カレンダーへの追加方法 (PC)</h3>
 
