@@ -1,0 +1,157 @@
+---
+import Breadcrumbs from 'src/components/Breadcrumbs.astro';
+import config from 'src/config';
+import BaseLayout from 'src/layouts/BaseLayout/BaseLayout.astro';
+---
+
+<BaseLayout title="API ドキュメント">
+  <Breadcrumbs items={[{ name: 'ホーム', path: '/' }]} />
+  <h1>API ドキュメント <small><code>v2025-02-04</code></small></h1>
+
+  <ul>
+    <li>ボイベまとめ (Quince) に登録されているイベントなどを取得するための API です。</li>
+    <li>利用に登録などは必要ありませんが、過度なアクセスはご遠慮ください。</li>
+    <li>この API を使用して別のイベントまとめサイトを作成することはおやめください。</li>
+    <li>API 仕様は予告なく停止や変更を行う場合がございます。</li>
+  </ul>
+
+  <p>
+    ベースURL: <code>{config.siteURL}/api/2025-02-04</code><br />
+    認可: 無し
+  </p>
+
+  <h2>エンドポイント</h2>
+
+  <h3 id="get-events">イベント一覧取得</h3>
+  <dl>
+    <dt>説明</dt>
+    <dd>QuincePear に登録されているイベント情報の一覧を配列で返します。</dd>
+    <dt>エンドポイント</dt>
+    <dd><code>GET /events</code></dd>
+    <dt>レスポンス</dt>
+    <dd>イベント情報の配列</dd>
+    <dt>ブラウザで確認する</dt>
+    <dd><a href={`${config.siteURL}/api/2025-02-04/events`} target="_blank" rel="noopener">{config.siteURL}/api/2025-02-04/events</a></dd>
+  </dl>
+
+  <h3 id="get-event">イベント情報取得</h3>
+  <dl>
+    <dt>説明</dt>
+    <dd>
+      指定したイベントの情報を返します。<br />
+      id は <a href="#get-events">イベント一覧取得</a> で取得したイベント情報の id です。
+    </dd>
+    <dt>エンドポイント</dt>
+    <dd><code>GET /events/:id</code></dd>
+    <dt>レスポンス</dt>
+    <dd>指定したイベント情報</dd>
+    <dt>ブラウザで確認する</dt>
+    <dd><a href={`${config.siteURL}/api/2025-02-04/events/Ro0mHgq8qrivwlTd51mQ`} target="_blank" rel="noopener">{config.siteURL}/api/2025-02-04/events/Ro0mHgq8qrivwlTd51mQ</a></dd>
+  </dl>
+
+  <h2>スキーム</h2>
+
+  <h3>イベント情報</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>フィールド</th>
+        <th>説明</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>id</th>
+        <td>イベントの ID</td>
+      </tr>
+      <tr>
+        <th>name</th>
+        <td>イベント名</td>
+      </tr>
+      <tr>
+        <th>date</th>
+        <td>イベント開催日時 (Unix time Milliseconds)</td>
+      </tr>
+      <tr>
+        <th>type</th>
+        <td>
+          イベントの種類
+          <table>
+            <tbody>
+              <tr>
+                <th>fanzine</th>
+                <td>同人誌即売会</td>
+              </tr>
+              <tr>
+                <th>djclub</th>
+                <td>DJ クラブイベント</td>
+              </tr>
+              <tr>
+                <th>special</th>
+                <td>特別イベント</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <th>genre</th>
+        <td>
+          イベントのジャンル
+          <table>
+            <tbody>
+              <tr>
+                <th>all-genre</th>
+                <td>音声合成オールジャンル</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <th>websiteURL</th>
+        <td>イベントの Web サイト URL</td>
+      </tr>
+      <tr>
+        <th>remarks</th>
+        <td>備考</td>
+      </tr>
+      <tr>
+        <th>venue.id</th>
+        <td>会場の ID</td>
+      </tr>
+      <tr>
+        <th>venue.name</th>
+        <td>会場名</td>
+      </tr>
+      <tr>
+        <th>venue.postalCode</th>
+        <td>郵便番号</td>
+      </tr>
+      <tr>
+        <th>venue.address</th>
+        <td>住所</td>
+      </tr>
+      <tr>
+        <th>roomName</th>
+        <td>部屋名</td>
+      </tr>
+      <tr>
+        <th>organizer.name</th>
+        <td>主催者名</td>
+      </tr>
+      <tr>
+        <th>subEvents[].name</th>
+        <td>サブイベント名</td>
+      </tr>
+      <tr>
+        <th>subEvents[].genre</th>
+        <td>サブイベントのジャンル</td>
+      </tr>
+      <tr>
+        <th>subEvents[].url</th>
+        <td>サブイベントの URL</td>
+      </tr>
+    </tbody>
+  </table>
+</BaseLayout>
