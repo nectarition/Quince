@@ -10,17 +10,6 @@ export const GET = async () => {
       name: e.name,
       date: e.date,
       type: e.type,
-      genre: e.genre,
-      websiteURL: e.websiteURL,
-      remarks: e.remarks,
-      venue: e.venue,
-      roomName: e.roomName,
-      organizer: e.organizer,
-      subEvents: e.subEvents.map((se) => ({
-        name: se.name,
-        genre: se.genre,
-        url: se.url,
-      })),
     })),
   );
 };

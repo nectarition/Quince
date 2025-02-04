@@ -9,17 +9,6 @@ export const GET: APIRoute = async ({ props }) => {
     name: props.data.name,
     date: props.data.date,
     type: props.data.type,
-    genre: props.data.genre,
-    websiteURL: props.data.websiteURL,
-    remarks: props.data.remarks,
-    venue: props.data.venue,
-    roomName: props.data.roomName,
-    organizer: props.data.organizer,
-    subEvents: props.data.subEvents.map((se: PearSubEvent) => ({
-      name: se.name,
-      genre: se.genre,
-      url: se.url,
-    })),
   };
   return getResponseJSON(filteredEvent);
 };
