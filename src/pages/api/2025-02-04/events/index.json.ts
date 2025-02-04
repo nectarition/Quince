@@ -10,6 +10,9 @@ export const GET = async () => {
       name: e.name,
       date: e.date,
       type: e.type,
+      websiteURL: e.websiteURL,
+      venueName: e.venue.name,
+      roomName: e.roomName,
     })),
   );
 };

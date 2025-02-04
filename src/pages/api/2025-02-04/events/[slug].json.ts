@@ -1,7 +1,6 @@
 import { getResponseJSON } from '../../../../libs/response';
 import event from '../../../../libs/event';
 import type { APIRoute } from 'astro';
-import type { PearSubEvent } from '@types';
 
 export const GET: APIRoute = async ({ props }) => {
   const filteredEvent = {
@@ -9,6 +8,9 @@ export const GET: APIRoute = async ({ props }) => {
     name: props.data.name,
     date: props.data.date,
     type: props.data.type,
+    websiteURL: props.data.websiteURL,
+    venueName: props.data.venue.name,
+    roomName: props.data.roomName,
   };
   return getResponseJSON(filteredEvent);
 };
