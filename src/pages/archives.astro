@@ -33,7 +33,7 @@ const events = fetchedEvents
             <td>{eventLibs.convertEventTypeShorten(e.type).name}</td>
             <td>{eventLibs.getPrefecture(e.venue.address)}</td>
             <td>
-              <a href={`#${e.websiteURL}`}>{e.name}</a>
+              <a href={e.websiteURL}>{e.name}</a>
             </td>
             <td>{eventLibs.convertGenre(e.genre)}</td>
           </tr>
