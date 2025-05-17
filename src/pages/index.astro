@@ -78,7 +78,11 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
   <EventList events={futureEvents} today={today} links={fetchedLinks} />
 
   <h2 id="held-events">開催が終了した音声合成系イベント</h2>
-  <EventList events={heldEvents} today={today} links={fetchedLinks} />
+  {heldEvents.length > 0 ? <EventList events={heldEvents} today={today} links={fetchedLinks} /> : <p>最近終了したイベントはありません</p>}
+
+  <div class="btnRack">
+    <a href="/archives/" class="btn">過去のイベントを表示</a>
+  </div>
 
   <h2>あなたのカレンダーにも追加できます！</h2>
 
@@ -141,6 +145,7 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
   <h2>リリースノート</h2>
   <details>
     <ul>
+      <li>2025/05/17: 2025.5.0 <a href="/archives/">ボイベアーカイブ</a> (サイトに登録されている過去のイベントを表示するページ) を追加しました</li>
       <li>
         2025/02/04: 2025.2.0
         <ul>

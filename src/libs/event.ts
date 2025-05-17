@@ -10,6 +10,7 @@ const getEventsAsync = async (): Promise<PearEventAppModel[]> => {
   const events = eventDocs.docs
     .filter((e) => e.exists)
     .map((e) => e.data())
+    .filter((e) => e.isPublic)
     .sort((a, b) => a.order - b.order)
     .sort((a, b) => a.date - b.date);
   if (events.length === 0) return [];

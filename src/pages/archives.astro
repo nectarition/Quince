@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout/BaseLayout.astro';
+import eventLibs from '../libs/event';
+import dateLibs from '../libs/date';
+import Breadcrumbs from 'src/components/Breadcrumbs.astro';
+const fetchedEvents = await eventLibs.getEventsAsync();
+const events = fetchedEvents
+  .filter((e) => e.date > 0)
+  .sort((a, b) => a.order - b.order)
+  .sort((a, b) => a.date - b.date);
+---
+
+<BaseLayout title="ボイベアーカイブ">
+  <Breadcrumbs items={[{ name: 'ホーム', path: '/' }]} />
+  <h1>ボイベアーカイブ</h1>
+  <p>サイトに登録されている過去のイベントを表示しています。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>種類</th>
+        <th>都道府県</th>
+        <th>ジャンル</th>
+        <th>イベント</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        events.map((e) => (
+          <tr>
+            <td>{dateLibs.format(e.date, 'YYYY.M.D (ddd)')}</td>
+            <td>{eventLibs.convertEventTypeShorten(e.type).name}</td>
+            <td>{eventLibs.getPrefecture(e.venue.address)}</td>
+            <td>
+              <a href={`#${e.websiteURL}`}>{e.name}</a>
+            </td>
+            <td>{eventLibs.convertGenre(e.genre)}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</BaseLayout>

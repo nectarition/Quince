@@ -20,6 +20,7 @@ export const eventConverter: FirestoreDataConverter<PearEventDbModel> = {
         name: eventDoc.organizer.name,
       },
       subEvents: eventDoc.subEvents,
+      isPublic: eventDoc.isPublic,
     };
   },
 };
