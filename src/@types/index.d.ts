@@ -11,6 +11,7 @@ export interface PearEvent {
     name: string;
   };
   subEvents: PearSubEvent[];
+  isPublic: boolean;
 }
 export type PearEventDocument = PearEvent & {
   id: string;
