@@ -1,7 +1,6 @@
 ---
-import eventLib from '../libs/event';
-import dateLib from '../libs/date';
 import type { PearEventAppModel, PearEventLink } from '@types';
+import EventCard from './EventCard.astro';
 
 export interface Props {
   today: Date;
@@ -10,17 +9,16 @@ export interface Props {
 }
 
 const props = Astro.props;
-const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>(
-  (acc, event) => {
-    const date = new Date(event.date);
-    const month = new Date(date.getFullYear(), date.getMonth(), 1);
-    const key = month.getTime();
-    if (!acc[key]) {
-      acc[key] = [];
-    }
-    acc[key].push(event);
-    return acc;
-  }, {});
+const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>((acc, event) => {
+  const date = new Date(event.date);
+  const month = new Date(date.getFullYear(), date.getMonth(), 1);
+  const key = month.getTime();
+  if (!acc[key]) {
+    acc[key] = [];
+  }
+  acc[key].push(event);
+  return acc;
+}, {});
 ---
 
 {
@@ -30,114 +28,13 @@ const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>(
       const monthDate = new Date(Number(month));
       return (
         <>
-          <h3 class="monthTitle">{monthDate.getFullYear()}年 {monthDate.getMonth() + 1}月</h3>
+          <h3 class="monthTitle">
+            {monthDate.getFullYear()}年 {monthDate.getMonth() + 1}月
+          </h3>
           <div class="cardRack">
-            {
-              events.map((event) => {
-                const span = Math.floor(dateLib.getSpan(event.date, props.today.getTime()) / 86400000);
-                const eventType = eventLib.convertEventType(event.type);
-                const links: PearEventLink[] = props.links[event.id] ?? []
-                const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER)) ;
-
-                return (
-                  <div id={event.id} class="card" style={`border: 1px solid ${eventType.color}; border-left: 8px solid ${eventType.color};`}>
-                    <div class={`card_dateArea_wrap ${(span >= 0 && span <= 10 && 'card_dateArea_wrap-near') ?? ''}`}>
-                      <div class="card_dateArea_container">
-                        <div class="card_dateArea_year">{dateLib.format(event.date, 'YYYY.')}</div>
-                        <div class="card_dateArea_date">{dateLib.format(event.date, 'M.D (ddd)')}</div>
-                        <div class="card_dateArea_count">
-                        {span === 0
-                          ? <b>本日開催！</b>
-                          : span > 0
-                            ? <>
-                              <small>あと</small>
-                              <b>{span}</b>
-                              <small>日</small>
-                            </>
-                            : span >= -10
-                              ? <>
-                                <small>{Math.abs(span)}日前に終了</small>
-                              </>
-                              : <></>}
-                              </div>
-                      </div>
-                    </div>
-                    <div class="card_labelArea">
-                      <span class="label" style={`background-color: ${eventType.color}`}>
-                        {eventType.name}
-                      </span>
-                    </div>
-                    <div class="card_eventArea">
-                      <div class="card_eventArea_genre">{eventLib.convertGenre(event.genre)}</div>
-                      <div class="card_eventArea_name">
-                        <a href={event.websiteURL} target="_blank">
-                          <b>{event.name}</b>
-                        </a>
-                      </div>
-                      {event.subEvents.length > 0 && (
-                        <ul class="card_eventArea_subEvents">
-                          {event.subEvents.map((subEvent) => (
-                            <li><span class="label label-secondary">{subEvent.genre}</span>
-                              <span class="card_eventArea_subEvents_name noneBreak">
-                                {(
-                                  subEvent.url
-                                    ? <a href={subEvent.url} target="_blank">{subEvent.name}</a> 
-                                    : subEvent.name
-                                )}
-                              </span></li>
-                          ))}
-                          </ul>
-                      )}
-                    </div>
-                    <div class="card_placeArea">
-                      <div class="card_placeArea_place">
-                        <span class="label">{eventLib.getPrefecture(event.venue.address)}</span>
-                        {event.venue.name}{event.roomName && ` ${event.roomName}`}
-                      </div>
-                      <div class="card_placeArea_placeDetail">
-                        <a href={`https://www.google.co.jp/maps/search/${encodeURIComponent(event.venue.address)}`} target="_blank">
-                          〒{eventLib.convertPostalCode(event.venue.postalCode)}&nbsp;
-                          {event.venue.address}
-                        </a>
-                      </div>
-                    </div>
-                    {sortedLinks.length > 0 && (
-                      <div class="card_linkArea">
-                        <ul>
-                          {sortedLinks
-                            .map((l) => {
-                            const limitSpan = l.limit !== null
-                              ? Math.floor(dateLib.getSpan(l.limit, props.today.getTime()) / 86400000)
-                              : null;
-                            return (
-                              <li><a href={l.url} target="_blank">{!l.limit || (limitSpan ?? -1) >= 0 ? <b>{l.name}</b> : <s>{l.name}</s>}</a>
-                                {l.limit && limitSpan !== null && limitSpan >= 0 && (
-                                  <>
-                                    &nbsp;
-                                    <b>{dateLib.format(l.limit, 'M月 D日')}</b>
-                                    <small>まで</small>
-                                    {limitSpan >= 0 && (
-                                      <>
-                                        <small>あと</small>
-                                        <b>{limitSpan}</b>
-                                        <small>日</small>
-                                      </>
-                                    )}
-                                  </>
-                                )}</li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    )}
-                    <div class="card_remarksArea">
-                      <div class="card_remarksArea_remarks">備考: {event.remarks}</div>
-                      <div class="card_remarksArea_organizer">運営: {event.organizer.name}</div>
-                    </div>
-                  </div>
-                );
-              })
-            }
+            {events.map((event) => (
+              <EventCard today={props.today} event={event} links={props.links[event.id] ?? []} />
+            ))}
           </div>
           <p class="text-right">
             <a href="#future-events">一番上に戻る</a>
@@ -151,169 +48,11 @@ const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>(
   .cardRack {
     margin-bottom: 10px;
 
-    display: flex;
-    flex-flow: row;
-    flex-wrap: wrap;
+    display: grid;
     gap: 10px;
 
     &:last-child {
       margin-bottom: 0;
-    }
-  }
-
-  .card {
-    padding: 10px;
-    background-color: var(--background-color);
-    display: grid;
-    width: 100%;
-    grid-template-columns: 100px 1fr 1fr;
-    grid-template-rows: auto auto auto;
-    gap: 5px 10px;
-
-    @media screen and (max-width: 840px) {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      order: 0;
-    }
-
-    &_dateArea {
-      &_wrap {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #e0e0e0;
-        grid-row: 1 / 4;
-
-        &-near {
-          background-color: #f5a5a5;
-        }
-
-        @media screen and (max-width: 840px) {
-          display: block;
-          order: 4;
-        }
-      }
-      &_container {
-        padding: 10px;
-        text-align: center;
-
-        @media screen and (max-width: 840px) {
-          text-align: left;
-        }
-      }
-      &_year {
-        font-size: 0.8em;
-      }
-      &_date {
-        font-weight: bold;
-      }
-      &_count {
-        padding-left: 5px;
-      }
-
-      @media screen and (max-width: 840px) {
-        &_year,
-        &_date,
-        &_count {
-          display: inline;
-        }
-      }
-    }
-
-    &_labelArea {
-      grid-column: 2;
-      grid-row: 1;
-
-      @media screen and (max-width: 840px) {
-        order: 1;
-      }
-    }
-
-    &_eventArea {
-      grid-column: 2;
-      grid-row: 2;
-
-      @media screen and (max-width: 840px) {
-        order: 2;
-      }
-
-      &_genre {
-        font-size: 0.8em;
-      }
-      &_name {
-        font-weight: bold;
-        font-size: 1.25em;
-      }
-
-      &_subEvents {
-        font-size: 0.9em;
-        margin-top: 5px;
-        &_name {
-          font-weight: bold;
-        }
-        li {
-          margin-bottom: 2px;
-          &:last-child {
-            margin-bottom: 0;
-          }
-        }
-      }
-    }
-
-    &_placeArea {
-      grid-column: 2;
-      grid-row: 3;
-
-      @media screen and (max-width: 840px) {
-        order: 3;
-      }
-
-      &_place {
-      }
-      &_placeDetail {
-        font-size: 0.8em;
-      }
-    }
-
-    &_remarksArea {
-      grid-column: 3;
-      grid-row: 3;
-
-      @media screen and (max-width: 840px) {
-        order: 6;
-      }
-
-      &_remarks {
-        font-size: 0.8em;
-      }
-      &_organizer {
-        font-size: 0.8em;
-      }
-    }
-
-    &_linkArea {
-      grid-column: 3;
-      grid-row: 2;
-
-      @media screen and (max-width: 840px) {
-        order: 5;
-      }
-    }
-  }
-
-  .label {
-    display: inline-block;
-    background-color: #404040;
-    color: #ffffff;
-    padding: 2px 10px 3px;
-    font-size: 0.9em;
-    margin-right: 5px;
-
-    &-secondary {
-      background-color: transparent;
-      border: 1px solid #202020;
-      color: #202020;
     }
   }
 

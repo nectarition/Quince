@@ -1,0 +1,103 @@
+---
+import EventCard from 'src/components/EventCard.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import BaseLayout from '../layouts/BaseLayout/BaseLayout.astro';
+---
+
+<BaseLayout title="ピックアップ掲載について">
+  <Breadcrumbs items={[{ name: 'ホーム', path: '/' }]} />
+  <h1>ピックアップ掲載について</h1>
+  <p>ボイベまとめのピックアップ掲載についてのご案内ページです。</p>
+
+  <h2>目次</h2>
+  <ul>
+    <li><a href="#pick-up-event">ピックアップイベントとは</a></li>
+  </ul>
+
+  <h2 id="pick-up-event">ピックアップイベント</h2>
+
+  <h3>ピックアップイベントとは</h3>
+  <p>
+    ピックアップイベントは、ボイベまとめ運営の「ねくたりしょん」が主催・協力しているイベントや、ボイベまとめの活動支援 (寄付や Sockbase VO-EVE プランの利用)
+    を行ってくださっているイベントを紹介するものです。
+  </p>
+  <p>
+    トップページの「ピックアップイベント」セクションに掲載され、多くの方の目に触れやすくなります。<br />
+    また「主催者からのPRメッセージ」を掲載することができます。イベントの魅力を直接アピールすることで、より多くの方に興味を持っていただけます。
+  </p>
+
+  <h3>掲載イメージ</h3>
+
+  <p>
+    <EventCard
+      today={new Date()}
+      event={{
+        id: 'example-event',
+        name: 'ボイベまとめカンファレンス',
+        type: 'special',
+        date: new Date('2025-12-19').getTime(),
+        genre: 'ボイベまとめユーザーの集い',
+        websiteURL: 'https://discord.gg/ggFnwgsUd3',
+        remarks: '現地参加のみ',
+        roomName: '大ホール',
+        order: 1,
+        organizer: {
+          name: 'ねくたりしょん',
+        },
+        subEvents: [],
+        isPublic: true,
+        isPickUp: true,
+        pickUpMessage: 'ピックアップイベント掲載のサンプルです。ここには主催者からのPRメッセージを掲載できます！',
+        venue: {
+          name: 'ボイベまとめ会館',
+          address: '東京都小笠原村沖ノ鳥島1番地',
+          postalCode: '1002100',
+          id: 'venue-001',
+        },
+      }}
+      links={[]}
+      isPickUp={true}
+    />
+  </p>
+
+  <h3>掲載依頼について</h3>
+
+  <p>音声合成系イベントを主催されている方で、ピックアップイベントとしての掲載をご希望の場合は、以下の方法でお申し込みいただけます。</p>
+
+  <h3>掲載方法</h3>
+
+  <h4>1. 寄付による掲載</h4>
+  <p>
+    寄付による活動支援をご検討いただける場合は、下記お問い合わせフォームよりご連絡ください。<br />
+    寄付額については別途ご相談させていただきます。
+  </p>
+
+  <div class="btnRack">
+    <a href="https://donate.stripe.com/bIY16HfCS8e5aFGdRr" class="btn">お問い合わせ</a>
+  </div>
+
+  <h4>2. Sockbase VO-EVE プランをご利用の場合</h4>
+  <p>
+    Sockbase を利用してイベントを運営される場合、システムの利用プラン選択時に <strong>VO-EVE プラン</strong>を選択することでピックアップイベントに掲載させていただきます。
+  </p>
+  <p>Sockbase の利用をご希望の方は、Sockbase 担当者へご連絡ください。</p>
+
+  <div class="btnRack">
+    <a href="https://sockbase.net/for-organizer" class="btn">Sockbase の導入について</a>
+  </div>
+
+  <h3>よくある質問</h3>
+  <dl>
+    <dt>Q. 掲載に費用はかかりますか?</dt>
+    <dd>A. Sockbase VO-EVE プランをご利用の場合はプラン料金内で掲載されます。<br />寄付による掲載をご希望の場合は、寄付額を別途ご相談させていただきます。</dd>
+
+    <dt>Q. 個人で小規模なイベントでも掲載できますか?</dt>
+    <dd>A. はい、個人主催のイベントも掲載可能です。まずはお気軽にご相談ください。</dd>
+
+    <dt>Q. どのくらいの期間掲載されますか?</dt>
+    <dd>A. お申し込み完了～イベント終了日まで掲載されます。詳細はお問い合わせください。</dd>
+
+    <dt>Q. Sockbase を利用するにはどうすればいいですか?</dt>
+    <dd>A. Sockbase 担当者への連絡が必要です。詳しくは<a href="https://sockbase.net/for-organizer">こちら</a>をご覧ください。</dd>
+  </dl>
+</BaseLayout>

@@ -12,6 +12,8 @@ export interface PearEvent {
   };
   subEvents: PearSubEvent[];
   isPublic: boolean;
+  isPickUp: boolean;
+  pickUpMessage: string | null;
 }
 export type PearEventDocument = PearEvent & {
   id: string;

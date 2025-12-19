@@ -1,0 +1,54 @@
+---
+import type { PearEventAppModel, PearEventLink } from '@types';
+import EventCard from './EventCard.astro';
+
+export interface Props {
+  today: Date;
+  events: PearEventAppModel[];
+  links: Record<string, PearEventLink[]>;
+}
+
+const props = Astro.props;
+---
+
+<div class="cardRack">
+  {props.events.map((event) => <EventCard today={props.today} event={event} links={props.links[event.id] ?? []} isPickUp={true} />)}
+</div>
+
+<p class="text-right">
+  <a href="#future-events">一番上に戻る</a>
+</p>
+
+<style lang="scss">
+  .cardRack {
+    margin-bottom: 10px;
+
+    display: grid;
+    gap: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .monthTitle {
+    font-size: 1.25em;
+    margin-bottom: 10px;
+  }
+
+  ul {
+    padding: 0;
+    list-style: none;
+    li {
+      margin-left: 1em;
+      &::before {
+        margin-left: -1em;
+        content: '・';
+      }
+    }
+  }
+
+  .text-right {
+    text-align: right;
+  }
+</style>

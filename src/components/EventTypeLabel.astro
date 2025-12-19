@@ -1,0 +1,30 @@
+---
+import eventLib from '../libs/event';
+export interface Props {
+  eventType: string;
+  isShort?: boolean;
+}
+
+const eventType = !Astro.props.isShort ? eventLib.convertEventType(Astro.props.eventType) : eventLib.convertEventTypeShorten(Astro.props.eventType);
+---
+
+<span class="label" style={`background-color: ${eventType.color}`}>
+  {eventType.name}
+</span>
+
+<style lang="scss">
+  .label {
+    display: inline-block;
+    background-color: #404040;
+    color: #ffffff;
+    padding: 2px 10px 3px;
+    font-size: 0.9em;
+    margin-right: 5px;
+
+    &-secondary {
+      background-color: transparent;
+      border: 1px solid #202020;
+      color: #202020;
+    }
+  }
+</style>

@@ -4,7 +4,9 @@ import eventLibs from '../libs/event';
 import dateLibs from '../libs/date';
 import BaseLayout from '../layouts/BaseLayout/BaseLayout.astro';
 import EventList from '../components/EventList.astro';
-import Alert from 'src/components/Alert.astro';
+import Alert from '../components/Alert.astro';
+import EventTypeLabel from '../components/EventTypeLabel.astro';
+import PickUpEventList from '../components/PickUpEventList.astro';
 
 const now = new Date();
 now.setUTCHours(now.getUTCHours() + 9);
@@ -22,6 +24,12 @@ const heldEvents = fetchedEvents
   .sort((a, b) => b.date - a.date);
 
 const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
+
+const pickupEvents = futureEvents
+  .filter((e) => e.date > today.getTime())
+  .filter((e) => e.isPickUp)
+  .sort((a, b) => a.order - b.order)
+  .sort((a, b) => a.date - b.date);
 ---
 
 <BaseLayout>
@@ -40,7 +48,7 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
     詳しくは<a href="https://donate.stripe.com/bIY16HfCS8e5aFGdRr">こちら</a>をご覧ください。
   </Alert>
 
-  <h2 id="future-events">開催が近い音声合成系イベント</h2>
+  <h2 id="future-events">イベントリスト</h2>
 
   <table>
     <thead>
@@ -56,7 +64,9 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
         futureEvents.map((e) => (
           <tr>
             <td>{dateLibs.format(e.date, 'YYYY.M.D (ddd)')}</td>
-            <td>{eventLibs.convertEventTypeShorten(e.type).name}</td>
+            <td>
+              <EventTypeLabel eventType={e.type} isShort={true} />
+            </td>
             <td>{eventLibs.getPrefecture(e.venue.address)}</td>
             <td class="allBreak">
               {e.genre && (
@@ -73,9 +83,31 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
     </tbody>
   </table>
 
+  <h2>
+    ピックアップイベント <span class="label">PR</span>
+  </h2>
+  {
+    pickupEvents.length > 0 ? (
+      <>
+        <PickUpEventList events={pickupEvents} today={today} links={fetchedLinks} />
+        <p>
+          <a href="/pick-up/#pick-up-event">「ピックアップイベント」とは？</a>
+        </p>
+      </>
+    ) : (
+      <p>
+        現在ピックアップイベントはありません。
+        <br />
+        <a href="/pick-up/#pick-up-event">「ピックアップイベント」とは？</a>
+      </p>
+    )
+  }
+
+  <h2>イベント情報</h2>
+
   <EventList events={futureEvents} today={today} links={fetchedLinks} />
 
-  <h2 id="held-events">開催が終了した音声合成系イベント</h2>
+  <h2 id="held-events">最近終了したイベント</h2>
   {heldEvents.length > 0 ? <EventList events={heldEvents} today={today} links={fetchedLinks} /> : <p>最近終了したイベントはありません</p>}
 
   <div class="btnRack">
@@ -131,18 +163,23 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
   </ul>
 
   <h2>応援をお願いします🙇</h2>
-  <p>サイトの継続運営のためご利用者様からの寄付を受け付けております。ご寄付をいただける方は下記「寄付する」ボタンからお願いいたします。</p>
+  <p>
+    サイトの継続運営のためご利用者様からの寄付を受け付けております。ご寄付をいただける方は下記「寄付する」ボタンからお願いいたします。<br />
+    ご寄付はサイトの維持管理費や新機能開発費用に充てさせていただきます。皆様のご支援がサイト運営の大きな助けとなります。何卒よろしくお願いいたします。
+  </p>
+  <p>
+    イベント主催者様でピックアップイベント掲載をご希望の方も、寄付による掲載が可能です。<br />
+    詳しくは<a href="/pick-up/#pick-up-event">こちら</a>をご覧ください。
+  </p>
   <div class="btnRack">
     <a href="https://donate.stripe.com/bIY16HfCS8e5aFGdRr" class="btn">寄付する</a>
+    <a href="/pick-up/" class="btn btn-secondary">ピックアップ掲載について</a>
   </div>
-  <p>
-    現在イベント主催者様向けに広告掲載を行えるよう準備を行っております。<br />
-    準備ができ次第こちらのサイトへ掲載いたしますので、今しばらくお待ちください。
-  </p>
 
   <h2>リリースノート</h2>
   <details>
     <ul>
+      <li>2025/12/19: 2025.12.0 ピックアップイベント機能を追加しました</li>
       <li>2025/05/17: 2025.5.0 <a href="/archives/">ボイベアーカイブ</a> (サイトに登録されている過去のイベントを表示するページ) を追加しました</li>
       <li>
         2025/02/04: 2025.2.0
@@ -185,5 +222,13 @@ const futureEvents = fetchedEvents.filter((e) => e.date > today.getTime());
 <style lang="scss">
   .codeBlock {
     font-family: monospace;
+  }
+  .label {
+    display: inline-block;
+    border: 1px solid var(--primary-brand-color);
+    color: var(--primary-brand-color);
+    padding: 1px 5px;
+    font-size: 0.75em;
+    font-weight: normal;
   }
 </style>
