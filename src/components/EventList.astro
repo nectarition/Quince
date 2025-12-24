@@ -28,7 +28,7 @@ const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>((
       const monthDate = new Date(Number(month));
       return (
         <>
-          <h3 class="monthTitle">
+          <h3>
             {monthDate.getFullYear()}年 {monthDate.getMonth() + 1}月
           </h3>
           <div class="cardRack">
@@ -46,18 +46,18 @@ const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>((
 
 <style lang="scss">
   .cardRack {
-    margin-bottom: 10px;
+    margin-bottom: 24px;
     display: grid;
-    gap: 15px;
+    gap: 16px;
 
     &:last-child {
       margin-bottom: 0;
     }
-  }
 
-  .monthTitle {
-    font-size: 1.25em;
-    margin-bottom: 10px;
+    @media screen and (max-width: 840px) {
+      gap: 12px;
+      margin-bottom: 20px;
+    }
   }
 
   ul {
@@ -74,5 +74,17 @@ const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>((
 
   .text-right {
     text-align: right;
+    margin-top: 20px;
+
+    a {
+      font-size: 0.9em;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+
+      &::before {
+        content: '↑';
+      }
+    }
   }
 </style>

@@ -21,18 +21,34 @@ const props = Astro.props;
 
 <style lang="scss">
   .cardRack {
-    margin-bottom: 10px;
+    margin-bottom: 24px;
     display: grid;
-    gap: 15px;
+    gap: 16px;
 
     &:last-child {
       margin-bottom: 0;
     }
+
+    @media screen and (max-width: 840px) {
+      gap: 12px;
+      margin-bottom: 20px;
+    }
   }
 
   .monthTitle {
-    font-size: 1.25em;
-    margin-bottom: 10px;
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid var(--primary-brand-color);
+    color: var(--primary-brand-color);
+    display: inline-block;
+
+    @media screen and (max-width: 840px) {
+      font-size: 1.3em;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+    }
   }
 
   ul {
@@ -49,5 +65,17 @@ const props = Astro.props;
 
   .text-right {
     text-align: right;
+    margin-top: 20px;
+
+    a {
+      font-size: 0.9em;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+
+      &::before {
+        content: '↑';
+      }
+    }
   }
 </style>

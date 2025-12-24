@@ -7,6 +7,11 @@ import EventList from '../components/EventList.astro';
 import Alert from '../components/Alert.astro';
 import EventTypeLabel from '../components/EventTypeLabel.astro';
 import PickUpEventList from '../components/PickUpEventList.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import CalendarCard from '../components/CalendarCard.astro';
+import InstructionsList from '../components/InstructionsList.astro';
+import ButtonGroup from '../components/ButtonGroup.astro';
 
 const now = new Date();
 now.setUTCHours(now.getUTCHours() + 9);
@@ -33,202 +38,372 @@ const pickupEvents = futureEvents
 ---
 
 <BaseLayout>
-  <h1>ボイベまとめ: 音声合成系イベント開催情報まとめサイト</h1>
+  <Hero title="ボイベまとめ" description="音声合成系イベント開催情報まとめサイト" />
 
-  <Alert type="info" title="追加通知はじめました">
-    <ul>
-      <li>イベントの追加通知を各種サービスにて行っています。</li>
-      <li>Discord: <a href="https://discord.gg/ggFnwgsUd3">参加はこちら</a></li>
-      <li>ぼすきー: <a href="https://voskey.icalo.net/@vo">@vo@voskey.icalo.net</a></li>
-    </ul>
-  </Alert>
+  <Section>
+    <Alert type="info" title="追加通知はじめました">
+      <ul>
+        <li>イベントの追加通知を各種サービスにて行っています。</li>
+        <li>Discord: <a href="https://discord.gg/ggFnwgsUd3">参加はこちら</a></li>
+        <li>ぼすきー: <a href="https://voskey.icalo.net/@vo">@vo@voskey.icalo.net</a></li>
+      </ul>
+    </Alert>
 
-  <Alert type="info" title="ご寄付をお待ちしております">
-    サイトの継続運営のため皆様からのご寄付を受け付けております。<br />
-    詳しくは<a href="https://donate.stripe.com/bIY16HfCS8e5aFGdRr">こちら</a>をご覧ください。
-  </Alert>
+    <Alert type="info" title="ご寄付をお待ちしております">
+      サイトの継続運営のため皆様からのご寄付を受け付けております。<br />
+      詳しくは<a href="https://donate.stripe.com/bIY16HfCS8e5aFGdRr">こちら</a>をご覧ください。
+    </Alert>
+  </Section>
 
-  <h2 id="future-events">イベントリスト</h2>
+  <Section id="future-events">
+    <h2>イベントリスト</h2>
 
-  <table>
-    <thead>
-      <tr>
-        <th>日付</th>
-        <th>種類</th>
-        <th>都道府県</th>
-        <th>イベント</th>
-      </tr>
-    </thead>
-    <tbody>
-      {
-        futureEvents.map((e) => (
+    <div class="table-container">
+      <table>
+        <thead>
           <tr>
-            <td>{dateLibs.format(e.date, 'YYYY.M.D (ddd)')}</td>
-            <td>
-              <EventTypeLabel eventType={e.type} isShort={true} />
-            </td>
-            <td>{eventLibs.getPrefecture(e.venue.address)}</td>
-            <td class="allBreak">
-              {e.genre && (
-                <>
-                  <small>{eventLibs.convertGenre(e.genre)}</small>
-                  <br />
-                </>
-              )}
-              <a href={`#${e.id}`}>「{e.name}」</a>
-            </td>
+            <th>日付</th>
+            <th>種類</th>
+            <th>都道府県</th>
+            <th>イベント</th>
           </tr>
-        ))
-      }
-    </tbody>
-  </table>
+        </thead>
+        <tbody>
+          {
+            futureEvents.map((e) => (
+              <tr>
+                <td class="noneBreak">{dateLibs.format(e.date, 'YYYY.M.D (ddd)')}</td>
+                <td class="noneBreak">
+                  <EventTypeLabel eventType={e.type} isShort={true} />
+                </td>
+                <td class="noneBreak">{eventLibs.getPrefecture(e.venue.address)}</td>
+                <td class="allBreak">
+                  {e.genre && (
+                    <>
+                      <small>{eventLibs.convertGenre(e.genre)}</small>
+                      <br />
+                    </>
+                  )}
+                  <a href={`#${e.id}`}>「{e.name}」</a>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </Section>
 
-  <h2>
-    ピックアップイベント <span class="label">PR</span>
-  </h2>
-  {
-    pickupEvents.length > 0 ? (
-      <>
-        <PickUpEventList events={pickupEvents} today={today} links={fetchedLinks} />
+  <Section>
+    <h2>
+      ピックアップイベント <span class="label">PR</span>
+    </h2>
+    {
+      pickupEvents.length > 0 ? (
+        <>
+          <PickUpEventList events={pickupEvents} today={today} links={fetchedLinks} />
+          <p>
+            <a href="/pick-up/#pick-up-event">「ピックアップイベント」とは？</a>
+          </p>
+        </>
+      ) : (
         <p>
+          現在ピックアップイベントはありません。
+          <br />
           <a href="/pick-up/#pick-up-event">「ピックアップイベント」とは？</a>
         </p>
-      </>
-    ) : (
-      <p>
-        現在ピックアップイベントはありません。
-        <br />
-        <a href="/pick-up/#pick-up-event">「ピックアップイベント」とは？</a>
-      </p>
-    )
-  }
+      )
+    }
+  </Section>
 
-  <h2>イベント情報</h2>
+  <Section>
+    <h2>イベント情報</h2>
+    <EventList events={futureEvents} today={today} links={fetchedLinks} />
+  </Section>
 
-  <EventList events={futureEvents} today={today} links={fetchedLinks} />
+  <Section id="held-events">
+    <h2>最近終了したイベント</h2>
+    {heldEvents.length > 0 ? <EventList events={heldEvents} today={today} links={fetchedLinks} /> : <p>最近終了したイベントはありません</p>}
+    <ButtonGroup align="center">
+      <a href="/archives/" class="btn">過去のイベントを表示</a>
+    </ButtonGroup>
+  </Section>
 
-  <h2 id="held-events">最近終了したイベント</h2>
-  {heldEvents.length > 0 ? <EventList events={heldEvents} today={today} links={fetchedLinks} /> : <p>最近終了したイベントはありません</p>}
+  <Section>
+    <h2>あなたのカレンダーにも追加できます！</h2>
 
-  <div class="btnRack">
-    <a href="/archives/" class="btn">過去のイベントを表示</a>
-  </div>
+    <p>Google カレンダーなどへの追加には以下のURLを使用してください。</p>
 
-  <h2>あなたのカレンダーにも追加できます！</h2>
+    <div class="calendar-grid">
+      <CalendarCard title="イベントカレンダー" url={`${siteConfig.siteURL}/event-schedule.ics`} webcalUrl="webcal://vo.nrsy.jp/event-schedule.ics" buttonText="端末に追加 (イベント)" />
 
-  <p>Google カレンダーなどへの追加には以下のURLを使用してください。</p>
+      <CalendarCard title="締め切りカレンダー" url={`${siteConfig.siteURL}/limits.ics`} webcalUrl="webcal://vo.nrsy.jp/limits.ics" buttonText="端末に追加 (締め切り)" />
+    </div>
 
-  <h4>イベントカレンダー</h4>
-  <p class="codeBlock">{siteConfig.siteURL}/event-schedule.ics</p>
+    <div class="instructions-container">
+      <InstructionsList
+        title="Google カレンダーへの追加方法 (PC)"
+        steps={[
+          'Google カレンダーを開きます',
+          '左メニューの「他のカレンダー」横にある「＋」ボタンをクリックします',
+          '「URL で追加」をクリックします',
+          '「カレンダーの URL」に上述のURLを入力します',
+          '「カレンダーを追加」をクリックすると同期が始まります',
+        ]}
+      />
 
-  <div class="btnRack">
-    <a href="webcal://vo.nrsy.jp/event-schedule.ics" class="btn">端末に追加 (イベント)</a>
-  </div>
+      <div class="mobile-instructions">
+        <h3>スマホでの追加方法</h3>
+        <p>上のボタンをタップすると許可を求めるダイアログが表示され「許可」を押すと追加できます。</p>
+      </div>
+    </div>
+  </Section>
 
-  <h4>締め切りカレンダー</h4>
-  <p class="codeBlock">{siteConfig.siteURL}/limits.ics</p>
-
-  <div class="btnRack">
-    <a href="webcal://vo.nrsy.jp/limits.ics" class="btn">端末に追加 (締め切り)</a>
-  </div>
-
-  <h3>Google カレンダーへの追加方法 (PC)</h3>
-
-  <ol>
-    <li>Google カレンダーを開きます</li>
-    <li>左メニューの「他のカレンダー」横にある「＋」ボタンをクリックします</li>
-    <li>「URL で追加」をクリックします</li>
-    <li>「カレンダーの URL」に上述のURLを入力します</li>
-    <li>「カレンダーを追加」をクリックすると同期が始まります</li>
-  </ol>
-
-  <h3>スマホでの追加方法</h3>
-  <p>上のボタンをタップすると許可を求めるダイアログが表示され「許可」を押すと追加できます。</p>
-
-  <h2>イベントの掲載基準について</h2>
-  <ul>
-    <li>日程及び会場が Web 上で公開されている同人誌即売会などのイベントを掲載しています。</li>
-    <li>同人誌即売会以外のイベントは、即売会と同日・前翌日に開催されるもののみ掲載しています。</li>
-    <li>Webオンリーなどのオフライン開催ではないイベントは掲載していません。</li>
-    <li>
-      イベント情報の提供は <a href="https://admin.vo.nrsy.jp/" target="_blank">こちらのフォーム (QuincePear)</a> からお寄せください。
-    </li>
-  </ul>
-
-  <h2>このサイトについて</h2>
-  <ul>
-    <li>この Web サイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。</li>
-    <li>情報投稿フォームや X (Twitter)、イベント Web サイトからの情報をもとに作成しています。</li>
-    <li>内容は正確でない場合があります。各イベントの Web サイトを必ずご確認ください。</li>
-  </ul>
-
-  <h2>応援をお願いします🙇</h2>
-  <p>
-    サイトの継続運営のためご利用者様からの寄付を受け付けております。ご寄付をいただける方は下記「寄付する」ボタンからお願いいたします。<br />
-    ご寄付はサイトの維持管理費や新機能開発費用に充てさせていただきます。皆様のご支援がサイト運営の大きな助けとなります。何卒よろしくお願いいたします。
-  </p>
-  <p>
-    イベント主催者様でピックアップイベント掲載をご希望の方も、寄付による掲載が可能です。<br />
-    詳しくは<a href="/pick-up/#pick-up-event">こちら</a>をご覧ください。
-  </p>
-  <div class="btnRack">
-    <a href="https://donate.stripe.com/bIY16HfCS8e5aFGdRr" class="btn">寄付する</a>
-    <a href="/pick-up/" class="btn btn-secondary">ピックアップ掲載について</a>
-  </div>
-
-  <h2>リリースノート</h2>
-  <details>
+  <Section>
+    <h2>イベントの掲載基準について</h2>
     <ul>
-      <li>2025/12/19: 2025.12.0 ピックアップイベント機能を追加しました</li>
-      <li>2025/05/17: 2025.5.0 <a href="/archives/">ボイベアーカイブ</a> (サイトに登録されている過去のイベントを表示するページ) を追加しました</li>
+      <li>日程及び会場が Web 上で公開されている同人誌即売会などのイベントを掲載しています。</li>
+      <li>同人誌即売会以外のイベントは、即売会と同日・前翌日に開催されるもののみ掲載しています。</li>
+      <li>Webオンリーなどのオフライン開催ではないイベントは掲載していません。</li>
       <li>
-        2025/02/04: 2025.2.0
-        <ul>
-          <li><a href="/api/docs/2025-02-04/">API</a> を追加しました</li>
-          <li>バージョンの付番方法を変更しました</li>
-        </ul>
+        イベント情報の提供は <a href="https://admin.vo.nrsy.jp/" target="_blank">こちらのフォーム (QuincePear)</a> からお寄せください。
       </li>
-      <li>2025/01/27: v1.5.0 概要一覧を追加しました</li>
-      <li>2024/10/02: v1.4.2 リンク表示順を変更しました</li>
-      <li>2024/10/02: v1.4.1 オンリー集合イベントに対応しました</li>
-      <li>
-        2024/10/01: v1.4.0
-        <ul>
-          <li>締め切りカレンダーの提供を開始しました</li>
-          <li>各リンクの情報を柔軟に扱えるように変更しました</li>
-        </ul>
-      </li>
-      <li>2024/06/14: v1.3.1 「本日開催！」「N日前に終了」を実装しました</li>
-      <li>2024/06/13: v1.3.0 データの取得方法を変更しました</li>
-      <li>
-        2024/04/18: v1.2.0
-        <ul>
-          <li>一覧の自動更新時刻を0時に変更しました</li>
-          <li>カレンダーインポート機能で終日扱いが正しく行われない不具合を修正しました</li>
-          <li>軽妙な不具合を修正しました</li>
-        </ul>
-      </li>
-      <li>2024/03/08: v1.1.1 バナーを追加しました</li>
-      <li>2024/03/06: v1.1.0 デザインを変更しました, ics形式での配信を開始しました</li>
-      <li>2024/03/05: v1.0.0 本サイトをリリースしました</li>
     </ul>
-  </details>
+  </Section>
 
-  <p>
-    <a href="https://vo.nrsy.jp" target="_blank"><img src="https://vo.nrsy.jp/banner.png" alt="音声合成系イベント開催情報まとめサイト" style="width: 200px; height: 40px" /></a>
-  </p>
+  <Section>
+    <h2>このサイトについて</h2>
+    <ul>
+      <li>この Web サイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。</li>
+      <li>情報投稿フォームや X (Twitter)、イベント Web サイトからの情報をもとに作成しています。</li>
+      <li>内容は正確でない場合があります。各イベントの Web サイトを必ずご確認ください。</li>
+    </ul>
+  </Section>
+
+  <Section class="donation-section">
+    <h2>応援をお願いします🙇</h2>
+    <p>
+      サイトの継続運営のためご利用者様からの寄付を受け付けております。ご寄付をいただける方は下記「寄付する」ボタンからお願いいたします。<br />
+      ご寄付はサイトの維持管理費や新機能開発費用に充てさせていただきます。皆様のご支援がサイト運営の大きな助けとなります。何卒よろしくお願いいたします。
+    </p>
+    <p>
+      イベント主催者様でピックアップイベント掲載をご希望の方も、寄付による掲載が可能です。<br />
+      詳しくは<a href="/pick-up/#pick-up-event">こちら</a>をご覧ください。
+    </p>
+    <ButtonGroup align="center">
+      <a href="https://donate.stripe.com/bIY16HfCS8e5aFGdRr" class="btn btn-primary">寄付する</a>
+      <a href="/pick-up/" class="btn">ピックアップ掲載について</a>
+    </ButtonGroup>
+  </Section>
+
+  <Section>
+    <h2>リリースノート</h2>
+    <details>
+      <ul>
+        <li>2025/12/19: 2025.12.0 ピックアップイベント機能を追加しました</li>
+        <li>2025/05/17: 2025.5.0 <a href="/archives/">ボイベアーカイブ</a> (サイトに登録されている過去のイベントを表示するページ) を追加しました</li>
+        <li>
+          2025/02/04: 2025.2.0
+          <ul>
+            <li><a href="/api/docs/2025-02-04/">API</a> を追加しました</li>
+            <li>バージョンの付番方法を変更しました</li>
+          </ul>
+        </li>
+        <li>2025/01/27: v1.5.0 概要一覧を追加しました</li>
+        <li>2024/10/02: v1.4.2 リンク表示順を変更しました</li>
+        <li>2024/10/02: v1.4.1 オンリー集合イベントに対応しました</li>
+        <li>
+          2024/10/01: v1.4.0
+          <ul>
+            <li>締め切りカレンダーの提供を開始しました</li>
+            <li>各リンクの情報を柔軟に扱えるように変更しました</li>
+          </ul>
+        </li>
+        <li>2024/06/14: v1.3.1 「本日開催！」「N日前に終了」を実装しました</li>
+        <li>2024/06/13: v1.3.0 データの取得方法を変更しました</li>
+        <li>
+          2024/04/18: v1.2.0
+          <ul>
+            <li>一覧の自動更新時刻を0時に変更しました</li>
+            <li>カレンダーインポート機能で終日扱いが正しく行われない不具合を修正しました</li>
+            <li>軽妙な不具合を修正しました</li>
+          </ul>
+        </li>
+        <li>2024/03/08: v1.1.1 バナーを追加しました</li>
+        <li>2024/03/06: v1.1.0 デザインを変更しました, ics形式での配信を開始しました</li>
+        <li>2024/03/05: v1.0.0 本サイトをリリースしました</li>
+      </ul>
+    </details>
+
+    <p class="banner-link">
+      <a href="https://vo.nrsy.jp" target="_blank"><img src="https://vo.nrsy.jp/banner.png" alt="音声合成系イベント開催情報まとめサイト" style="width: 200px; height: 40px" /></a>
+    </p>
+  </Section>
 </BaseLayout>
 
 <style lang="scss">
-  .codeBlock {
-    font-family: monospace;
-  }
   .label {
     display: inline-block;
     border: 1px solid var(--primary-brand-color);
     color: var(--primary-brand-color);
-    padding: 1px 5px;
+    padding: 2px 8px;
     font-size: 0.75em;
     font-weight: normal;
+    border-radius: 4px;
+    margin-left: 8px;
+  }
+
+  .table-container {
+    overflow-x: auto;
+    margin: 0 -24px;
+    padding: 0 24px;
+
+    @media screen and (max-width: 840px) {
+      margin: 0 -16px;
+      padding: 0 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95em;
+
+      thead {
+        tr {
+          border-bottom: 2px solid var(--border-color);
+        }
+
+        th {
+          padding: 10px 12px;
+          text-align: left;
+          font-weight: 600;
+          color: #555;
+          font-size: 0.9em;
+          white-space: nowrap;
+
+          @media screen and (max-width: 840px) {
+            padding: 8px 10px;
+            font-size: 0.85em;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          border-bottom: 1px solid #f0f0f0;
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+
+        td {
+          padding: 12px;
+          vertical-align: middle;
+
+          @media screen and (max-width: 840px) {
+            padding: 10px;
+          }
+
+          &.noneBreak {
+            white-space: nowrap;
+          }
+
+          &.allBreak {
+            white-space: normal;
+            word-break: break-word;
+          }
+
+          small {
+            color: #888;
+            font-size: 0.85em;
+          }
+
+          a {
+            color: #333;
+            text-decoration: underline;
+            font-weight: 500;
+
+            &:hover {
+              color: var(--primary-brand-color);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+
+    @media screen and (max-width: 840px) {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+  }
+
+  .instructions-container {
+    display: grid;
+    gap: 16px;
+    margin-top: 24px;
+
+    @media screen and (max-width: 840px) {
+      gap: 12px;
+      margin-top: 20px;
+    }
+  }
+
+  .mobile-instructions {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px 18px;
+    border-left: 4px solid var(--info-color);
+
+    @media screen and (max-width: 840px) {
+      padding: 14px;
+    }
+
+    h3 {
+      margin-bottom: 12px;
+      border: none;
+      padding: 0;
+      font-size: 1.25em;
+      color: var(--info-color);
+
+      @media screen and (max-width: 840px) {
+        font-size: 1.1em;
+      }
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.6;
+    }
+  }
+
+  .donation-section {
+    background: linear-gradient(135deg, rgba(186, 54, 81, 0.03) 0%, rgba(186, 54, 81, 0.01) 100%);
+    border-left: 4px solid var(--primary-brand-color);
+  }
+
+  .banner-link {
+    text-align: center;
+    margin-top: 24px;
+
+    img {
+      transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+      border-radius: 4px;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+    }
   }
 </style>

@@ -1,0 +1,67 @@
+---
+export interface Props {
+    title: string;
+    url: string;
+    webcalUrl: string;
+    buttonText: string;
+}
+const { title, url, webcalUrl, buttonText } = Astro.props;
+---
+
+<div class="calendar-card">
+    <h4 class="calendar-title">{title}</h4>
+    <div class="calendar-url">
+        <code>{url}</code>
+    </div>
+    <div class="calendar-actions">
+        <a href={webcalUrl} class="btn btn-primary">{buttonText}</a>
+    </div>
+</div>
+
+<style lang="scss">
+    .calendar-card {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 16px;
+        border: 1px solid var(--border-color);
+
+        @media screen and (max-width: 840px) {
+            padding: 14px;
+        }
+    }
+    .calendar-title {
+        margin-bottom: 16px;
+        font-size: 1.25em;
+
+        @media screen and (max-width: 840px) {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+        }
+    }
+
+    .calendar-url {
+        background: white;
+        padding: 10px 12px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        border: 1px solid var(--border-color);
+        overflow-x: auto;
+    }
+
+    code {
+        font-family: 'Courier New', monospace;
+        font-size: 0.9em;
+        color: #333;
+        word-break: break-all;
+        @media screen and (max-width: 840px) {
+            padding: 8px 10px;
+            margin-bottom: 10px;
+        }
+    }
+
+    .calendar-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+</style>

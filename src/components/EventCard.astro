@@ -18,277 +18,534 @@ const eventType = eventLib.convertEventType(event.type);
 const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER)) ;
 ---
 
-<div class="cardWrap">
-  <div class="card" style={`border: 1px solid ${eventType.color}; border-left: 8px solid ${eventType.color};`}>
+<div class="cardWrap" id={event.id}>
+  <article class="card" style={`--event-color: ${eventType.color};`}>
     <div class={`card_dateArea_wrap ${(span >= 0 && span <= 10 && 'card_dateArea_wrap-near') ?? ''}`}>
       <div class="card_dateArea_container">
         <div class="card_dateArea_year">{dateLib.format(event.date, 'YYYY.')}</div>
-        <div class="card_dateArea_date">{dateLib.format(event.date, 'M.D (ddd)')}</div>
+        <div class="card_dateArea_date">{dateLib.format(event.date, 'M.D')}</div>
+        <div class="card_dateArea_day">{dateLib.format(event.date, '(ddd)')}</div>
         <div class="card_dateArea_count">
         {span === 0
-          ? <b>本日開催！</b>
+          ? <span class="badge badge-today">本日開催</span>
           : span > 0
-            ? <>
-              <small>あと</small>
-              <b>{span}</b>
-              <small>日</small>
-            </>
-            : span >= -10
-              ? <>
-                <small>{Math.abs(span)}日前に終了</small>
-              </>
-              : <></>}
-              </div>
-      </div>
-    </div>
-    <div class="card_labelArea">
-      <EventTypeLabel eventType={event.type} />
-    </div>
-    <div class="card_eventArea">
-      <div class="card_eventArea_genre">{eventLib.convertGenre(event.genre)}</div>
-      <div class="card_eventArea_name">
-        <a href={event.websiteURL} target="_blank">
-          <b>{event.name}</b>
-        </a>
-      </div>
-      {event.subEvents.length > 0 && (
-        <ul class="card_eventArea_subEvents">
-          {event.subEvents.map((subEvent) => (
-            <li>
-              <span class="label label-secondary">{subEvent.genre}</span>
-              <span class="card_eventArea_subEvents_name noneBreak">
-                {(
-                  subEvent.url
-                    ? <a href={subEvent.url} target="_blank">{subEvent.name}</a> 
-                    : subEvent.name
-                )}
+            ? <span class="badge badge-upcoming">
+                <span class="badge-label">あと</span>
+                <span class="badge-number">{span}</span>
+                <span class="badge-label">日</span>
               </span>
-            </li>
-          ))}
-          </ul>
-      )}
-    </div>
-    <div class="card_placeArea">
-      <div class="card_placeArea_place">
-        <span class="label">{eventLib.getPrefecture(event.venue.address)}</span>
-        {event.venue.name}{event.roomName && ` ${event.roomName}`}
-      </div>
-      <div class="card_placeArea_placeDetail">
-        <a href={`https://www.google.co.jp/maps/search/${encodeURIComponent(event.venue.address)}`} target="_blank">
-          〒{eventLib.convertPostalCode(event.venue.postalCode)}&nbsp;
-          {event.venue.address}
-        </a>
+            : span >= -10
+              ? <span class="badge badge-ended">{Math.abs(span)}日前終了</span>
+              : <></>}
+        </div>
       </div>
     </div>
-    {sortedLinks.length > 0 && (
-      <div class="card_linkArea">
-        <ul>
-          {sortedLinks
-            .map((l) => {
-            const limitSpan = l.limit !== null
-              ? Math.floor(dateLib.getSpan(l.limit, today.getTime()) / 86400000)
-              : null;
-            return (
-              <li><a href={l.url} target="_blank">{!l.limit || (limitSpan ?? -1) >= 0 ? <b>{l.name}</b> : <s>{l.name}</s>}</a>
-                {l.limit && limitSpan !== null && limitSpan >= 0 && (
-                  <>
-                    &nbsp;
-                    <b>{dateLib.format(l.limit, 'M月 D日')}</b>
-                    <small>まで</small>
-                    {limitSpan >= 0 && (
-                      <>
-                        <small>あと</small>
-                        <b>{limitSpan}</b>
-                        <small>日</small>
-                      </>
+    
+    <div class="card_content">
+      <div class="card_header">
+        <div class="card_labelArea">
+          <EventTypeLabel eventType={event.type} />
+        </div>
+        <div class="card_eventArea">
+          <div class="card_eventArea_genre">{eventLib.convertGenre(event.genre)}</div>
+          <h3 class="card_eventArea_name">
+            <a href={event.websiteURL} target="_blank">
+              {event.name}
+            </a>
+          </h3>
+          {event.pickUpMessage && isPickUp && (
+            <div class="pickUpMessage">
+              <div class="pickUpMessage_content">{event.pickUpMessage}</div>
+            </div>
+          )}
+          {event.subEvents.length > 0 && (
+            <div class="card_eventArea_subEvents">
+              {event.subEvents.map((subEvent) => (
+                <div class="subEvent-item">
+                  <span class="subEvent-genre">{subEvent.genre}</span>
+                  <span class="subEvent-name">
+                    {(
+                      subEvent.url
+                        ? <a href={subEvent.url} target="_blank">{subEvent.name}</a> 
+                        : subEvent.name
                     )}
-                  </>
-                )}</li>
-            );
-          })}
-        </ul>
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    )}
-    <div class="card_remarksArea">
-      <div class="card_remarksArea_remarks">備考: {event.remarks}</div>
-      <div class="card_remarksArea_organizer">運営: {event.organizer.name}</div>
+
+      <div class="card_body">
+        <div class="card_placeArea">
+          <div class="card_placeArea_place">
+            <span class="tag tag-location">{eventLib.getPrefecture(event.venue.address)}</span>
+            <span class="venue-name">{event.venue.name}{event.roomName && ` ${event.roomName}`}</span>
+          </div>
+          <div class="card_placeArea_placeDetail">
+            <a href={`https://www.google.co.jp/maps/search/${encodeURIComponent(event.venue.address)}`} target="_blank">
+              〒{eventLib.convertPostalCode(event.venue.postalCode)} {event.venue.address}
+            </a>
+          </div>
+        </div>
+
+        {sortedLinks.length > 0 && (
+          <div class="card_linkArea">
+            <ul class="link-list">
+              {sortedLinks
+                .map((l) => {
+                const limitSpan = l.limit !== null
+                  ? Math.floor(dateLib.getSpan(l.limit, today.getTime()) / 86400000)
+                  : null;
+                return (
+                  <li class="link-item">
+                    <a href={l.url} target="_blank" class={!l.limit || (limitSpan ?? -1) >= 0 ? '' : 'link-expired'}>
+                      {!l.limit || (limitSpan ?? -1) >= 0 ? l.name : `${l.name} (締切済)`}
+                    </a>
+                    {l.limit && limitSpan !== null && limitSpan >= 0 && (
+                      <span class="deadline">
+                        <span class="deadline-date">{dateLib.format(l.limit, 'YYYY/M/D')}</span>
+                        <span class="deadline-remaining">あと{limitSpan}日</span>
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+
+        <div class="card_remarksArea">
+          <div class="card_remarksArea_item">
+            <span class="card_remarksArea_label">備考:</span> {event.remarks}
+          </div>
+          <div class="card_remarksArea_item">
+            <span class="card_remarksArea_label">運営:</span> {event.organizer.name}
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  {event.pickUpMessage && isPickUp && (
-    <div class="pickUpMessage">
-      <div class="pickUpMessage_content">{event.pickUpMessage}</div>
-    </div>
-  )}
+  </article>
 </div>
 
 <style lang="scss">
+  .cardWrap {
+    scroll-margin-top: 20px;
+  }
+
   .card {
-    padding: 10px;
-    background-color: var(--background-color);
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--event-color);
     display: grid;
-    width: 100%;
-    grid-template-columns: 110px 1fr 1fr;
-    grid-template-rows: auto auto auto;
-    gap: 5px 10px;
+    grid-template-columns: 140px 1fr;
 
     @media screen and (max-width: 840px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card_dateArea {
+    &_wrap {
       display: flex;
-      flex-direction: column;
-      width: 100%;
-      order: 0;
+      align-items: center;
+      justify-content: center;
+      background: #fafafa;
+      padding: 12px;
+      border-right: 1px solid var(--border-color);
+
+      &-near {
+        background: #fff0f0;
+      }
+
+      @media screen and (max-width: 840px) {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 12px;
+      }
     }
 
-    &_dateArea {
-      &_wrap {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #e0e0e0;
-        grid-row: 1 / 4;
+    &_container {
+      text-align: center;
+    }
 
-        &-near {
-          background-color: #f5a5a5;
-        }
+    &_year {
+      font-size: 0.85em;
+      color: #888;
+      font-weight: 400;
+    }
 
-        @media screen and (max-width: 840px) {
-          display: block;
-          order: 4;
-        }
-      }
+    &_date {
+      font-size: 2em;
+      font-weight: 600;
+      color: var(--event-color, var(--primary-brand-color));
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
+
+    &_day {
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    &_count {
+      margin-top: 8px;
+    }
+
+    @media screen and (max-width: 840px) {
       &_container {
-        padding: 10px;
-        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 5px;
+        text-align: left;
+      }
 
-        @media screen and (max-width: 840px) {
-          text-align: left;
-        }
+      &_year,
+      &_date,
+      &_day {
+        display: inline;
+        margin: 0;
       }
-      &_year {
-        font-size: 0.8em;
-      }
+
       &_date {
-        font-weight: bold;
+        font-size: 1.5em;
       }
+
       &_count {
-        padding-left: 5px;
-      }
-
-      @media screen and (max-width: 840px) {
-        &_year,
-        &_date,
-        &_count {
-          display: inline;
-        }
-      }
-    }
-
-    &_labelArea {
-      grid-column: 2;
-      grid-row: 1;
-
-      @media screen and (max-width: 840px) {
-        order: 1;
-      }
-    }
-
-    &_eventArea {
-      grid-column: 2;
-      grid-row: 2;
-
-      @media screen and (max-width: 840px) {
-        order: 2;
-      }
-
-      &_genre {
-        font-size: 0.8em;
-      }
-      &_name {
-        font-weight: bold;
-        font-size: 1.25em;
-      }
-
-      &_subEvents {
-        font-size: 0.9em;
-        margin-top: 5px;
-        &_name {
-          font-weight: bold;
-        }
-        li {
-          margin-bottom: 2px;
-          &:last-child {
-            margin-bottom: 0;
-          }
-        }
-      }
-    }
-
-    &_placeArea {
-      grid-column: 2;
-      grid-row: 3;
-
-      @media screen and (max-width: 840px) {
-        order: 3;
-      }
-
-      &_place {
-      }
-      &_placeDetail {
-        font-size: 0.8em;
-      }
-    }
-
-    &_remarksArea {
-      grid-column: 3;
-      grid-row: 3;
-
-      @media screen and (max-width: 840px) {
-        order: 6;
-      }
-
-      &_remarks {
-        font-size: 0.8em;
-      }
-      &_organizer {
-        font-size: 0.8em;
-      }
-    }
-
-    &_linkArea {
-      grid-column: 3;
-      grid-row: 2;
-
-      @media screen and (max-width: 840px) {
-        order: 5;
+        margin: 0;
       }
     }
   }
-  
-  .label {
+
+  .badge {
     display: inline-block;
-    background-color: #404040;
-    color: #ffffff;
-    padding: 2px 10px 3px;
-    font-size: 0.9em;
-    margin-right: 5px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.7em;
+    font-weight: 500;
+    white-space: nowrap;
+
+    &-today {
+      background: #ff6b6b;
+      color: white;
+    }
+
+    &-upcoming {
+      background: #4ecdc4;
+      color: white;
+    }
+
+    &-ended {
+      background: #999;
+      color: white;
+    }
+
+    &-label {
+      font-size: 0.9em;
+    }
+
+    &-number {
+      font-size: 1.3em;
+      font-weight: 700;
+      margin: 0 2px;
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  .card_content {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    @media screen and (max-width: 840px) {
+      padding: 14px;
+      gap: 12px;
+    }
+  }
+
+  .card_header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card_labelArea {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card_eventArea {
+    &_genre {
+      font-size: 0.85em;
+      color: #666;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    &_name {
+      font-size: 1.25em;
+      font-weight: 600;
+      line-height: 1.4;
+      margin: 0 0 12px 0;
+      color: #333;
+      border-left: none;
+      padding-left: 0;
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      @media screen and (max-width: 840px) {
+        font-size: 1.2em;
+      }
+    }
+
+    &_subEvents {
+      margin-top: 8px;
+      padding-left: 12px;
+
+      .subEvent-item {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        font-size: 0.85em;
+        margin-bottom: 4px;
+        line-height: 1.5;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        &::before {
+          content: '└';
+          color: #999;
+          margin-right: 2px;
+        }
+      }
+
+      .subEvent-genre {
+        color: #666;
+        font-size: 0.9em;
+        white-space: nowrap;
+        
+        &::after {
+          content: ':';
+          margin-left: 1px;
+        }
+      }
+
+      .subEvent-name {
+        color: #555;
+        
+        a {
+          color: inherit;
+          text-decoration: none;
+          border-bottom: 1px dotted #999;
+        }
+      }
+    }
+  }
+
+  .card_body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-color);
+
+    @media screen and (max-width: 840px) {
+      gap: 12px;
+      padding-top: 12px;
+    }
+  }
+
+  .card_section_title {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 8px;
+  }
+
+  .card_placeArea {
+    &_place {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+
+      .venue-name {
+        font-weight: 600;
+        color: #333;
+      }
+    }
+
+    &_placeDetail {
+      font-size: 0.85em;
+      color: #666;
+      line-height: 1.6;
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .card_linkArea {
+    .link-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .link-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      background: #f0f5ff;
+      border-radius: 6px;
+      border-left: 3px solid #d0e0ff;
+
+      a {
+        font-weight: 500;
+        text-decoration: underline;
+        color: #333;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        &.link-expired {
+          color: #aaa;
+          text-decoration: line-through;
+          opacity: 0.6;
+        }
+      }
+
+      .deadline {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.8em;
+        white-space: nowrap;
+        color: #666;
+
+        &-date {
+          font-weight: 500;
+          color: #555;
+        }
+
+        &-remaining {
+          padding: 2px 6px;
+          background: #e8e8e8;
+          color: #666;
+          border-radius: 10px;
+          font-size: 0.9em;
+          font-weight: 500;
+        }
+      }
+
+      @media screen and (max-width: 840px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+    }
+  }
+
+  .card_remarksArea {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.8em;
+    color: #888;
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0;
+
+    &_item {
+      line-height: 1.5;
+    }
+
+    &_label {
+      font-weight: 600;
+      color: #666;
+      margin-right: 4px;
+    }
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 500;
+    white-space: nowrap;
+    background: #f0f0f0;
+    color: #666;
 
     &-secondary {
-      background-color: transparent;
-      border: 1px solid #202020;
-      color: #202020;
+      background: white;
+      border: 1px solid #e0e0e0;
+      color: #666;
+    }
+
+    &-location {
+      background: var(--event-color);
+      color: white;
     }
   }
 
   .pickUpMessage {
-    padding: 10px;
-    background-color: #fff4e5;
-    border: 1px solid #ffcc80;
+    margin: 10px 0 0 0;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #fff8e1 0%, #fff3cd 100%);
+    border: 1px solid #ffecb3;
+    border-left: 3px solid #ffa000;
+    border-radius: 6px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.9em;
 
-    &_title {
-      font-weight: bold;
-      margin-bottom: 2px;
+    @media screen and (max-width: 840px) {
+      padding: 8px 12px;
+      font-size: 0.85em;
     }
+
+    &_icon {
+      font-size: 1.2em;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
     &_content {
       white-space: pre-wrap;
+      line-height: 1.6;
+      color: #5d4037;
+      flex: 1;
     }
   }
 </style>
