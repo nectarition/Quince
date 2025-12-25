@@ -31,9 +31,9 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
         ? <span class="badge badge-nearly">本日開催</span>
         : span > 0
           ? <span class={`badge badge-${span <= 14 ? 'nearly' : 'upcoming'}`}>
-              <span class="badge-label">あと</span>
-              <span class="badge-number">&nbsp;{span}&nbsp;</span>
-              <span class="badge-label">日</span>
+              <span class="badge-label">あと </span>
+              <span class="badge-number">{span}</span>
+              <span class="badge-label"> 日</span>
             </span>
           : span >= -10
             ? <span class="badge badge-ended">{Math.abs(span)} 日前に終了</span>
@@ -86,13 +86,15 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
                   : null;
                 return (
                   <li class="link-item">
-                    <a href={l.url} target="_blank" class={!l.limit || (limitSpan ?? -1) >= 0 ? '' : 'link-expired'}>
-                      {!l.limit || (limitSpan ?? -1) >= 0 ? l.name : `${l.name} (締切済)`}
-                    </a>
+                    <span class="link-item_content">
+                      <a href={l.url} target="_blank" class={!l.limit || (limitSpan ?? -1) >= 0 ? '' : 'link-expired'}>
+                        {!l.limit || (limitSpan ?? -1) >= 0 ? l.name : `${l.name} (締切済)`}
+                      </a>
+                    </span>
                     {l.limit && limitSpan !== null && limitSpan >= 0 && (
                       <span class="deadline">
                         <span class="deadline-date">{dateLib.format(l.limit, 'YYYY/M/D')}</span>
-                        <span class="deadline-remaining">あと{limitSpan}日</span>
+                        <span class="deadline-remaining">あと {limitSpan} 日</span>
                       </span>
                     )}
                   </li>
@@ -311,6 +313,7 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
       color: #333;
       border-left: none;
       padding-left: 0;
+      margin-bottom: 0;
 
       @media screen and (max-width: 840px) {
         font-size: 1.2em;
@@ -405,33 +408,23 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
       margin: 0;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 2px;
     }
 
     .link-item {
       display: flex;
-      align-items: center;
+      flex-flow: column;
       justify-content: space-between;
-      gap: 10px;
-      margin: 0;
-      padding: 8px 10px;
+      padding: 5px 10px;
       background: #f0f5ff;
       border-radius: 5px;
-      border-left: 3px solid #d0e0ff;
+      border-left: 3px solid #c4d8ff;
 
-      a {
-        font-weight: 500;
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-
-        &.link-expired {
-          text-decoration: line-through;
-          opacity: 0.6;
-          &:hover {
-            text-decoration: line-through underline;
-          }
+      a.link-expired {
+        text-decoration: line-through;
+        opacity: 0.6;
+        &:hover {
+          text-decoration: line-through underline;
         }
       }
 
@@ -456,12 +449,6 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
           font-size: 0.9em;
           font-weight: 500;
         }
-      }
-
-      @media screen and (max-width: 840px) {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
       }
     }
   }
