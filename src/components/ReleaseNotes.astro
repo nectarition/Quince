@@ -1,6 +1,4 @@
 ---
-import type { FC } from 'astro';
-
 interface ReleaseNote {
   date: string;
   version: string;
@@ -112,7 +110,6 @@ const releases: ReleaseNote[] = [
   }
 ];
 
-// グループ化: 年ごとにリリースをまとめる
 const releasesByYear = releases.reduce((acc, release) => {
   const year = release.date.split('/')[0];
   if (!acc[year]) {
