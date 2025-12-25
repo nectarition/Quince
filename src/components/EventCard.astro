@@ -35,9 +35,7 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
               <span class="badge-number">{span}</span>
               <span class="badge-label"> 日</span>
             </span>
-          : span >= -10
-            ? <span class="badge badge-ended">{Math.abs(span)} 日前に終了</span>
-            : <></>}
+          : <span class="badge badge-ended">{Math.abs(span)} 日前に終了</span>}
       </div>
     </div>
     

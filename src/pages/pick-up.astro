@@ -2,6 +2,7 @@
 import EventCard from 'src/components/EventCard.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import BaseLayout from '../layouts/BaseLayout/BaseLayout.astro';
+import ButtonGroup from '../components/ButtonGroup.astro';
 ---
 
 <BaseLayout title="ピックアップ掲載について">
@@ -72,9 +73,9 @@ import BaseLayout from '../layouts/BaseLayout/BaseLayout.astro';
     寄付額については別途ご相談させていただきます。
   </p>
 
-  <div class="btnRack">
+  <ButtonGroup align="left">
     <a href="https://forms.gle/swwrtyGXj3TLxUb78" class="btn">お問い合わせ</a>
-  </div>
+  </ButtonGroup>
 
   <h4>2. Sockbase VO-EVE プランをご利用の場合</h4>
   <p>
@@ -82,9 +83,9 @@ import BaseLayout from '../layouts/BaseLayout/BaseLayout.astro';
   </p>
   <p>Sockbase の利用をご希望の方は、Sockbase 担当者へご連絡ください。</p>
 
-  <div class="btnRack">
+  <ButtonGroup align="left">
     <a href="https://sockbase.net/for-organizer" class="btn">Sockbase の導入について</a>
-  </div>
+  </ButtonGroup>
 
   <h3>よくある質問</h3>
   <dl>

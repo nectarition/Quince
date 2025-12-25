@@ -116,11 +116,17 @@ const convertPostalCode = (rawPostalCode: string): string => {
   return `${code[1]}-${code[2]}`;
 };
 
-const getPrefecture = (rawAddress: string): string => {
+const getPrefecture = (rawAddress: string, withSuffix: boolean = false): string => {
   const pref = rawAddress.match(/^(.{2,3})[都道府県]/);
   if (!pref) return '';
   const prefName = pref[1];
   if (prefName === '北海') return '北海道';
+  if (withSuffix) {
+    if (prefName === '東京') return '東京都';
+    if (prefName === '京都') return '京都府';
+    if (prefName === '大阪') return '大阪府';
+    return `${prefName}県`;
+  }
   return prefName;
 };
 

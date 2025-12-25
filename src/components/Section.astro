@@ -1,27 +1,27 @@
 ---
 export interface Props {
-    id?: string;
-    class?: string;
+  id?: string;
+  class?: string;
 }
 ---
 
 <section id={Astro.props.id} class={`section ${Astro.props.class || ''}`}>
-    <slot />
+  <slot />
 </section>
 
 <style lang="scss">
-    .section {
-        background: white;
-        border-radius: 10px;
-        padding: 24px;
-        margin-bottom: 24px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        border: 1px solid var(--border-color);
+  .section {
+    background: white;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-color);
 
-        @media screen and (max-width: 840px) {
-            padding: 16px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-        }
+    @media screen and (max-width: 840px) {
+      padding: 16px;
+      margin-bottom: 20px;
+      border-radius: 10px;
     }
+  }
 </style>

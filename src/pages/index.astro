@@ -12,6 +12,8 @@ import Section from '../components/Section.astro';
 import CalendarCard from '../components/CalendarCard.astro';
 import InstructionsList from '../components/InstructionsList.astro';
 import ButtonGroup from '../components/ButtonGroup.astro';
+import ReleaseNotes from '../components/ReleaseNotes.astro';
+import { Sprite } from 'astro-icon';
 
 const now = new Date();
 now.setUTCHours(now.getUTCHours() + 9);
@@ -41,6 +43,7 @@ const pickupEvents = futureEvents
   <Hero title="ボイベまとめ" description="音声合成系イベント開催情報まとめサイト" />
 
   <Section>
+    <h2>お知らせ</h2>
     <Alert type="info" title="追加通知はじめました">
       <ul>
         <li>イベントの追加通知を各種サービスにて行っています。</li>
@@ -70,24 +73,42 @@ const pickupEvents = futureEvents
       <tbody>
         {
           futureEvents.map((e) => (
-            <tr>
-              <td data-label="日付">{dateLibs.format(e.date, 'YYYY/M/D (ddd)')}</td>
-              <td data-label="種類">
-                <EventTypeLabel eventType={e.type} isShort={true} />
-              </td>
-              <td data-label="都道府県">{eventLibs.getPrefecture(e.venue.address)}</td>
-              <td>
-                {e.genre && (
-                  <>
-                    <small>{eventLibs.convertGenre(e.genre)}</small>
-                    <br />
-                  </>
-                )}
-                <a href={`#${e.id}`}>「{e.name}」</a>
-              </td>
-            </tr>
-          ))
-        }
+              <tr class="event-row">
+                <td class="pc-only">
+                  {dateLibs.format(e.date, 'YYYY/M/D (ddd)')}
+                </td>
+                <td class="pc-only">
+                  <EventTypeLabel eventType={e.type} isShort={true} />
+                </td>
+                <td class="pc-only">
+                  {eventLibs.getPrefecture(e.venue.address, true)}
+                </td>
+                <td class="sp-only">
+                  <div class="sp-event-header">
+                    <span class="header-item">
+                      <EventTypeLabel eventType={e.type} isShort={true} />
+                    </span>
+                    <span class="header-item">
+                      <Sprite name="mdi:calendar" class="icon" />
+                      {dateLibs.format(e.date, 'YYYY/M/D (ddd)')}
+                    </span>
+                    <span class="header-item">
+                      <Sprite name="mdi:map-marker-outline" class="icon" />
+                      {eventLibs.getPrefecture(e.venue.address, true)}
+                    </span>
+                  </div>
+                </td>
+                <td class="event-name">
+                  {e.genre && (
+                    <>
+                      <small>{eventLibs.convertGenre(e.genre)}</small>
+                      <br />
+                    </>
+                  )}
+                  <a href={`#${e.id}`}>「{e.name}」</a>
+                </td>
+              </tr>
+              ))}
       </tbody>
     </table>
   </Section>
@@ -138,23 +159,19 @@ const pickupEvents = futureEvents
       <CalendarCard title="締め切りカレンダー" url={`${siteConfig.siteURL}/limits.ics`} webcalUrl="webcal://vo.nrsy.jp/limits.ics" buttonText="端末に追加 (締め切り)" />
     </div>
 
-    <div class="instructions-container">
-      <InstructionsList
-        title="Google カレンダーへの追加方法 (PC)"
-        steps={[
-          'Google カレンダーを開きます',
-          '左メニューの「他のカレンダー」横にある「＋」ボタンをクリックします',
-          '「URL で追加」をクリックします',
-          '「カレンダーの URL」に上述のURLを入力します',
-          '「カレンダーを追加」をクリックすると同期が始まります',
-        ]}
-      />
+    <Alert type="info" title="Google カレンダーへの追加方法 (PC)">
+      <ol>
+        <li>Google カレンダーを開きます</li>
+        <li>左メニューの「他のカレンダー」横にある「＋」ボタンをクリックします</li>
+        <li>「URL で追加」をクリックします</li>
+        <li>「カレンダーの URL」に上述のURLを入力します</li>
+        <li>「カレンダーを追加」をクリックすると同期が始まります</li>
+      </ol>
+    </Alert>
 
-      <div class="mobile-instructions">
-        <h3>スマホでの追加方法</h3>
-        <p>上のボタンをタップすると許可を求めるダイアログが表示され「許可」を押すと追加できます。</p>
-      </div>
-    </div>
+    <Alert type="info" title="スマホでの追加方法 (iOS/Android)">
+      上のボタンをタップすると許可を求めるダイアログが表示され「許可」を押すと追加できます。
+    </Alert>
   </Section>
 
   <Section>
@@ -163,31 +180,29 @@ const pickupEvents = futureEvents
       <li>日程及び会場が Web 上で公開されている同人誌即売会などのイベントを掲載しています。</li>
       <li>同人誌即売会以外のイベントは、即売会と同日・前翌日に開催されるもののみ掲載しています。</li>
       <li>Webオンリーなどのオフライン開催ではないイベントは掲載していません。</li>
-      <li>
-        イベント情報の提供は <a href="https://admin.vo.nrsy.jp/" target="_blank">こちらのフォーム (QuincePear)</a> からお寄せください。
-      </li>
     </ul>
+    <ButtonGroup align="center">
+      <a href="https://admin.vo.nrsy.jp/" class="btn btn-primary" target="_blank">イベント情報を提供する</a>
+    </ButtonGroup>
   </Section>
 
   <Section>
     <h2>このサイトについて</h2>
     <ul>
       <li>この Web サイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。</li>
-      <li>情報投稿フォームや X (Twitter)、イベント Web サイトからの情報をもとに作成しています。</li>
+      <li>X (Twitter)、イベント Web サイトなど、Web 上から一次情報を参照できる情報をもとに作成しています。</li>
       <li>内容は正確でない場合があります。各イベントの Web サイトを必ずご確認ください。</li>
     </ul>
   </Section>
 
-  <Section class="donation-section">
+  <Section>
     <h2>応援をお願いします🙇</h2>
-    <p>
-      サイトの継続運営のためご利用者様からの寄付を受け付けております。ご寄付をいただける方は下記「寄付する」ボタンからお願いいたします。<br />
-      ご寄付はサイトの維持管理費や新機能開発費用に充てさせていただきます。皆様のご支援がサイト運営の大きな助けとなります。何卒よろしくお願いいたします。
-    </p>
-    <p>
-      イベント主催者様でピックアップイベント掲載をご希望の方も、寄付による掲載が可能です。<br />
-      詳しくは<a href="/pick-up/#pick-up-event">こちら</a>をご覧ください。
-    </p>
+    <ul>
+      <li>当サイトは個人運営のため、サーバー維持費やドメイン費用などの運営コストを寄付で賄っております。</li>
+      <li>皆様からのご支援がサイトの継続と改善に繋がります。何卒よろしくお願いいたします。</li>
+      <li>イベント主催者様でピックアップイベント掲載をご希望の方も、寄付による掲載が可能です。</li>
+      <li>詳しくは<a href="/pick-up/#pick-up-event">こちら</a>をご覧ください。</li>
+    </ul>
     <ButtonGroup align="center">
       <a href="https://donate.stripe.com/bIY16HfCS8e5aFGdRr" class="btn btn-primary">寄付する</a>
       <a href="/pick-up/" class="btn">ピックアップ掲載について</a>
@@ -195,48 +210,24 @@ const pickupEvents = futureEvents
   </Section>
 
   <Section>
-    <h2>リリースノート</h2>
-    <details>
-      <ul>
-        <li>2025/12/19: 2025.12.0 ピックアップイベント機能を追加しました</li>
-        <li>2025/05/17: 2025.5.0 <a href="/archives/">ボイベアーカイブ</a> (サイトに登録されている過去のイベントを表示するページ) を追加しました</li>
-        <li>
-          2025/02/04: 2025.2.0
-          <ul>
-            <li><a href="/api/docs/2025-02-04/">API</a> を追加しました</li>
-            <li>バージョンの付番方法を変更しました</li>
-          </ul>
-        </li>
-        <li>2025/01/27: v1.5.0 概要一覧を追加しました</li>
-        <li>2024/10/02: v1.4.2 リンク表示順を変更しました</li>
-        <li>2024/10/02: v1.4.1 オンリー集合イベントに対応しました</li>
-        <li>
-          2024/10/01: v1.4.0
-          <ul>
-            <li>締め切りカレンダーの提供を開始しました</li>
-            <li>各リンクの情報を柔軟に扱えるように変更しました</li>
-          </ul>
-        </li>
-        <li>2024/06/14: v1.3.1 「本日開催！」「N日前に終了」を実装しました</li>
-        <li>2024/06/13: v1.3.0 データの取得方法を変更しました</li>
-        <li>
-          2024/04/18: v1.2.0
-          <ul>
-            <li>一覧の自動更新時刻を0時に変更しました</li>
-            <li>カレンダーインポート機能で終日扱いが正しく行われない不具合を修正しました</li>
-            <li>軽妙な不具合を修正しました</li>
-          </ul>
-        </li>
-        <li>2024/03/08: v1.1.1 バナーを追加しました</li>
-        <li>2024/03/06: v1.1.0 デザインを変更しました, ics形式での配信を開始しました</li>
-        <li>2024/03/05: v1.0.0 本サイトをリリースしました</li>
-      </ul>
-    </details>
-
-    <p class="banner-link">
-      <a href="https://vo.nrsy.jp" target="_blank"><img src="https://vo.nrsy.jp/banner.png" alt="音声合成系イベント開催情報まとめサイト" style="width: 200px; height: 40px" /></a>
-    </p>
+    <h2>API について</h2>
+    <ul>
+      <li>当サイトではイベント情報を取得するための API を提供しています。</li>
+      <li>API の詳細については<a href="/api/docs/">こちら</a>をご覧ください。</li>
+    </ul>
+    <ButtonGroup align="center">
+      <a href="/api/docs/2025-02-04/" class="btn btn-primary">API ドキュメントを見る</a>
+    </ButtonGroup>
   </Section>
+
+  <Section>
+    <h2>リリースノート</h2>
+    <ReleaseNotes />
+  </Section>
+  
+  <p class="banner-link">
+    <a href="https://vo.nrsy.jp" target="_blank"><img src="https://vo.nrsy.jp/banner.png" alt="音声合成系イベント開催情報まとめサイト" style="width: 200px; height: 40px" /></a>
+  </p>
 </BaseLayout>
 
 <style lang="scss">
@@ -253,7 +244,6 @@ const pickupEvents = futureEvents
 
   .responsive-table {
     border-collapse: collapse;
-    font-size: 0.95em;
 
     thead {
       @media screen and (max-width: 840px) {
@@ -265,12 +255,11 @@ const pickupEvents = futureEvents
       }
 
       th {
-        padding: 10px 12px;
+        padding: 10px;
         text-align: left;
         font-weight: 600;
         color: #555;
         font-size: 0.9em;
-        white-space: nowrap;
 
         @media screen and (max-width: 840px) {
           padding: 8px 10px;
@@ -282,42 +271,87 @@ const pickupEvents = futureEvents
     tbody {
       tr {
         border-bottom: 1px solid #f0f0f0;
-
         &:last-child {
           border-bottom: none;
         }
 
-        @media screen and (max-width: 840px) {
-          display: flex;
-          flex-direction: column;
-          gap: 5px;
-          padding: 10px;
-        }
-      }
-
-      td {
-        padding: 12px;
-        vertical-align: middle;
-
-        @media screen and (max-width: 840px) {
-          display: block;
-          padding: 0;
-          &[data-label]::before {
-            display: inline-block;
-            width: 5em;
-            content: attr(data-label);
-            font-weight: 600;
-            color: #555;
-            margin-right: 8px;
+        &.event-row {
+          @media screen and (max-width: 840px) {
+            display: block;
+            padding: 10px;
           }
-        }
-
-        small {
-          color: #888;
-          font-size: 0.85em;
         }
       }
     }
+
+    td {
+      padding: 10px;
+      vertical-align: middle;
+
+      &.event-name {
+        white-space: normal;
+      }
+
+      @media screen and (max-width: 840px) {
+        padding: 0;
+      }
+
+      &.pc-only {
+        @media screen and (max-width: 840px) {
+          display: none;
+        }
+      }
+
+      &.sp-only {
+        @media screen and (min-width: 841px) {
+          display: none;
+        }
+        
+        @media screen and (max-width: 840px) {
+          display: flex;
+          flex-flow: column;
+          .sp-event-header {
+            display: flex;
+            gap: 10px;
+            .header-item {
+              flex: 1;
+            }
+          }
+          .event-row {
+            grid-template-columns: 30% 30% auto;
+            column-gap: 10px;
+            row-gap: 2px;
+          }
+          .event-name {
+            grid-column: 1 / 4;
+          }
+          .event-date {
+            grid-row: 1;
+            grid-column: 2;
+          }
+          .event-type {
+            grid-row: 1;
+            grid-column: 1;
+          }
+          .event-area {
+            grid-row: 1;
+            grid-column: 3;
+          }
+        }
+      }
+      
+      small {
+        color: #888;
+        font-size: 0.85em;
+      }
+    }
+  }
+
+  .icon {
+    vertical-align: middle;
+    width: 1.5em;
+    height: 1.5em;
+    color: #606060;
   }
 
   .calendar-grid {
@@ -331,50 +365,6 @@ const pickupEvents = futureEvents
       gap: 12px;
       margin: 16px 0;
     }
-  }
-
-  .instructions-container {
-    display: grid;
-    gap: 16px;
-    margin-top: 24px;
-
-    @media screen and (max-width: 840px) {
-      gap: 12px;
-      margin-top: 20px;
-    }
-  }
-
-  .mobile-instructions {
-    background: #f8f9fa;
-    border-radius: 10px;
-    padding: 16px 18px;
-    border-left: 4px solid var(--info-color);
-
-    @media screen and (max-width: 840px) {
-      padding: 14px;
-    }
-
-    h3 {
-      margin-bottom: 12px;
-      border: none;
-      padding: 0;
-      font-size: 1.25em;
-      color: var(--info-color);
-
-      @media screen and (max-width: 840px) {
-        font-size: 1.1em;
-      }
-    }
-
-    p {
-      margin: 0;
-      line-height: 1.6;
-    }
-  }
-
-  .donation-section {
-    background: linear-gradient(135deg, rgba(186, 54, 81, 0.03) 0%, rgba(186, 54, 81, 0.01) 100%);
-    border-left: 4px solid var(--primary-brand-color);
   }
 
   .banner-link {

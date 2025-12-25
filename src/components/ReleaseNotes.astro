@@ -1,0 +1,343 @@
+---
+import type { FC } from 'astro';
+
+interface ReleaseNote {
+  date: string;
+  version: string;
+  title: string;
+  items: string | string[];
+}
+
+const releases: ReleaseNote[] = [
+  {
+    date: '2025/12/25',
+    version: 'v2025.12.1',
+    title: 'デザインをリニューアル',
+    items: ['全面的なデザインリニューアルを行いました']
+  },
+  {
+    date: '2025/12/19',
+    version: 'v2025.12.0',
+    title: 'ピックアップイベント機能を追加',
+    items: ['ピックアップイベント機能を追加しました']
+  },
+  {
+    date: '2025/05/17',
+    version: 'v2025.5.0',
+    title: 'ボイベアーカイブを追加',
+    items: [
+      '<a href="/archives/">ボイベアーカイブ</a> (サイトに登録されている過去のイベントを表示するページ) を追加しました'
+    ]
+  },
+  {
+    date: '2025/02/04',
+    version: 'v2025.2.0',
+    title: 'API と通知システムを追加',
+    items: [
+      '<a href="/api/docs/2025-02-04/">API</a> を追加しました',
+      'バージョンの付番方法を変更しました'
+    ]
+  },
+  {
+    date: '2025/01/27',
+    version: 'v1.5.0',
+    title: '概要一覧を追加',
+    items: ['概要一覧を追加しました']
+  },
+  {
+    date: '2024/10/02',
+    version: 'v1.4.2',
+    title: 'リンク表示順を変更',
+    items: ['リンク表示順を変更しました']
+  },
+  {
+    date: '2024/10/02',
+    version: 'v1.4.1',
+    title: 'オンリー集合イベントに対応',
+    items: ['オンリー集合イベントに対応しました']
+  },
+  {
+    date: '2024/10/01',
+    version: 'v1.4.0',
+    title: '締め切りカレンダーを追加',
+    items: [
+      '締め切りカレンダーの提供を開始しました',
+      '各リンクの情報を柔軟に扱えるように変更しました'
+    ]
+  },
+  {
+    date: '2024/06/14',
+    version: 'v1.3.1',
+    title: 'イベント通知機能を実装',
+    items: [
+      '「本日開催！」「N日前に終了」を実装しました'
+    ]
+  },
+  {
+    date: '2024/06/13',
+    version: 'v1.3.0',
+    title: 'データ取得方法を変更',
+    items: ['データの取得方法を変更しました']
+  },
+  {
+    date: '2024/04/18',
+    version: 'v1.2.0',
+    title: '自動更新と不具合修正',
+    items: [
+      '一覧の自動更新時刻を0時に変更しました',
+      'カレンダーインポート機能で終日扱いが正しく行われない不具合を修正しました',
+      '軽妙な不具合を修正しました'
+    ]
+  },
+  {
+    date: '2024/03/08',
+    version: 'v1.1.1',
+    title: 'バナーを追加',
+    items: ['バナーを追加しました']
+  },
+  {
+    date: '2024/03/06',
+    version: 'v1.1.0',
+    title: 'デザイン刷新と ICS 配信を開始',
+    items: [
+      'デザインを変更しました',
+      'ics形式での配信を開始しました'
+    ]
+  },
+  {
+    date: '2024/03/05',
+    version: 'v1.0.0',
+    title: '本サイトをリリース',
+    items: ['本サイトをリリースしました']
+  }
+];
+
+// グループ化: 年ごとにリリースをまとめる
+const releasesByYear = releases.reduce((acc, release) => {
+  const year = release.date.split('/')[0];
+  if (!acc[year]) {
+    acc[year] = [];
+  }
+  acc[year].push(release);
+  return acc;
+}, {} as Record<string, ReleaseNote[]>);
+
+const sortedYears = Object.keys(releasesByYear).sort((a, b) => parseInt(b) - parseInt(a));
+---
+
+<div class="release-notes-container">
+  {sortedYears.map((year) => (
+    <details class="year-group" open={year === sortedYears[0]}>
+      <summary class="year-header">{year}</summary>
+      <div class="release-notes-list">
+        {releasesByYear[year].map((release) => (
+          <div class="release-item">
+            <div class="release-meta">
+              <span class="release-version">{release.version}</span>
+              <span class="release-date">{release.date}</span>
+            </div>
+            <p class="release-title">{release.title}</p>
+            {Array.isArray(release.items) && release.items.length > 0 && (
+              <ul class="release-items">
+                {release.items.map((item) => (
+                  <li set:html={item} />
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
+    </details>
+  ))}
+</div>
+
+<style lang="scss">
+  .release-notes-container {
+    margin-top: 16px;
+  }
+
+  .year-group {
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &[open] {
+      .year-header::before {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .year-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1em;
+    color: var(--primary-brand-color);
+    padding: 12px;
+    margin: 0;
+    cursor: pointer;
+    font-weight: 700;
+    user-select: none;
+    list-style: none;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(186, 54, 81, 0.05);
+    }
+
+    &::before {
+      content: '▼';
+      display: inline-block;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+      font-size: 0.9em;
+      color: var(--primary-brand-color);
+    }
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  .release-notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 12px;
+  }
+
+  .release-item {
+    padding: 10px;
+    border-left: 3px solid var(--primary-brand-color);
+    border-radius: 4px;
+    background: rgba(186, 54, 81, 0.05);
+    transition: all 0.2s ease;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .release-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    font-size: 0.85em;
+    flex-wrap: wrap;
+  }
+
+  .release-date {
+    color: #666;
+    font-weight: 500;
+  }
+
+  .release-version {
+    display: inline-block;
+    background: rgba(186, 54, 81, 0.15);
+    color: var(--primary-brand-color);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 600;
+  }
+
+  .release-title {
+    font-size: 0.95em;
+    color: var(--primary-brand-color);
+    margin: 0 0 6px 0;
+    font-weight: 600;
+  }
+
+  .release-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 4px;
+      padding-left: 16px;
+      position: relative;
+      font-size: 0.9em;
+      color: #555;
+      line-height: 1.4;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &::before {
+        content: '▸';
+        position: absolute;
+        left: 0;
+        color: var(--primary-brand-color);
+        font-weight: bold;
+      }
+
+      a {
+        color: var(--primary-brand-color);
+        text-decoration: none;
+        font-weight: 500;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 840px) {
+    .year-group {
+      margin-bottom: 16px;
+      border-radius: 4px;
+    }
+
+    .year-header {
+      font-size: 1em;
+      padding: 10px;
+      gap: 8px;
+
+      &::before {
+        font-size: 0.85em;
+      }
+    }
+
+    .release-notes-list {
+      padding: 0 10px 10px 10px;
+      gap: 0;
+    }
+
+    .release-item {
+      padding: 8px;
+      margin-bottom: 6px;
+    }
+
+    .release-meta {
+      gap: 8px;
+      font-size: 0.8em;
+    }
+
+    .release-version {
+      padding: 2px 6px;
+      font-size: 0.75em;
+    }
+
+    .release-title {
+      font-size: 0.9em;
+      margin-bottom: 4px;
+    }
+
+    .release-items li {
+      margin-bottom: 3px;
+      font-size: 0.85em;
+      padding-left: 14px;
+    }
+  }
+</style>

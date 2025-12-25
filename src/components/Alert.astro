@@ -41,22 +41,23 @@ const props = Astro.props
     display: flex;
     flex-direction: column;
     gap: 5px;
+    border-radius: 10px;
 
     &-info {
-      border: 1px solid var(--info-color);
-      border-left: 8px solid var(--info-color);
+      border: 1px solid var(--border-color);
+      border-left: 3px solid var(--info-color);
     }
     &-success {
       border: 1px solid var(--success-color);
-      border-left: 8px solid var(--success-color);
+      border-left: 3px solid var(--success-color);
     }
     &-warning {
-      border: 1px solid var(--warning-color);
-      border-left: 8px solid var(--warning-color);
+      border: 1px solid var(--border-color);
+      border-left: 3px solid var(--warning-color);
     }
     &-error {
       border: 1px solid var(--danger-color);
-      border-left: 8px solid var(--danger-color);
+      border-left: 3px solid var(--danger-color);
     }
   }
   .header {
