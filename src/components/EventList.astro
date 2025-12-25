@@ -3,6 +3,7 @@ import type { PearEventAppModel, PearEventLink } from '@types';
 import EventCard from './EventCard.astro';
 
 export interface Props {
+  sectionHeadingId: string;
   today: Date;
   events: PearEventAppModel[];
   links: Record<string, PearEventLink[]>;
@@ -37,7 +38,7 @@ const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>((
             ))}
           </div>
           <p class="text-right">
-            <a href="#future-events">一番上に戻る</a>
+            <a href={`#${props.sectionHeadingId}`}>一番上に戻る</a>
           </p>
         </>
       );

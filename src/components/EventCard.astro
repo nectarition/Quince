@@ -20,24 +20,24 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
 
 <div class="cardWrap" id={event.id}>
   <article class="card" style={`--event-color: ${eventType.color};`}>
-    <div class={`card_dateArea_wrap ${(span >= 0 && span <= 10 && 'card_dateArea_wrap-near') ?? ''}`}>
+    <div class={`card_dateArea_wrap ${(span >= 0 && span <= 14 && 'card_dateArea_wrap-near') ?? ''}`}>
       <div class="card_dateArea_container">
         <div class="card_dateArea_year">{dateLib.format(event.date, 'YYYY.')}</div>
         <div class="card_dateArea_date">{dateLib.format(event.date, 'M.D')}</div>
         <div class="card_dateArea_day">{dateLib.format(event.date, '(ddd)')}</div>
-        <div class="card_dateArea_count">
-        {span === 0
-          ? <span class="badge badge-today">本日開催</span>
-          : span > 0
-            ? <span class="badge badge-upcoming">
-                <span class="badge-label">あと</span>
-                <span class="badge-number">{span}</span>
-                <span class="badge-label">日</span>
-              </span>
-            : span >= -10
-              ? <span class="badge badge-ended">{Math.abs(span)}日前に終了</span>
-              : <></>}
-        </div>
+      </div>
+      <div class="card_countArea">
+      {span === 0
+        ? <span class="badge badge-nearly">本日開催</span>
+        : span > 0
+          ? <span class={`badge badge-${span <= 14 ? 'nearly' : 'upcoming'}`}>
+              <span class="badge-label">あと</span>
+              <span class="badge-number">&nbsp;{span}&nbsp;</span>
+              <span class="badge-label">日</span>
+            </span>
+          : span >= -10
+            ? <span class="badge badge-ended">{Math.abs(span)} 日前に終了</span>
+            : <></>}
       </div>
     </div>
     
@@ -154,6 +154,7 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-flow: column;
       background: #fafafa;
       padding: 12px;
       border-right: 1px solid var(--border-color);
@@ -163,9 +164,12 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
       }
 
       @media screen and (max-width: 840px) {
+        flex-flow: row;
+        justify-content: flex-start;
         border-right: none;
         border-bottom: 1px solid var(--border-color);
         padding: 12px;
+        gap: 10px;
       }
     }
 
@@ -176,7 +180,6 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
     &_year {
       font-size: 0.85em;
       color: #888;
-      font-weight: 400;
     }
 
     &_date {
@@ -201,8 +204,7 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
       &_container {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 5px;
+        gap: 3px;
         text-align: left;
       }
 
@@ -211,6 +213,10 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
       &_day {
         display: inline;
         margin: 0;
+      }
+
+      &_year {
+        font-size: 1.25em;
       }
 
       &_date {
@@ -231,13 +237,13 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
     font-weight: 500;
     white-space: nowrap;
 
-    &-today {
-      background: #ff6b6b;
+    &-nearly {
+      background: var(--danger-color);
       color: white;
     }
 
     &-upcoming {
-      background: #4ecdc4;
+      background: var(--success-color);
       color: white;
     }
 
@@ -302,7 +308,6 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
       font-size: 1.25em;
       font-weight: 600;
       line-height: 1.4;
-      margin: 0 0 12px 0;
       color: #333;
       border-left: none;
       padding-left: 0;

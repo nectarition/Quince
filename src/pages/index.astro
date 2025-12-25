@@ -23,7 +23,7 @@ const fetchedLinks = await eventLibs.getLinksAsync();
 const heldEvents = fetchedEvents
   .filter((e) => {
     const span = dateLibs.getSpan(e.date, today.getTime()) / 86400000;
-    return span < 0 && span >= -10;
+    return span < 0 && span >= -30;
   })
   .sort((a, b) => a.order - b.order)
   .sort((a, b) => b.date - a.date);
@@ -116,14 +116,14 @@ const pickupEvents = futureEvents
     }
   </Section>
 
-  <Section>
+  <Section id="event-info">
     <h2>イベント情報</h2>
-    <EventList events={futureEvents} today={today} links={fetchedLinks} />
+    <EventList sectionHeadingId="event-info" events={futureEvents} today={today} links={fetchedLinks} />
   </Section>
 
   <Section id="held-events">
     <h2>最近終了したイベント</h2>
-    {heldEvents.length > 0 ? <EventList events={heldEvents} today={today} links={fetchedLinks} /> : <p>最近終了したイベントはありません</p>}
+    {heldEvents.length > 0 ? <EventList sectionHeadingId="held-events" events={heldEvents} today={today} links={fetchedLinks} /> : <p>最近終了したイベントはありません</p>}
     <ButtonGroup align="center">
       <a href="/archives/" class="btn">過去のイベントを表示</a>
     </ButtonGroup>
@@ -317,16 +317,6 @@ const pickupEvents = futureEvents
           small {
             color: #888;
             font-size: 0.85em;
-          }
-
-          a {
-            color: #333;
-            text-decoration: underline;
-            font-weight: 500;
-
-            &:hover {
-              color: var(--primary-brand-color);
-            }
           }
         }
       }
