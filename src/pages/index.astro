@@ -71,7 +71,7 @@ const pickupEvents = futureEvents
         {
           futureEvents.map((e) => (
             <tr>
-              <td data-label="日付">{dateLibs.format(e.date, 'YYYY.M.D (ddd)')}</td>
+              <td data-label="日付">{dateLibs.format(e.date, 'YYYY/M/D (ddd)')}</td>
               <td data-label="種類">
                 <EventTypeLabel eventType={e.type} isShort={true} />
               </td>
