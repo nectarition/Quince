@@ -58,40 +58,38 @@ const pickupEvents = futureEvents
   <Section id="future-events">
     <h2>イベントリスト</h2>
 
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>日付</th>
-            <th>種類</th>
-            <th>都道府県</th>
-            <th>イベント</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            futureEvents.map((e) => (
-              <tr>
-                <td class="noneBreak">{dateLibs.format(e.date, 'YYYY.M.D (ddd)')}</td>
-                <td class="noneBreak">
-                  <EventTypeLabel eventType={e.type} isShort={true} />
-                </td>
-                <td class="noneBreak">{eventLibs.getPrefecture(e.venue.address)}</td>
-                <td class="allBreak">
-                  {e.genre && (
-                    <>
-                      <small>{eventLibs.convertGenre(e.genre)}</small>
-                      <br />
-                    </>
-                  )}
-                  <a href={`#${e.id}`}>「{e.name}」</a>
-                </td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
-    </div>
+    <table class="responsive-table">
+      <thead>
+        <tr>
+          <th>日付</th>
+          <th>種類</th>
+          <th>都道府県</th>
+          <th>イベント</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          futureEvents.map((e) => (
+            <tr>
+              <td data-label="日付">{dateLibs.format(e.date, 'YYYY.M.D (ddd)')}</td>
+              <td data-label="種類">
+                <EventTypeLabel eventType={e.type} isShort={true} />
+              </td>
+              <td data-label="都道府県">{eventLibs.getPrefecture(e.venue.address)}</td>
+              <td>
+                {e.genre && (
+                  <>
+                    <small>{eventLibs.convertGenre(e.genre)}</small>
+                    <br />
+                  </>
+                )}
+                <a href={`#${e.id}`}>「{e.name}」</a>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
   </Section>
 
   <Section>
@@ -253,71 +251,70 @@ const pickupEvents = futureEvents
     margin-left: 8px;
   }
 
-  .table-container {
-    overflow-x: auto;
-    margin: 0 -24px;
-    padding: 0 24px;
+  .responsive-table {
+    border-collapse: collapse;
+    font-size: 0.95em;
 
-    @media screen and (max-width: 840px) {
-      margin: 0 -16px;
-      padding: 0 16px;
+    thead {
+      @media screen and (max-width: 840px) {
+        display: none;
+      }
+
+      tr {
+        border-bottom: 2px solid var(--border-color);
+      }
+
+      th {
+        padding: 10px 12px;
+        text-align: left;
+        font-weight: 600;
+        color: #555;
+        font-size: 0.9em;
+        white-space: nowrap;
+
+        @media screen and (max-width: 840px) {
+          padding: 8px 10px;
+          font-size: 0.85em;
+        }
+      }
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.95em;
+    tbody {
+      tr {
+        border-bottom: 1px solid #f0f0f0;
 
-      thead {
-        tr {
-          border-bottom: 2px solid var(--border-color);
+        &:last-child {
+          border-bottom: none;
         }
 
-        th {
-          padding: 10px 12px;
-          text-align: left;
-          font-weight: 600;
-          color: #555;
-          font-size: 0.9em;
-          white-space: nowrap;
-
-          @media screen and (max-width: 840px) {
-            padding: 8px 10px;
-            font-size: 0.85em;
-          }
+        @media screen and (max-width: 840px) {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          padding: 10px;
         }
       }
 
-      tbody {
-        tr {
-          border-bottom: 1px solid #f0f0f0;
+      td {
+        padding: 12px;
+        vertical-align: middle;
 
-          &:last-child {
-            border-bottom: none;
+        @media screen and (max-width: 840px) {
+          display: block;
+          padding: 0;
+          &[data-label]::before {
+            display: inline-block;
+            width: 5em;
+            content: attr(data-label);
+            font-weight: 600;
+            color: #555;
+            margin-right: 8px;
           }
         }
 
-        td {
-          padding: 12px;
-          vertical-align: middle;
-
-          @media screen and (max-width: 840px) {
-            padding: 10px;
-          }
-
-          &.noneBreak {
-            white-space: nowrap;
-          }
-
-          &.allBreak {
-            white-space: normal;
-            word-break: break-word;
-          }
-
-          small {
-            color: #888;
-            font-size: 0.85em;
-          }
+        small {
+          color: #888;
+          font-size: 0.85em;
         }
       }
     }

@@ -28,10 +28,7 @@ html {
 
 body {
   font-family: 'Noto Sans JP', sans-serif;
-
-  @media screen and (max-width: 840px) {
-    font-size: 14px;
-  }
+  font-size: 16px;
 }
 
 h1,
@@ -104,10 +101,6 @@ table {
 
     &:nth-child(2n) {
       background-color: #fafafa;
-    }
-
-    &:hover {
-      background-color: rgba(186, 54, 81, 0.04);
     }
   }
 
