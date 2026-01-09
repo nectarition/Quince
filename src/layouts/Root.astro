@@ -19,23 +19,24 @@ const title = (Astro.props.title && `${Astro.props.title} - ${siteName}`) ?? sit
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-
     <meta name="description" content={description} />
-
     <meta property="og:title" content={title} />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:image" content={`${siteURL}/card.png`} />
     <meta property="og:url" content={`${siteURL}/`} />
     <meta property="og:description" content={description} />
-
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@nectarition" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={`${siteURL}/card.png`} />
-
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="ボイべまとめ" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="google-adsense-account" content="ca-pub-7758249797234531" />
-
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZJMRCR6LXH"></script>
     <script type="module">
       window.dataLayer = window.dataLayer || [];
@@ -46,7 +47,6 @@ const title = (Astro.props.title && `${Astro.props.title} - ${siteName}`) ?? sit
 
       gtag('config', 'G-ZJMRCR6LXH');
     </script>
-
     <title>{title}</title>
   </head>
   <body>
