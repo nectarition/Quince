@@ -72,42 +72,39 @@ const pickupEvents = futureEvents
       <tbody>
         {
           futureEvents.map((e) => (
-              <tr class="event-row">
-                <td class="pc-only">
-                  {dateLibs.format(e.date, 'YYYY/M/D (ddd)')}
-                </td>
-                <td class="pc-only">
-                  <EventTypeLabel eventType={e.type} isShort={true} />
-                </td>
-                <td class="pc-only">
-                  {eventLibs.getPrefecture(e.venue.address, true)}
-                </td>
-                <td class="sp-only">
-                  <div class="sp-event-header">
-                    <span class="header-item">
-                      <EventTypeLabel eventType={e.type} isShort={true} />
-                    </span>
-                    <span class="header-item">
-                      <Sprite name="mdi:calendar" class="icon" />
-                      {dateLibs.format(e.date, 'YYYY/M/D (ddd)')}
-                    </span>
-                    <span class="header-item">
-                      <Sprite name="mdi:map-marker-outline" class="icon" />
-                      {eventLibs.getPrefecture(e.venue.address, true)}
-                    </span>
-                  </div>
-                </td>
-                <td class="event-name">
-                  {e.genre && (
-                    <>
-                      <small>{eventLibs.convertGenre(e.genre)}</small>
-                      <br />
-                    </>
-                  )}
-                  <a href={`#${e.id}`}>「{e.name}」</a>
-                </td>
-              </tr>
-              ))}
+            <tr class="event-row">
+              <td class="pc-only">{dateLibs.format(e.date, 'YYYY/M/D (ddd)')}</td>
+              <td class="pc-only">
+                <EventTypeLabel eventType={e.type} isShort={true} />
+              </td>
+              <td class="pc-only">{eventLibs.getPrefecture(e.venue.address, true)}</td>
+              <td class="sp-only">
+                <div class="sp-event-header">
+                  <span class="header-item">
+                    <EventTypeLabel eventType={e.type} isShort={true} />
+                  </span>
+                  <span class="header-item">
+                    <Sprite name="mdi:calendar" class="icon" />
+                    {dateLibs.format(e.date, 'YYYY/M/D (ddd)')}
+                  </span>
+                  <span class="header-item">
+                    <Sprite name="mdi:map-marker-outline" class="icon" />
+                    {eventLibs.getPrefecture(e.venue.address, true)}
+                  </span>
+                </div>
+              </td>
+              <td class="event-name">
+                {e.genre && (
+                  <>
+                    <small>{eventLibs.convertGenre(e.genre)}</small>
+                    <br />
+                  </>
+                )}
+                <a href={`#${e.id}`}>「{e.name}」</a>
+              </td>
+            </tr>
+          ))
+        }
       </tbody>
     </table>
   </Section>
@@ -168,9 +165,7 @@ const pickupEvents = futureEvents
       </ol>
     </Alert>
 
-    <Alert type="info" title="スマホでの追加方法 (iOS/Android)">
-      上のボタンをタップすると許可を求めるダイアログが表示され「許可」を押すと追加できます。
-    </Alert>
+    <Alert type="info" title="スマホでの追加方法 (iOS/Android)"> 上のボタンをタップすると許可を求めるダイアログが表示され「許可」を押すと追加できます。 </Alert>
   </Section>
 
   <Section>
@@ -223,9 +218,10 @@ const pickupEvents = futureEvents
     <h2>リリースノート</h2>
     <ReleaseNotes />
   </Section>
-  
+
   <p class="banner-link">
     <a href="https://vo.nrsy.jp" target="_blank"><img src="https://vo.nrsy.jp/banner.png" alt="音声合成系イベント開催情報まとめサイト" style="width: 200px; height: 40px" /></a>
+    <a href="https://seidouren.jp" target="_blank"><img src="https://seidouren.jp/banner.png" alt="声同連: 音声合成系同人誌即売会連絡会" style="width: 200px; height: 40px" /></a>
   </p>
 </BaseLayout>
 
@@ -305,7 +301,7 @@ const pickupEvents = futureEvents
         @media screen and (min-width: 841px) {
           display: none;
         }
-        
+
         @media screen and (max-width: 840px) {
           display: flex;
           flex-flow: column;
@@ -338,7 +334,7 @@ const pickupEvents = futureEvents
           }
         }
       }
-      
+
       small {
         color: #888;
         font-size: 0.85em;
@@ -367,7 +363,10 @@ const pickupEvents = futureEvents
   }
 
   .banner-link {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
     margin-top: 24px;
 
     img {
