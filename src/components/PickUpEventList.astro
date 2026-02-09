@@ -4,6 +4,7 @@ import EventTypeLabel from './EventTypeLabel.astro';
 import eventLib from '../libs/event';
 import dateLib from '../libs/date';
 import { Sprite } from 'astro-icon';
+import { initPrefectureTooltip } from '../scripts/prefectureTooltip';
 
 export interface Props {
   today: Date;
@@ -12,57 +13,98 @@ export interface Props {
 }
 
 const props = Astro.props;
+
+// グループ化用のキーを生成
+const groupKey = (e: PearEventAppModel) => {
+  return `${e.date}-${e.venue.id}-${e.roomName || ''}`;
+};
+
+// イベントをグループ化
+const groupedEvents = props.events.reduce(
+  (acc, event) => {
+    const key = groupKey(event);
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(event);
+    return acc;
+  },
+  {} as Record<string, PearEventAppModel[]>,
+);
+
+const groups = Object.values(groupedEvents);
 ---
 
 <table class="responsive-table">
   <thead>
     <tr>
       <th>日付</th>
+      <th>会場</th>
       <th>種類</th>
       <th>イベント</th>
-      <th>会場</th>
     </tr>
   </thead>
   <tbody>
     {
-      props.events.map((e) => (
-        <tr class="event-row">
-          <td class="pc-only">{dateLib.format(e.date, 'YYYY/M/D (ddd)')}</td>
-          <td class="pc-only">
-            <EventTypeLabel eventType={e.type} isShort={true} />
-          </td>
-          <td class="sp-only event-name">
-            <div class="sp-event-header">
-              <span class="header-item">
-                <EventTypeLabel eventType={e.type} isShort={true} />
-              </span>
-              <span class="header-item">
-                <Sprite name="mdi:calendar" class="icon" />
-                {dateLib.format(e.date, 'YYYY/M/D (ddd)')}
-              </span>
-              <span class="header-item">
-                <Sprite name="mdi:map-marker-outline" class="icon" />
-                {eventLib.getPrefecture(e.venue.address, true)}
-              </span>
-            </div>
-            <div class="event-name">
-              {e.genre && (
-                <>
-                  <small>{eventLib.convertGenre(e.genre)}</small>
-                  <br />
-                </>
-              )}
-              <a href={`#${e.id}`}>「{e.name}」</a>
-              {e.pickUpMessage && (
-                <div class="pickUpMessage">
-                  <div class="pickUpMessage_content">{e.pickUpMessage}</div>
-                </div>
-              )}
-            </div>
-          </td>
-          <td class="pc-only">{e.venue.name}</td>
-        </tr>
-      ))
+      groups.map((eventGroup) => {
+        const firstEvent = eventGroup[0];
+        const rowSpan = eventGroup.length;
+        return (
+          <>
+            {eventGroup.map((e, index) => (
+              <tr class={`event-row ${index === 0 ? 'group-first' : ''}`}>
+                {index === 0 && (
+                  <>
+                    <td class="pc-only" rowspan={rowSpan}>
+                      {dateLib.format(firstEvent.date, 'YYYY/M/D (ddd)')}
+                    </td>
+                    <td class="pc-only" rowspan={rowSpan}>
+                      <div class="venue-group">
+                        <div>{firstEvent.venue.name}</div>
+                        {firstEvent.roomName && <div class="room-name">{firstEvent.roomName}</div>}
+                      </div>
+                    </td>
+                  </>
+                )}
+                <td class="pc-only">
+                  <EventTypeLabel eventType={e.type} isShort={true} />
+                </td>
+                <td class="sp-only event-name">
+                  <div class="sp-event-header">
+                    <span class="header-item">
+                      <EventTypeLabel eventType={e.type} isShort={true} />
+                    </span>
+                    <span class="header-item">
+                      <Sprite name="mdi:calendar" class="icon" />
+                      {dateLib.format(e.date, 'YYYY/M/D (ddd)')}
+                    </span>
+                    <span class="header-item">
+                      <Sprite name="mdi:map-marker-outline" class="icon" />
+                      <span class="prefecture-tooltip-trigger" data-venue={e.venue.name} data-room={e.roomName || ''}>
+                        {eventLib.getPrefecture(e.venue.address, true)}
+                      </span>
+                    </span>
+                  </div>
+                  <div class="event-name">
+                    {e.genre && (
+                      <>
+                        <small>{eventLib.convertGenre(e.genre)}</small>
+                        <br />
+                      </>
+                    )}
+                    <a href={`#${e.id}`}>「{e.name}」</a>
+                    {e.pickUpMessage && (
+                      <div class="pickUpMessage">
+                        <div class="pickUpMessage_content">{e.pickUpMessage}</div>
+                      </div>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </>
+        );
+      })
     }
   </tbody>
 </table>
@@ -95,6 +137,22 @@ const props = Astro.props;
         @media screen and (max-width: 840px) {
           padding: 8px 10px;
           font-size: 0.85em;
+        }
+      }
+    }
+
+    .venue-group {
+      display: flex;
+      flex-direction: column;
+
+      div {
+        &:first-child {
+          font-weight: 500;
+        }
+
+        &.room-name {
+          font-size: 0.85em;
+          color: #666;
         }
       }
     }
@@ -194,6 +252,56 @@ const props = Astro.props;
     color: #606060;
   }
 
+  .prefecture-tooltip-trigger {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted #606060;
+
+    @media screen and (min-width: 841px) {
+      border-bottom: none;
+      cursor: auto;
+    }
+  }
+
+  .prefecture-tooltip {
+    background-color: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    z-index: 10000;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    max-width: 200px;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-break: break-word;
+
+    @media screen and (min-width: 841px) {
+      display: none;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #333;
+      z-index: 10000;
+      pointer-events: none;
+    }
+  }
+
+  .prefecture-tooltip-room {
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    font-size: 0.85em;
+  }
+
   .text-right {
     text-align: right;
     margin-top: 20px;
@@ -210,3 +318,7 @@ const props = Astro.props;
     }
   }
 </style>
+<script>
+  import { initPrefectureTooltip } from '../scripts/prefectureTooltip';
+  initPrefectureTooltip();
+</script>
