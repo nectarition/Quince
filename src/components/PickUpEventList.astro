@@ -1,6 +1,9 @@
 ---
 import type { PearEventAppModel, PearEventLink } from '@types';
-import EventCard from './EventCard.astro';
+import EventTypeLabel from './EventTypeLabel.astro';
+import eventLib from '../libs/event';
+import dateLib from '../libs/date';
+import { Sprite } from 'astro-icon';
 
 export interface Props {
   today: Date;
@@ -11,56 +14,184 @@ export interface Props {
 const props = Astro.props;
 ---
 
-<div class="cardRack">
-  {props.events.map((event) => <EventCard today={props.today} event={event} links={props.links[event.id] ?? []} isPickUp={true} />)}
-</div>
+<table class="responsive-table">
+  <thead>
+    <tr>
+      <th>日付</th>
+      <th>種類</th>
+      <th>イベント</th>
+      <th>会場</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      props.events.map((e) => (
+        <tr class="event-row">
+          <td class="pc-only">{dateLib.format(e.date, 'YYYY/M/D (ddd)')}</td>
+          <td class="pc-only">
+            <EventTypeLabel eventType={e.type} isShort={true} />
+          </td>
+          <td class="sp-only event-name">
+            <div class="sp-event-header">
+              <span class="header-item">
+                <EventTypeLabel eventType={e.type} isShort={true} />
+              </span>
+              <span class="header-item">
+                <Sprite name="mdi:calendar" class="icon" />
+                {dateLib.format(e.date, 'YYYY/M/D (ddd)')}
+              </span>
+              <span class="header-item">
+                <Sprite name="mdi:map-marker-outline" class="icon" />
+                {eventLib.getPrefecture(e.venue.address, true)}
+              </span>
+            </div>
+            <div class="event-name">
+              {e.genre && (
+                <>
+                  <small>{eventLib.convertGenre(e.genre)}</small>
+                  <br />
+                </>
+              )}
+              <a href={`#${e.id}`}>「{e.name}」</a>
+              {e.pickUpMessage && (
+                <div class="pickUpMessage">
+                  <div class="pickUpMessage_content">{e.pickUpMessage}</div>
+                </div>
+              )}
+            </div>
+          </td>
+          <td class="pc-only">{e.venue.name}</td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
 
 <p class="text-right">
   <a href="#future-events">一番上に戻る</a>
 </p>
 
 <style lang="scss">
-  .cardRack {
-    margin-bottom: 24px;
-    display: grid;
-    gap: 16px;
+  .responsive-table {
+    border-collapse: collapse;
+    width: 100%;
 
-    &:last-child {
-      margin-bottom: 0;
-    }
+    thead {
+      @media screen and (max-width: 840px) {
+        display: none;
+      }
 
-    @media screen and (max-width: 840px) {
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-  }
+      tr {
+        border-bottom: 2px solid var(--border-color);
+      }
 
-  .monthTitle {
-    font-size: 1.5em;
-    font-weight: 700;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 3px solid var(--primary-brand-color);
-    color: var(--primary-brand-color);
-    display: inline-block;
+      th {
+        padding: 10px;
+        text-align: left;
+        font-weight: 600;
+        color: #555;
+        font-size: 0.9em;
 
-    @media screen and (max-width: 840px) {
-      font-size: 1.3em;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-    }
-  }
-
-  ul {
-    padding: 0;
-    list-style: none;
-    li {
-      margin-left: 1em;
-      &::before {
-        margin-left: -1em;
-        content: '・';
+        @media screen and (max-width: 840px) {
+          padding: 8px 10px;
+          font-size: 0.85em;
+        }
       }
     }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid #f0f0f0;
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &.event-row {
+          @media screen and (max-width: 840px) {
+            display: block;
+            padding: 10px;
+          }
+        }
+      }
+    }
+
+    td {
+      padding: 10px;
+      vertical-align: middle;
+
+      &.event-name {
+        white-space: normal;
+      }
+
+      @media screen and (max-width: 840px) {
+        padding: 0;
+      }
+
+      &.pc-only {
+        @media screen and (max-width: 840px) {
+          display: none;
+        }
+      }
+
+      &.sp-only {
+        @media screen and (min-width: 841px) {
+          display: table-cell;
+        }
+
+        @media screen and (max-width: 840px) {
+          display: flex;
+          flex-flow: column;
+        }
+      }
+
+      .sp-event-header {
+        @media screen and (min-width: 841px) {
+          display: none;
+        }
+
+        @media screen and (max-width: 840px) {
+          display: flex;
+          gap: 10px;
+          .header-item {
+            flex: 1;
+          }
+        }
+      }
+
+      small {
+        color: #888;
+        font-size: 0.85em;
+      }
+    }
+  }
+
+  .pickUpMessage {
+    margin: 10px 0 0 0;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #fff8e1 0%, #fff3cd 100%);
+    border: 1px solid #ffecb3;
+    border-left: 3px solid #ffa000;
+    border-radius: 5px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.9em;
+
+    @media screen and (max-width: 840px) {
+      padding: 8px 12px;
+      font-size: 0.85em;
+    }
+
+    &_content {
+      white-space: pre-wrap;
+    }
+  }
+
+  .icon {
+    vertical-align: middle;
+    width: 1.5em;
+    height: 1.5em;
+    color: #606060;
   }
 
   .text-right {

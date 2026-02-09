@@ -65,8 +65,8 @@ const pickupEvents = futureEvents
         <tr>
           <th>日付</th>
           <th>種類</th>
-          <th>都道府県</th>
           <th>イベント</th>
+          <th>会場</th>
         </tr>
       </thead>
       <tbody>
@@ -77,7 +77,6 @@ const pickupEvents = futureEvents
               <td class="pc-only">
                 <EventTypeLabel eventType={e.type} isShort={true} />
               </td>
-              <td class="pc-only">{eventLibs.getPrefecture(e.venue.address, true)}</td>
               <td class="sp-only">
                 <div class="sp-event-header">
                   <span class="header-item">
@@ -102,6 +101,7 @@ const pickupEvents = futureEvents
                 )}
                 <a href={`#${e.id}`}>「{e.name}」</a>
               </td>
+              <td class="pc-only">{e.venue.name}</td>
             </tr>
           ))
         }
@@ -140,7 +140,7 @@ const pickupEvents = futureEvents
     <h2>最近終了したイベント</h2>
     {heldEvents.length > 0 ? <EventList sectionHeadingId="held-events" events={heldEvents} today={today} links={fetchedLinks} /> : <p>最近終了したイベントはありません</p>}
     <ButtonGroup align="center">
-      <a href="/archives/" class="btn">過去のイベントを表示</a>
+      <a href="/archives/" class="btn">ボイベまとめ登録イベント一覧</a>
     </ButtonGroup>
   </Section>
 

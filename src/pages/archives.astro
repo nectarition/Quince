@@ -13,29 +13,31 @@ const events = fetchedEvents
 <BaseLayout title="ボイベアーカイブ">
   <Breadcrumbs items={[{ name: 'ホーム', path: '/' }]} />
   <h1>ボイベアーカイブ</h1>
-  <p>サイトに登録されている過去のイベントを表示しています。</p>
+  <p>サイトに登録されている全てのイベントを表示しています。</p>
 
   <table>
     <thead>
       <tr>
+        <th>#</th>
         <th>日付</th>
         <th>種類</th>
-        <th>都道府県</th>
-        <th>イベント</th>
         <th>ジャンル</th>
+        <th>イベント</th>
+        <th>会場</th>
       </tr>
     </thead>
     <tbody>
       {
-        events.map((e) => (
+        events.map((e, i) => (
           <tr>
+            <td>{i + 1}</td>
             <td>{dateLibs.format(e.date, 'YYYY.M.D (ddd)')}</td>
             <td>{eventLibs.convertEventTypeShorten(e.type).name}</td>
-            <td>{eventLibs.getPrefecture(e.venue.address)}</td>
+            <td>{eventLibs.convertGenre(e.genre)}</td>
             <td>
               <a href={e.websiteURL}>{e.name}</a>
             </td>
-            <td>{eventLibs.convertGenre(e.genre)}</td>
+            <td>{e.venue.name}</td>
           </tr>
         ))
       }

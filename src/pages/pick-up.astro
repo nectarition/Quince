@@ -1,5 +1,5 @@
 ---
-import EventCard from 'src/components/EventCard.astro';
+import PickUpEventList from '../components/PickUpEventList.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import BaseLayout from '../layouts/BaseLayout/BaseLayout.astro';
 import ButtonGroup from '../components/ButtonGroup.astro';
@@ -29,10 +29,10 @@ import ButtonGroup from '../components/ButtonGroup.astro';
 
   <h3>掲載イメージ</h3>
 
-  <p>
-    <EventCard
-      today={new Date()}
-      event={{
+  <PickUpEventList
+    today={new Date()}
+    events={[
+      {
         id: 'example-event',
         name: 'ボイベまとめカンファレンス',
         type: 'special',
@@ -55,11 +55,10 @@ import ButtonGroup from '../components/ButtonGroup.astro';
           postalCode: '1002100',
           id: 'venue-001',
         },
-      }}
-      links={[]}
-      isPickUp={true}
-    />
-  </p>
+      },
+    ]}
+    links={{}}
+  />
 
   <h3>掲載依頼について</h3>
 

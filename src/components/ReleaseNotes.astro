@@ -8,144 +8,138 @@ interface ReleaseNote {
 
 const releases: ReleaseNote[] = [
   {
+    date: '2026/02/09',
+    version: 'v2026.2.0',
+    title: 'イベントリストをリニューアル',
+    items: ['イベントリストのレイアウトを変更しました'],
+  },
+  {
     date: '2025/12/25',
     version: 'v2025.12.1',
     title: 'デザインをリニューアル',
-    items: ['全面的なデザインリニューアルを行いました']
+    items: ['全面的なデザインリニューアルを行いました'],
   },
   {
     date: '2025/12/19',
     version: 'v2025.12.0',
     title: 'ピックアップイベント機能を追加',
-    items: ['ピックアップイベント機能を追加しました']
+    items: ['ピックアップイベント機能を追加しました'],
   },
   {
     date: '2025/05/17',
     version: 'v2025.5.0',
     title: 'ボイベアーカイブを追加',
-    items: [
-      '<a href="/archives/">ボイベアーカイブ</a> (サイトに登録されている過去のイベントを表示するページ) を追加しました'
-    ]
+    items: ['<a href="/archives/">ボイベアーカイブ</a> (サイトに登録されている過去のイベントを表示するページ) を追加しました'],
   },
   {
     date: '2025/02/04',
     version: 'v2025.2.0',
     title: 'API と通知システムを追加',
-    items: [
-      '<a href="/api/docs/2025-02-04/">API</a> を追加しました',
-      'バージョンの付番方法を変更しました'
-    ]
+    items: ['<a href="/api/docs/2025-02-04/">API</a> を追加しました', 'バージョンの付番方法を変更しました'],
   },
   {
     date: '2025/01/27',
     version: 'v1.5.0',
     title: '概要一覧を追加',
-    items: ['概要一覧を追加しました']
+    items: ['概要一覧を追加しました'],
   },
   {
     date: '2024/10/02',
     version: 'v1.4.2',
     title: 'リンク表示順を変更',
-    items: ['リンク表示順を変更しました']
+    items: ['リンク表示順を変更しました'],
   },
   {
     date: '2024/10/02',
     version: 'v1.4.1',
     title: 'オンリー集合イベントに対応',
-    items: ['オンリー集合イベントに対応しました']
+    items: ['オンリー集合イベントに対応しました'],
   },
   {
     date: '2024/10/01',
     version: 'v1.4.0',
     title: '締め切りカレンダーを追加',
-    items: [
-      '締め切りカレンダーの提供を開始しました',
-      '各リンクの情報を柔軟に扱えるように変更しました'
-    ]
+    items: ['締め切りカレンダーの提供を開始しました', '各リンクの情報を柔軟に扱えるように変更しました'],
   },
   {
     date: '2024/06/14',
     version: 'v1.3.1',
     title: 'イベント通知機能を実装',
-    items: [
-      '「本日開催！」「N日前に終了」を実装しました'
-    ]
+    items: ['「本日開催！」「N日前に終了」を実装しました'],
   },
   {
     date: '2024/06/13',
     version: 'v1.3.0',
     title: 'データ取得方法を変更',
-    items: ['データの取得方法を変更しました']
+    items: ['データの取得方法を変更しました'],
   },
   {
     date: '2024/04/18',
     version: 'v1.2.0',
     title: '自動更新と不具合修正',
-    items: [
-      '一覧の自動更新時刻を0時に変更しました',
-      'カレンダーインポート機能で終日扱いが正しく行われない不具合を修正しました',
-      '軽妙な不具合を修正しました'
-    ]
+    items: ['一覧の自動更新時刻を0時に変更しました', 'カレンダーインポート機能で終日扱いが正しく行われない不具合を修正しました', '軽妙な不具合を修正しました'],
   },
   {
     date: '2024/03/08',
     version: 'v1.1.1',
     title: 'バナーを追加',
-    items: ['バナーを追加しました']
+    items: ['バナーを追加しました'],
   },
   {
     date: '2024/03/06',
     version: 'v1.1.0',
     title: 'デザイン刷新と ICS 配信を開始',
-    items: [
-      'デザインを変更しました',
-      'ics形式での配信を開始しました'
-    ]
+    items: ['デザインを変更しました', 'ics形式での配信を開始しました'],
   },
   {
     date: '2024/03/05',
     version: 'v1.0.0',
     title: '本サイトをリリース',
-    items: ['本サイトをリリースしました']
-  }
+    items: ['本サイトをリリースしました'],
+  },
 ];
 
-const releasesByYear = releases.reduce((acc, release) => {
-  const year = release.date.split('/')[0];
-  if (!acc[year]) {
-    acc[year] = [];
-  }
-  acc[year].push(release);
-  return acc;
-}, {} as Record<string, ReleaseNote[]>);
+const releasesByYear = releases.reduce(
+  (acc, release) => {
+    const year = release.date.split('/')[0];
+    if (!acc[year]) {
+      acc[year] = [];
+    }
+    acc[year].push(release);
+    return acc;
+  },
+  {} as Record<string, ReleaseNote[]>,
+);
 
 const sortedYears = Object.keys(releasesByYear).sort((a, b) => parseInt(b) - parseInt(a));
 ---
 
 <div class="release-notes-container">
-  {sortedYears.map((year) => (
-    <details class="year-group" open={year === sortedYears[0]}>
-      <summary class="year-header">{year}</summary>
-      <div class="release-notes-list">
-        {releasesByYear[year].map((release) => (
-          <div class="release-item">
-            <div class="release-meta">
-              <span class="release-version">{release.version}</span>
-              <span class="release-date">{release.date}</span>
+  {
+    sortedYears.map((year) => (
+      <details class="year-group" open={year === sortedYears[0]}>
+        <summary class="year-header">{year}</summary>
+        <div class="release-notes-list">
+          {releasesByYear[year].map((release) => (
+            <div class="release-item">
+              <div class="release-meta">
+                <span class="release-version">{release.version}</span>
+                <span class="release-date">{release.date}</span>
+              </div>
+              <p class="release-title">{release.title}</p>
+              {Array.isArray(release.items) && release.items.length > 0 && (
+                <ul class="release-items">
+                  {release.items.map((item) => (
+                    <li set:html={item} />
+                  ))}
+                </ul>
+              )}
             </div>
-            <p class="release-title">{release.title}</p>
-            {Array.isArray(release.items) && release.items.length > 0 && (
-              <ul class="release-items">
-                {release.items.map((item) => (
-                  <li set:html={item} />
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
-      </div>
-    </details>
-  ))}
+          ))}
+        </div>
+      </details>
+    ))
+  }
 </div>
 
 <style lang="scss">
