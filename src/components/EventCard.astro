@@ -15,7 +15,7 @@ const { event, today, links, isPickUp } = Astro.props;
 
 const span = Math.floor(dateLib.getSpan(event.date, today.getTime()) / 86400000);
 const eventType = eventLib.convertEventType(event.type);
-const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER)) ;
+const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER));
 ---
 
 <div class="cardWrap" id={event.id}>
@@ -27,18 +27,22 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
         <div class="card_dateArea_day">{dateLib.format(event.date, '(ddd)')}</div>
       </div>
       <div class="card_countArea">
-      {span === 0
-        ? <span class="badge badge-nearly">本日開催</span>
-        : span > 0
-          ? <span class={`badge badge-${span <= 14 ? 'nearly' : 'upcoming'}`}>
+        {
+          span === 0 ? (
+            <span class="badge badge-nearly">本日開催</span>
+          ) : span > 0 ? (
+            <span class={`badge badge-${span <= 14 ? 'nearly' : 'upcoming'}`}>
               <span class="badge-label">あと </span>
               <span class="badge-number">{span}</span>
               <span class="badge-label"> 日</span>
             </span>
-          : <span class="badge badge-ended">{Math.abs(span)} 日前に終了</span>}
+          ) : (
+            <span class="badge badge-ended">{Math.abs(span)} 日前に終了</span>
+          )
+        }
       </div>
     </div>
-    
+
     <div class="card_content">
       <div class="card_header">
         <div class="card_labelArea">
@@ -51,56 +55,61 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
               {event.name}
             </a>
           </h3>
-          {event.pickUpMessage && isPickUp && (
-            <div class="pickUpMessage">
-              <div class="pickUpMessage_content">{event.pickUpMessage}</div>
-            </div>
-          )}
-          {event.subEvents.length > 0 && (
-            <div class="card_eventArea_subEvents">
-              {event.subEvents.map((subEvent) => (
-                <div class="subEvent-item">
-                  <span class="subEvent-genre">{subEvent.genre}</span>
-                  <span class="subEvent-name">
-                    {(
-                      subEvent.url
-                        ? <a href={subEvent.url} target="_blank">{subEvent.name}</a> 
-                        : subEvent.name
-                    )}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        
-        {sortedLinks.length > 0 && (
-          <div class="card_linkArea">
-            <ul class="link-list">
-              {sortedLinks
-                .map((l) => {
-                const limitSpan = l.limit !== null
-                  ? Math.floor(dateLib.getSpan(l.limit, today.getTime()) / 86400000)
-                  : null;
-                return (
-                  <li class="link-item">
-                    <span class="link-item_content">
-                      <a href={l.url} target="_blank" class={!l.limit || (limitSpan ?? -1) >= 0 ? '' : 'link-expired'}>
-                        {!l.limit || (limitSpan ?? -1) >= 0 ? l.name : `${l.name} (締切済)`}
-                      </a>
+          {
+            event.pickUpMessage && isPickUp && (
+              <div class="pickUpMessage">
+                <div class="pickUpMessage_content">{event.pickUpMessage}</div>
+              </div>
+            )
+          }
+          {
+            event.subEvents.length > 0 && (
+              <div class="card_eventArea_subEvents">
+                {event.subEvents.map((subEvent) => (
+                  <div class="subEvent-item">
+                    <span class="subEvent-genre">{subEvent.genre}</span>
+                    <span class="subEvent-name">
+                      {subEvent.url ? (
+                        <a href={subEvent.url} target="_blank">
+                          {subEvent.name}
+                        </a>
+                      ) : (
+                        subEvent.name
+                      )}
                     </span>
-                    {l.limit && limitSpan !== null && limitSpan >= 0 && (
-                      <span class="deadline">
-                        <span class="deadline-date">{dateLib.format(l.limit, 'YYYY/M/D')}</span>
-                        <span class="deadline-remaining">あと {limitSpan} 日</span>
+                  </div>
+                ))}
+              </div>
+            )
+          }
+        </div>
+
+        {
+          sortedLinks.length > 0 && (
+            <div class="card_linkArea">
+              <ul class="link-list">
+                {sortedLinks.map((l) => {
+                  const limitSpan = l.limit !== null ? Math.floor(dateLib.getSpan(l.limit, today.getTime()) / 86400000) : null;
+                  return (
+                    <li class="link-item">
+                      <span class="link-item_content">
+                        <a href={l.url} target="_blank" class={!l.limit || (limitSpan ?? -1) >= 0 ? '' : 'link-expired'}>
+                          {!l.limit || (limitSpan ?? -1) >= 0 ? l.name : `${l.name} (締切済)`}
+                        </a>
                       </span>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        )}
+                      {l.limit && limitSpan !== null && limitSpan >= 0 && (
+                        <span class="deadline">
+                          <span class="deadline-date">{dateLib.format(l.limit, 'YYYY/M/D')}</span>
+                          <span class="deadline-remaining">あと {limitSpan} 日</span>
+                        </span>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )
+        }
       </div>
 
       <div class="card_body">
@@ -111,17 +120,20 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
           </div>
           <div class="card_placeArea_placeDetail">
             <a href={`https://www.google.co.jp/maps/search/${encodeURIComponent(event.venue.address)}`} target="_blank">
-              〒{eventLib.convertPostalCode(event.venue.postalCode)} {event.venue.address}
+              〒{eventLib.convertPostalCode(event.venue.postalCode)}
+              {event.venue.address}
             </a>
           </div>
         </div>
 
         <div class="card_remarksArea">
           <div class="card_remarksArea_item">
-            <span class="card_remarksArea_label">備考:</span> {event.remarks}
+            <span class="card_remarksArea_label">備考:</span>
+            {event.remarks}
           </div>
           <div class="card_remarksArea_item">
-            <span class="card_remarksArea_label">運営:</span> {event.organizer.name}
+            <span class="card_remarksArea_label">運営:</span>
+            {event.organizer.name}
           </div>
         </div>
       </div>
@@ -264,7 +276,8 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
   }
 
   @keyframes pulse {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 1;
     }
     50% {
@@ -345,7 +358,7 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
         color: #666;
         font-size: 0.9em;
         white-space: nowrap;
-        
+
         &::after {
           content: ':';
           margin-left: 1px;

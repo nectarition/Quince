@@ -196,6 +196,13 @@ details {
   }
 }
 
+.container {
+  padding: 40px 10%;
+  @media screen and (max-width: 840px) {
+    padding: 20px;
+  }
+}
+
 .btn {
   display: inline-block;
   padding: 12px 32px;

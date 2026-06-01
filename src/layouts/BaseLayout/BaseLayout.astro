@@ -7,7 +7,7 @@ export interface Props {
 ---
 
 <Root title={Astro.props.title}>
-  <div class="container">
+  <div class="root">
     <div>
       <slot />
     </div>
@@ -16,7 +16,7 @@ export interface Props {
 </Root>
 
 <style lang="scss">
-  .container {
+  .root {
     height: 100%;
     display: grid;
     grid-template-rows: 1fr auto;

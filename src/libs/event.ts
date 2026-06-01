@@ -57,7 +57,7 @@ const getVenueAsync = async (venueId: string): Promise<PearVenueDbModel> => {
 
 const convertGenre = (genreType: string): string => {
   if (genreType === 'all-genre') {
-    return '音声合成オールジャンル';
+    return '音声合成オールキャラ';
   }
   return genreType;
 };
