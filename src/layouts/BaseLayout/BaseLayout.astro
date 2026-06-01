@@ -8,7 +8,7 @@ export interface Props {
 
 <Root title={Astro.props.title}>
   <div class="container">
-    <div class="content">
+    <div>
       <slot />
     </div>
     <Footer />
@@ -20,12 +20,5 @@ export interface Props {
     height: 100%;
     display: grid;
     grid-template-rows: 1fr auto;
-  }
-  .content {
-    padding: 40px 10%;
-
-    @media screen and (max-width: 840px) {
-      padding: 20px;
-    }
   }
 </style>
