@@ -3,6 +3,7 @@ import eventLib from '../libs/event';
 import dateLib from '../libs/date';
 import type { PearEventAppModel, PearEventLink } from '@types';
 import EventTypeLabel from './EventTypeLabel.astro';
+import { Icon } from 'astro-icon';
 
 export interface Props {
   today: Date;
@@ -146,6 +147,11 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
         </div>
       </div>
     </div>
+    <div class="card_reportArea">
+      <a href={`https://admin.vo.nrsy.jp/report?eventId=${event.id}`} target="_blank" class="toolTip" data-tooltip="誤りを報告する">
+        <Icon name="ic:outline-flag" />
+      </a>
+    </div>
   </article>
 </div>
 
@@ -157,15 +163,55 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
   .card {
     background: white;
     border-radius: 10px;
-    overflow: hidden;
+    overflow: visible;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     border: 1px solid var(--border-color);
     border-left: 3px solid var(--event-color);
     display: grid;
     grid-template-columns: 140px 1fr;
 
+    position: relative;
+
     @media screen and (max-width: 840px) {
       grid-template-columns: 1fr;
+    }
+
+    &_reportArea {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      color: #c0c0c0;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .toolTip {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      position: relative;
+      color: #c0c0c0;
+      &::after {
+        position: absolute;
+        opacity: 0;
+        content: attr(data-tooltip);
+        bottom: 100%;
+        right: 0;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 6px 8px;
+        border-radius: 4px;
+        font-size: 0.85em;
+        white-space: nowrap;
+        margin-bottom: 8px;
+        transition: opacity 0.2s;
+        pointer-events: none;
+        z-index: 9999;
+      }
+
+      &:hover::after {
+        opacity: 1;
+      }
     }
   }
 
