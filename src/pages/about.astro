@@ -1,0 +1,56 @@
+---
+import PickUpEventList from '../components/PickUpEventList.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import BaseLayout from '../layouts/BaseLayout/BaseLayout.astro';
+import ButtonGroup from '../components/ButtonGroup.astro';
+import Hero from '../components/Hero.astro';
+import ReleaseNotes from '../components/ReleaseNotes.astro';
+---
+
+<BaseLayout title="ピックアップ掲載について">
+  <Hero />
+  <div class="container">
+    <Breadcrumbs items={[{ name: 'ホーム', path: '/' }]} />
+
+    <h1>このサイトについて</h1>
+
+    <h2>免責事項</h2>
+    <ul>
+      <li>この Web サイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。</li>
+      <li>X (Twitter)、イベント Web サイトなど、Web 上から一次情報を参照できる情報をもとに作成しています。</li>
+      <li>内容は正確でない場合があります。各イベントの Web サイトを必ずご確認ください。</li>
+    </ul>
+
+    <h2>イベントの掲載基準について</h2>
+    <ul>
+      <li>日程及び会場が Web 上で公開されている同人誌即売会などのイベントを掲載しています。</li>
+      <li>同人誌即売会以外のイベントは、即売会と同日・前翌日に開催されるもののみ掲載しています。</li>
+      <li>Webオンリーなどのオフライン開催ではないイベントは掲載していません。</li>
+    </ul>
+    <ButtonGroup align="center">
+      <a href="https://admin.vo.nrsy.jp/" class="btn btn-primary" target="_blank">イベント情報を提供する</a>
+    </ButtonGroup>
+
+    <h2>API について</h2>
+    <ul>
+      <li>当サイトではイベント情報を取得するための API を提供しています。</li>
+      <li>API の詳細については<a href="/api/docs/2025-02-04/">こちら</a>をご覧ください。</li>
+    </ul>
+    <ButtonGroup align="center">
+      <a href="/api/docs/2025-02-04/" class="btn btn-primary">API ドキュメントを見る</a>
+    </ButtonGroup>
+
+    <h2>応援をお願いします🙇</h2>
+    <ul>
+      <li>当サイトは個人が運営しています。もしお役に立てているのであれば、コーヒー一杯分でも構いませんのでご寄付いただけると大変励みになります！</li>
+      <li>イベントのピックアップ掲載についてもお気軽にご相談ください！</li>
+    </ul>
+    <ButtonGroup align="center">
+      <a href="https://donate.stripe.com/bIY16HfCS8e5aFGdRr" class="btn btn-primary">寄付する</a>
+      <a href="/pick-up/" class="btn">ピックアップ掲載について</a>
+    </ButtonGroup>
+
+    <h2>リリースノート</h2>
+    <ReleaseNotes />
+  </div>
+</BaseLayout>

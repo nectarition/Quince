@@ -2,7 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout/BaseLayout.astro';
 import eventLibs from '../libs/event';
 import dateLibs from '../libs/date';
-import Breadcrumbs from 'src/components/Breadcrumbs.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Hero from '../components/Hero.astro';
 const fetchedEvents = await eventLibs.getEventsAsync();
 const events = fetchedEvents
   .filter((e) => e.date > 0)
@@ -11,36 +12,39 @@ const events = fetchedEvents
 ---
 
 <BaseLayout title="ボイベアーカイブ">
-  <Breadcrumbs items={[{ name: 'ホーム', path: '/' }]} />
-  <h1>ボイベアーカイブ</h1>
-  <p>サイトに登録されている全てのイベントを表示しています。</p>
+  <Hero />
+  <div class="container">
+    <Breadcrumbs items={[{ name: 'ホーム', path: '/' }]} />
+    <h1>ボイベアーカイブ</h1>
+    <p>サイトに登録されている全てのイベントを表示しています。</p>
 
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>日付</th>
-        <th>種類</th>
-        <th>ジャンル</th>
-        <th>イベント</th>
-        <th>会場</th>
-      </tr>
-    </thead>
-    <tbody>
-      {
-        events.map((e, i) => (
-          <tr>
-            <td>{i + 1}</td>
-            <td>{dateLibs.format(e.date, 'YYYY.M.D (ddd)')}</td>
-            <td>{eventLibs.convertEventTypeShorten(e.type).name}</td>
-            <td>{eventLibs.convertGenre(e.genre)}</td>
-            <td>
-              <a href={e.websiteURL}>{e.name}</a>
-            </td>
-            <td>{e.venue.name}</td>
-          </tr>
-        ))
-      }
-    </tbody>
-  </table>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>日付</th>
+          <th>種類</th>
+          <th>ジャンル</th>
+          <th>イベント</th>
+          <th>会場</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          events.map((e, i) => (
+            <tr>
+              <td>{i + 1}</td>
+              <td>{dateLibs.format(e.date, 'YYYY.M.D (ddd)')}</td>
+              <td>{eventLibs.convertEventTypeShorten(e.type).name}</td>
+              <td>{eventLibs.convertGenre(e.genre)}</td>
+              <td>
+                <a href={e.websiteURL}>{e.name}</a>
+              </td>
+              <td>{e.venue.name}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
 </BaseLayout>

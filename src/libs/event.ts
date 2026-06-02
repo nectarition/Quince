@@ -75,7 +75,7 @@ const convertEventType = (eventType: string): { name: string; color: string } =>
     };
   } else if (eventType === 'special') {
     return {
-      name: '特別イベント',
+      name: 'その他のイベント',
       color: '#2d8965',
     };
   }
@@ -99,7 +99,7 @@ const convertEventTypeShorten = (eventType: string): { name: string; color: stri
     };
   } else if (eventType === 'special') {
     return {
-      name: '特別',
+      name: 'その他',
       color: '#2d8965',
     };
   }

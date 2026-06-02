@@ -2,7 +2,7 @@
 
 ---
 
-<section class="hero">
+<section class="hero" id="hero-section">
   <div class="logotype">
     <a href="/"><img class="logotype_content" src="/assets/logotype.png" /></a>
   </div>
@@ -24,12 +24,47 @@
   }
 
   .logotype {
+    position: fixed;
+    z-index: 1;
+    align-self: start;
+
     &_content {
       height: 128px;
-      transition: height 0.3s ease;
+      transition:
+        height 0.3s ease,
+        transform 0.3s ease;
       @media screen and (max-width: 840px) {
         height: 64px;
       }
     }
   }
 </style>
+
+<style is:global lang="scss">
+  .hero-scrolled {
+    height: 48px !important;
+    transform: translate(-16px, -16px);
+  }
+</style>
+
+<script>
+  const heroSection = document.getElementById('hero-section');
+  const logotypeContent = document.querySelector('.logotype_content');
+
+  if (heroSection && logotypeContent) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            logotypeContent.classList.add('hero-scrolled');
+          } else {
+            logotypeContent.classList.remove('hero-scrolled');
+          }
+        });
+      },
+      { threshold: 0.1 },
+    );
+
+    observer.observe(heroSection);
+  }
+</script>

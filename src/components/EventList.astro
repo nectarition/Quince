@@ -5,7 +5,6 @@ import eventLib from '../libs/event';
 import dateLib from '../libs/date';
 
 export interface Props {
-  sectionHeadingId: string;
   today: Date;
   isPickup?: boolean;
   events: PearEventAppModel[];
@@ -13,26 +12,49 @@ export interface Props {
 }
 
 const props = Astro.props;
+
+const groupedEvents = props.events.reduce(
+  (acc, event) => {
+    const monthKey = dateLib.format(event.date, 'YYYY-MM');
+    if (!acc[monthKey]) {
+      acc[monthKey] = [];
+    }
+    acc[monthKey].push(event);
+    return acc;
+  },
+  {} as Record<string, typeof props.events>,
+);
+
+const monthKeys = Object.keys(groupedEvents).sort();
 ---
 
 <div class="accordion_rack">
   {
-    props.events.map((event) => (
-      <details class="accordion" open={props.isPickup}>
-        <summary class="summary">
-          <div class="meta">
-            <span class="date">{dateLib.format(event.date, 'YYYY/MM/DD(ddd)')}</span>
-            <span class="prefecture">{eventLib.getPrefecture(event.venue.address, true)}</span>
-          </div>
-          <div class="details">
-            <span class="genre">{eventLib.convertGenre(event.genre)}</span>
-            <span class="name">{event.name}</span>
-          </div>
-        </summary>
-        <div class="content">
-          <EventCard today={props.today} event={event} links={props.links[event.id] ?? []} isPickUp={props.isPickup} />
+    monthKeys.map((monthKey) => (
+      <>
+        <div class="month-divider">
+          <span class="month-label">
+            {monthKey.split('-')[0]}年 {parseInt(monthKey.split('-')[1], 10)}月
+          </span>
         </div>
-      </details>
+        {groupedEvents[monthKey].map((event) => (
+          <details class={`accordion${props.isPickup ? ' pickup' : ''}`} open={props.isPickup}>
+            <summary class="summary">
+              <div class="meta">
+                <span class="date">{dateLib.format(event.date, 'YYYY/MM/DD(ddd)')}</span>
+                <span class="prefecture">{eventLib.getPrefecture(event.venue.address, true)}</span>
+              </div>
+              <div class="details">
+                <span class="genre">{eventLib.convertGenre(event.genre)}</span>
+                <span class="name">{event.name}</span>
+              </div>
+            </summary>
+            <div class="content">
+              <EventCard today={props.today} event={event} links={props.links[event.id] ?? []} isPickUp={props.isPickup} />
+            </div>
+          </details>
+        ))}
+      </>
     ))
   }
 </div>
@@ -46,6 +68,26 @@ const props = Astro.props;
     &:last-child {
       margin-bottom: 0;
     }
+  }
+
+  .month-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: var(--border-color);
+    }
+  }
+
+  .month-label {
+    font-size: 0.9em;
+    color: #666;
+    font-weight: 500;
+    white-space: nowrap;
   }
 
   .accordion {
@@ -62,6 +104,14 @@ const props = Astro.props;
     &[open] {
       border-color: #999;
       background: #fafafa;
+    }
+
+    &.pickup {
+      border-color: var(--pickup-color);
+      &[open] {
+        border-color: var(--pickup-color);
+        background: #fafafa;
+      }
     }
   }
 
