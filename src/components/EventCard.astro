@@ -56,13 +56,6 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
             </a>
           </h3>
           {
-            event.pickUpMessage && isPickUp && (
-              <div class="pickUpMessage">
-                <div class="pickUpMessage_content">{event.pickUpMessage}</div>
-              </div>
-            )
-          }
-          {
             event.subEvents.length > 0 && (
               <div class="card_eventArea_subEvents">
                 {event.subEvents.map((subEvent) => (
@@ -82,8 +75,14 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
               </div>
             )
           }
+          {
+            event.pickUpMessage && isPickUp && (
+              <div class="pickUpMessage">
+                <div class="pickUpMessage_content">{event.pickUpMessage}</div>
+              </div>
+            )
+          }
         </div>
-
         {
           sortedLinks.length > 0 && (
             <div class="card_linkArea">
@@ -107,6 +106,15 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
                   );
                 })}
               </ul>
+            </div>
+          )
+        }
+        {
+          event.bannerURL && isPickUp && (
+            <div class="card_bannerArea">
+              <a href={event.websiteURL}>
+                <img src={event.bannerURL} alt={`${event.name} バナー`} class="card_bannerArea_image" />
+              </a>
             </div>
           )
         }
@@ -391,6 +399,14 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
     margin-bottom: 8px;
   }
 
+  .card_bannerArea {
+    text-align: center;
+    &_image {
+      height: 80px;
+      border-radius: 5px;
+    }
+  }
+
   .card_placeArea {
     &_place {
       display: flex;
@@ -508,6 +524,7 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
 
   .pickUpMessage {
     margin: 10px 0 0 0;
+    margin-bottom: 5px;
     padding: 10px 14px;
     background: linear-gradient(135deg, #fff8e1 0%, #fff3cd 100%);
     border: 1px solid #ffecb3;

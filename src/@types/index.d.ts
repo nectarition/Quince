@@ -14,6 +14,7 @@ export interface PearEvent {
   isPublic: boolean;
   isPickUp: boolean;
   pickUpMessage: string | null;
+  bannerURL: string | null;
 }
 export type PearEventDocument = PearEvent & {
   id: string;

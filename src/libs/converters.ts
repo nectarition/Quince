@@ -23,6 +23,7 @@ export const eventConverter: FirestoreDataConverter<PearEventDbModel> = {
       isPublic: eventDoc.isPublic,
       isPickUp: eventDoc.isPickUp,
       pickUpMessage: eventDoc.pickUpMessage,
+      bannerURL: eventDoc.bannerURL,
     };
   },
 };
