@@ -5,15 +5,10 @@ import dateLibs from '../libs/date';
 import BaseLayout from '../layouts/BaseLayout/BaseLayout.astro';
 import EventList from '../components/EventList.astro';
 import Alert from '../components/Alert.astro';
-import EventTypeLabel from '../components/EventTypeLabel.astro';
-import PickUpEventList from '../components/PickUpEventList.astro';
 import Hero from '../components/Hero.astro';
-import Section from '../components/Section.astro';
 import CalendarCard from '../components/CalendarCard.astro';
 import ButtonGroup from '../components/ButtonGroup.astro';
 import ReleaseNotes from '../components/ReleaseNotes.astro';
-import { Sprite } from 'astro-icon';
-import { initPrefectureTooltip } from '../scripts/prefectureTooltip';
 
 const now = new Date();
 now.setUTCHours(now.getUTCHours() + 9);
@@ -37,233 +32,74 @@ const pickupEvents = futureEvents
   .filter((e) => e.isPickUp)
   .sort((a, b) => a.order - b.order)
   .sort((a, b) => a.date - b.date);
-
-// グループ化用のキーを生成
-const groupKey = (e: (typeof futureEvents)[0]) => {
-  return `${e.date}-${e.venue.id}-${e.roomName || ''}`;
-};
-
-// futureEventsをグループ化
-const groupedFutureEvents = futureEvents.reduce(
-  (acc, event) => {
-    const key = groupKey(event);
-    if (!acc[key]) {
-      acc[key] = [];
-    }
-    acc[key].push(event);
-    return acc;
-  },
-  {} as Record<string, typeof futureEvents>,
-);
-
-const futureEventGroups = Object.values(groupedFutureEvents);
 ---
 
 <BaseLayout>
-  <Hero title="ボイベまとめ" description="音声合成系イベント開催情報まとめサイト" />
+  <Hero />
+  <div class="columns_rack">
+    <div class="main">
+      <h2 id="future-events">開催前のイベント</h2>
+      <EventList events={futureEvents} today={today} links={fetchedLinks} />
 
-  <Section>
-    <h2>お知らせ</h2>
-    <Alert type="info" title="追加通知はじめました">
-      <ul>
-        <li>イベントの追加通知を各種サービスにて行っています。</li>
-        <li>Discord: <a href="https://discord.gg/ggFnwgsUd3">参加はこちら</a></li>
-        <li>ぼすきー: <a href="https://voskey.icalo.net/@vo">@vo@voskey.icalo.net</a></li>
-      </ul>
-    </Alert>
-
-    <Alert type="info" title="ご寄付をお待ちしております">
-      サイトの継続運営のため皆様からのご寄付を受け付けております。<br />
-      詳しくは<a href="https://donate.stripe.com/bIY16HfCS8e5aFGdRr">こちら</a>をご覧ください。
-    </Alert>
-  </Section>
-
-  <Section id="future-events">
-    <h2>イベントリスト</h2>
-
-    <table class="responsive-table">
-      <thead>
-        <tr>
-          <th>日付</th>
-          <th>会場</th>
-          <th>種類</th>
-          <th>イベント</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          futureEventGroups.map((eventGroup) => {
-            const firstEvent = eventGroup[0];
-            const rowSpan = eventGroup.length;
-            return (
-              <>
-                {eventGroup.map((e, index) => (
-                  <tr class={`event-row ${index === 0 ? 'group-first' : ''}`}>
-                    {index === 0 && (
-                      <>
-                        <td class="pc-only" rowspan={rowSpan}>
-                          {dateLibs.format(firstEvent.date, 'YYYY/M/D (ddd)')}
-                        </td>
-                        <td class="pc-only" rowspan={rowSpan}>
-                          <div class="venue-group">
-                            <div>{firstEvent.venue.name}</div>
-                            {firstEvent.roomName && <div class="room-name">{firstEvent.roomName}</div>}
-                          </div>
-                        </td>
-                      </>
-                    )}
-                    <td class="pc-only">
-                      <EventTypeLabel eventType={e.type} isShort={true} />
-                    </td>
-                    <td class="sp-only">
-                      <div class="sp-event-header">
-                        <span class="header-item">
-                          <EventTypeLabel eventType={e.type} isShort={true} />
-                        </span>
-                        <span class="header-item">
-                          <Sprite name="mdi:calendar" class="icon" />
-                          {dateLibs.format(e.date, 'YYYY/M/D (ddd)')}
-                        </span>
-                        <span class="header-item">
-                          <Sprite name="mdi:map-marker-outline" class="icon" />
-                          <span class="prefecture-tooltip-trigger" data-venue={e.venue.name} data-room={e.roomName || ''}>
-                            {eventLibs.getPrefecture(e.venue.address, true)}
-                          </span>
-                        </span>
-                      </div>
-                    </td>
-                    <td class="event-name">
-                      {e.genre && (
-                        <>
-                          <small>{eventLibs.convertGenre(e.genre)}</small>
-                          <br />
-                        </>
-                      )}
-                      <a href={`#${e.id}`}>「{e.name}」</a>
-                    </td>
-                  </tr>
-                ))}
-              </>
-            );
-          })
-        }
-      </tbody>
-    </table>
-  </Section>
-
-  <Section>
-    <h2>
-      ピックアップイベント <span class="label">PR</span>
-    </h2>
-    {
-      pickupEvents.length > 0 ? (
-        <>
-          <PickUpEventList events={pickupEvents} today={today} links={fetchedLinks} />
+      <h2>最近終了したイベント</h2>
+      {heldEvents.length > 0 ? <EventList events={heldEvents} today={today} links={fetchedLinks} /> : <p>最近終了したイベントはありません</p>}
+      <ButtonGroup align="center">
+        <a href="/archives/" class="btn">ボイベまとめ登録イベント一覧</a>
+      </ButtonGroup>
+    </div>
+    <div class="sidebar">
+      <h2>
+        ピックアップイベント <span class="label">PR</span>
+      </h2>
+      {
+        pickupEvents.length > 0 ? (
+          <>
+            <EventList isPickup={true} events={pickupEvents} today={today} links={fetchedLinks} />
+          </>
+        ) : (
           <p>
+            現在ピックアップイベントはありません。
+            <br />
             <a href="/pick-up/#pick-up-event">「ピックアップイベント」とは？</a>
           </p>
-        </>
-      ) : (
-        <p>
-          現在ピックアップイベントはありません。
-          <br />
-          <a href="/pick-up/#pick-up-event">「ピックアップイベント」とは？</a>
-        </p>
-      )
-    }
-  </Section>
-
-  <Section id="event-info">
-    <h2>イベント情報</h2>
-    <EventList sectionHeadingId="event-info" events={futureEvents} today={today} links={fetchedLinks} />
-  </Section>
-
-  <Section id="held-events">
-    <h2>最近終了したイベント</h2>
-    {heldEvents.length > 0 ? <EventList sectionHeadingId="held-events" events={heldEvents} today={today} links={fetchedLinks} /> : <p>最近終了したイベントはありません</p>}
-    <ButtonGroup align="center">
-      <a href="/archives/" class="btn">ボイベまとめ登録イベント一覧</a>
-    </ButtonGroup>
-  </Section>
-
-  <Section>
-    <h2>あなたのカレンダーにも追加できます！</h2>
-
-    <p>Google カレンダーなどへの追加には以下のURLを使用してください。</p>
-
-    <div class="calendar-grid">
-      <CalendarCard title="イベントカレンダー" url={`${siteConfig.siteURL}/event-schedule.ics`} webcalUrl="webcal://vo.nrsy.jp/event-schedule.ics" buttonText="端末に追加 (イベント)" />
-
-      <CalendarCard title="締め切りカレンダー" url={`${siteConfig.siteURL}/limits.ics`} webcalUrl="webcal://vo.nrsy.jp/limits.ics" buttonText="端末に追加 (締め切り)" />
+        )
+      }
     </div>
+  </div>
 
-    <Alert type="info" title="Google カレンダーへの追加方法 (PC)">
-      <ol>
-        <li>Google カレンダーを開きます</li>
-        <li>左メニューの「他のカレンダー」横にある「＋」ボタンをクリックします</li>
-        <li>「URL で追加」をクリックします</li>
-        <li>「カレンダーの URL」に上述のURLを入力します</li>
-        <li>「カレンダーを追加」をクリックすると同期が始まります</li>
-      </ol>
-    </Alert>
-
-    <Alert type="info" title="スマホでの追加方法 (iOS/Android)"> 上のボタンをタップすると許可を求めるダイアログが表示され「許可」を押すと追加できます。 </Alert>
-  </Section>
-
-  <Section>
-    <h2>イベントの掲載基準について</h2>
+  <div class="container">
+    <h2>あなたのカレンダーにも追加できます！</h2>
+    <div class="calendar_rack">
+      <div class="calendar_rack_introduction">
+        <Alert type="info" title="Google カレンダーへの追加方法 (PC)"> 右のカレンダーの「Google カレンダーに追加」から追加できます </Alert>
+        <Alert type="info" title="スマホでの追加方法 (iOS/Android)"> 下のボタンをタップすると許可を求めるダイアログが表示され「許可」を押すと追加できます。 </Alert>
+        <div class="calendar-grid">
+          <CalendarCard title="イベントカレンダー" url={`${siteConfig.siteURL}/event-schedule.ics`} webcalUrl="webcal://vo.nrsy.jp/event-schedule.ics" buttonText="端末に追加 (イベント)" />
+          <CalendarCard title="締め切りカレンダー" url={`${siteConfig.siteURL}/limits.ics`} webcalUrl="webcal://vo.nrsy.jp/limits.ics" buttonText="端末に追加 (締め切り)" />
+        </div>
+      </div>
+      <div class="calendar_rack_calendar">
+        <iframe
+          class="embedded-calendar"
+          src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Asia%2FTokyo&showPrint=0&showTz=0&title=%E3%83%9C%E3%82%A4%E3%81%B9%E3%81%BE%E3%81%A8%E3%82%81%20Google%20%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC&src=YzBwdW0zc2w5NXZwZmVpa2hrNnQ4cGE4Y3BoMDV2dG5AaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&src=c2xlcHJvOThoZHZkdW0yOGEwZDdmYWxodGEyMWFodGNAaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23616161&color=%23f4511e"
+          style="border-width:0"
+          frameborder="0"
+          scrolling="no"></iframe>
+      </div>
+    </div>
+    <h2>イベント追加通知を受け取れます！</h2>
+    <p>ボイベまとめでは、サイトに新しいイベントが追加された際に通知を受け取れる機能を提供しています。</p>
     <ul>
-      <li>日程及び会場が Web 上で公開されている同人誌即売会などのイベントを掲載しています。</li>
-      <li>同人誌即売会以外のイベントは、即売会と同日・前翌日に開催されるもののみ掲載しています。</li>
-      <li>Webオンリーなどのオフライン開催ではないイベントは掲載していません。</li>
+      <li>Discord: <a href="https://discord.gg/ggFnwgsUd3" target="_blank">参加はこちら</a></li>
+      <li>ぼすきー: <a href="https://voskey.icalo.net/@vo" target="_blank">@vo@voskey.icalo.net</a></li>
     </ul>
     <ButtonGroup align="center">
-      <a href="https://admin.vo.nrsy.jp/" class="btn btn-primary" target="_blank">イベント情報を提供する</a>
+      <a href="/about/" class="btn btn-primary">このサイトについて</a>
     </ButtonGroup>
-  </Section>
-
-  <Section>
-    <h2>このサイトについて</h2>
-    <ul>
-      <li>この Web サイトはファン個人が運営しております。イベント運営様や関連企業様とは一切関係ございません。</li>
-      <li>X (Twitter)、イベント Web サイトなど、Web 上から一次情報を参照できる情報をもとに作成しています。</li>
-      <li>内容は正確でない場合があります。各イベントの Web サイトを必ずご確認ください。</li>
-    </ul>
-  </Section>
-
-  <Section>
-    <h2>応援をお願いします🙇</h2>
-    <ul>
-      <li>当サイトは個人運営のため、サーバー維持費やドメイン費用などの運営コストを寄付で賄っております。</li>
-      <li>皆様からのご支援がサイトの継続と改善に繋がります。何卒よろしくお願いいたします。</li>
-      <li>イベント主催者様でピックアップイベント掲載をご希望の方も、寄付による掲載が可能です。</li>
-      <li>詳しくは<a href="/pick-up/#pick-up-event">こちら</a>をご覧ください。</li>
-    </ul>
-    <ButtonGroup align="center">
-      <a href="https://donate.stripe.com/bIY16HfCS8e5aFGdRr" class="btn btn-primary">寄付する</a>
-      <a href="/pick-up/" class="btn">ピックアップ掲載について</a>
-    </ButtonGroup>
-  </Section>
-
-  <Section>
-    <h2>API について</h2>
-    <ul>
-      <li>当サイトではイベント情報を取得するための API を提供しています。</li>
-      <li>API の詳細については<a href="/api/docs/">こちら</a>をご覧ください。</li>
-    </ul>
-    <ButtonGroup align="center">
-      <a href="/api/docs/2025-02-04/" class="btn btn-primary">API ドキュメントを見る</a>
-    </ButtonGroup>
-  </Section>
-
-  <Section>
-    <h2>リリースノート</h2>
-    <ReleaseNotes />
-  </Section>
-
+  </div>
   <p class="banner-link">
-    <a href="https://vo.nrsy.jp" target="_blank"><img src="https://vo.nrsy.jp/banner.png" alt="音声合成系イベント開催情報まとめサイト" style="width: 200px; height: 40px" /></a>
-    <a href="https://seidouren.jp" target="_blank"><img src="https://seidouren.jp/banner.png" alt="声同連: 音声合成系同人誌即売会連絡会" style="width: 200px; height: 40px" /></a>
+    <a href="https://vo.nrsy.jp"><img src="/banner.png" alt="音声合成系イベント開催情報まとめサイト" style="width: 200px; height: 40px" /></a>
+    <a href="https://seidouren.jp"><img src="https://seidouren.jp/banner.png" alt="声同連: 音声合成系同人誌即売会連絡会" style="width: 200px; height: 40px" /></a>
   </p>
 </BaseLayout>
 
@@ -273,6 +109,23 @@ const futureEventGroups = Object.values(groupedFutureEvents);
 </script>
 
 <style lang="scss">
+  .columns_rack {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 40px;
+    padding-bottom: 40px;
+    gap: 40px;
+    .main {
+    }
+    .sidebar {
+    }
+    @media screen and (max-width: 840px) {
+      grid-template-columns: 1fr;
+      padding: 20px;
+      gap: 20px;
+    }
+  }
+
   .label {
     display: inline-block;
     border: 1px solid var(--primary-brand-color);
@@ -284,194 +137,34 @@ const futureEventGroups = Object.values(groupedFutureEvents);
     margin-left: 8px;
   }
 
-  .responsive-table {
-    border-collapse: collapse;
-
-    thead {
-      @media screen and (max-width: 840px) {
-        display: none;
-      }
-
-      tr {
-        border-bottom: 2px solid var(--border-color);
-      }
-
-      th {
-        padding: 10px;
-        text-align: left;
-        font-weight: 600;
-        color: #555;
-        font-size: 0.9em;
-
-        @media screen and (max-width: 840px) {
-          padding: 8px 10px;
-          font-size: 0.85em;
-        }
-      }
-    }
-
-    .venue-group {
-      display: flex;
-      flex-direction: column;
-
-      div {
-        &:first-child {
-          font-weight: 500;
-        }
-
-        &.room-name {
-          font-size: 0.85em;
-          color: #666;
-        }
-      }
-    }
-
-    tbody {
-      tr {
-        border-bottom: 1px solid #f0f0f0;
-        &:last-child {
-          border-bottom: none;
-        }
-
-        &.event-row {
-          @media screen and (max-width: 840px) {
-            display: block;
-            padding: 10px;
-          }
-        }
-      }
-    }
-
-    td {
-      padding: 10px;
-      vertical-align: middle;
-
-      &.event-name {
-        white-space: normal;
-      }
-
-      @media screen and (max-width: 840px) {
-        padding: 0;
-      }
-
-      &.pc-only {
-        @media screen and (max-width: 840px) {
-          display: none;
-        }
-      }
-
-      &.sp-only {
-        @media screen and (min-width: 841px) {
-          display: none;
-        }
-
-        @media screen and (max-width: 840px) {
-          display: flex;
-          flex-flow: column;
-          .sp-event-header {
-            display: flex;
-            gap: 10px;
-            .header-item {
-              flex: 1;
-            }
-          }
-          .event-row {
-            grid-template-columns: 30% 30% auto;
-            column-gap: 10px;
-            row-gap: 2px;
-          }
-          .event-name {
-            grid-column: 1 / 4;
-          }
-          .event-date {
-            grid-row: 1;
-            grid-column: 2;
-          }
-          .event-type {
-            grid-row: 1;
-            grid-column: 1;
-          }
-          .event-area {
-            grid-row: 1;
-            grid-column: 3;
-          }
-        }
-      }
-
-      small {
-        color: #888;
-        font-size: 0.85em;
-      }
+  .calendar_rack {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 20px;
+    @media screen and (max-width: 840px) {
+      grid-template-columns: 1fr;
+      gap: 20px;
     }
   }
 
-  .icon {
-    vertical-align: middle;
-    width: 1.5em;
-    height: 1.5em;
-    color: #606060;
-  }
-
-  .prefecture-tooltip-trigger {
-    cursor: pointer;
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted #606060;
-
-    @media screen and (min-width: 841px) {
-      border-bottom: none;
-      cursor: auto;
+  .embedded-calendar {
+    width: 100%;
+    height: 600px;
+    border: none;
+    border-radius: 6px;
+    @media screen and (max-width: 840px) {
+      height: 400px;
     }
-  }
-
-  .prefecture-tooltip {
-    background-color: #333;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 0.9em;
-    z-index: 10000;
-    pointer-events: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    max-width: 200px;
-    line-height: 1.4;
-    white-space: pre-wrap;
-    word-break: break-word;
-
-    @media screen and (min-width: 841px) {
-      display: none;
-    }
-
-    &::before {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 6px solid transparent;
-      border-top-color: #333;
-      z-index: 10000;
-      pointer-events: none;
-    }
-  }
-
-  .prefecture-tooltip-room {
-    margin-top: 4px;
-    padding-top: 4px;
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-    font-size: 0.85em;
   }
 
   .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-flow: column;
     gap: 16px;
-    margin: 20px 0;
-
-    @media screen and (max-width: 840px) {
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin: 16px 0;
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 
@@ -480,7 +173,7 @@ const futureEventGroups = Object.values(groupedFutureEvents);
     justify-content: center;
     flex-wrap: wrap;
     gap: 24px;
-    margin-top: 24px;
+    margin-bottom: 40px;
 
     img {
       transition:
@@ -493,5 +186,9 @@ const futureEventGroups = Object.values(groupedFutureEvents);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
     }
+  }
+
+  .container {
+    border-top: 1px solid var(--border-color);
   }
 </style>

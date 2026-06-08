@@ -1,63 +1,206 @@
 ---
 import type { PearEventAppModel, PearEventLink } from '@types';
 import EventCard from './EventCard.astro';
+import eventLib from '../libs/event';
+import dateLib from '../libs/date';
 
 export interface Props {
-  sectionHeadingId: string;
   today: Date;
+  isPickup?: boolean;
   events: PearEventAppModel[];
   links: Record<string, PearEventLink[]>;
 }
 
 const props = Astro.props;
-const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>((acc, event) => {
-  const date = new Date(event.date);
-  const month = new Date(date.getFullYear(), date.getMonth(), 1);
-  const key = month.getTime();
-  if (!acc[key]) {
-    acc[key] = [];
-  }
-  acc[key].push(event);
-  return acc;
-}, {});
+
+const groupedEvents = props.events.reduce(
+  (acc, event) => {
+    const monthKey = dateLib.format(event.date, 'YYYY-MM');
+    if (!acc[monthKey]) {
+      acc[monthKey] = [];
+    }
+    acc[monthKey].push(event);
+    return acc;
+  },
+  {} as Record<string, typeof props.events>,
+);
+
+const monthKeys = Object.keys(groupedEvents).sort();
 ---
 
-{
-  Object.entries(eventsByMonth)
-    .sort(([a], [b]) => Number(a) - Number(b))
-    .map(([month, events]) => {
-      const monthDate = new Date(Number(month));
-      return (
-        <>
-          <h3>
-            {monthDate.getFullYear()}年 {monthDate.getMonth() + 1}月
-          </h3>
-          <div class="cardRack">
-            {events.map((event) => (
-              <EventCard today={props.today} event={event} links={props.links[event.id] ?? []} />
-            ))}
-          </div>
-          <p class="text-right">
-            <a href={`#${props.sectionHeadingId}`}>一番上に戻る</a>
-          </p>
-        </>
-      );
-    })
-}
+<div class="accordion_rack">
+  {
+    monthKeys.map((monthKey) => (
+      <>
+        <div class="month-divider">
+          <span class="month-label">
+            {monthKey.split('-')[0]}年 {parseInt(monthKey.split('-')[1], 10)}月
+          </span>
+        </div>
+        {groupedEvents[monthKey].map((event) => (
+          <details class={`accordion${props.isPickup ? ' pickup' : ''}`} open={props.isPickup}>
+            <summary class="summary">
+              <div class="meta">
+                <span class="date">{dateLib.format(event.date, 'YYYY/MM/DD(ddd)')}</span>
+                <span class="prefecture">{eventLib.getPrefecture(event.venue.address, true)}</span>
+              </div>
+              <div class="details">
+                <span class="genre">{eventLib.convertGenre(event.genre)}</span>
+                <span class="name">{event.name}</span>
+              </div>
+            </summary>
+            <div class="content">
+              <EventCard today={props.today} event={event} links={props.links[event.id] ?? []} isPickUp={props.isPickup} />
+            </div>
+          </details>
+        ))}
+      </>
+    ))
+  }
+</div>
 
 <style lang="scss">
-  .cardRack {
-    margin-bottom: 24px;
-    display: grid;
-    gap: 16px;
-
+  .accordion_rack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
     &:last-child {
       margin-bottom: 0;
     }
+  }
 
+  .month-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: var(--border-color);
+    }
+  }
+
+  .month-label {
+    font-size: 0.9em;
+    color: #666;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .accordion {
+    margin: 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    padding: 0;
+
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+
+    &[open] {
+      border-color: #999;
+      background: #fafafa;
+    }
+
+    &.pickup {
+      border-color: var(--pickup-color);
+      &[open] {
+        border-color: var(--pickup-color);
+        background: #fafafa;
+      }
+    }
+  }
+
+  .summary {
+    padding: 12px 16px;
+    cursor: pointer;
+    user-select: none;
+    display: grid;
+    grid-template-columns: 192px 1fr;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95em;
+    transition: background-color 0.2s;
+
+    .accordion[open] & {
+      background-color: #f0f0f0;
+      margin-bottom: 0;
+    }
     @media screen and (max-width: 840px) {
-      gap: 12px;
-      margin-bottom: 20px;
+      grid-template-columns: 120px 1fr;
+    }
+  }
+
+  .date {
+    font-weight: 600;
+    color: var(--primary-brand-color, #333);
+    min-width: 85px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+  }
+
+  .genre {
+    font-size: 0.85em;
+    color: #666;
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 3px;
+    @media screen and (max-width: 840px) {
+      font-size: 0.75em;
+    }
+  }
+
+  .prefecture {
+    display: inline-block;
+    font-size: 0.85em;
+    color: #555;
+    background: #e8f4f8;
+    padding: 2px 8px;
+    border-radius: 3px;
+    min-width: max-content;
+    width: calc(4em + 16px);
+    text-align: center;
+    @media screen and (max-width: 840px) {
+      width: 100%;
+    }
+  }
+
+  .name {
+    displpay: inline-block;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .content {
+    padding: 16px;
+  }
+
+  .meta {
+    display: flex;
+    flex-flow: row;
+    gap: 10px;
+    align-items: center;
+    @media screen and (max-width: 840px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+  }
+  .details {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2px 10px;
+    @media screen and (max-width: 840px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
     }
   }
 
@@ -69,22 +212,6 @@ const eventsByMonth = props.events.reduce<Record<string, PearEventAppModel[]>>((
       &::before {
         margin-left: -1em;
         content: '・';
-      }
-    }
-  }
-
-  .text-right {
-    text-align: right;
-    margin-top: 20px;
-
-    a {
-      font-size: 0.9em;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-
-      &::before {
-        content: '↑';
       }
     }
   }

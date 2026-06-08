@@ -57,7 +57,7 @@ const getVenueAsync = async (venueId: string): Promise<PearVenueDbModel> => {
 
 const convertGenre = (genreType: string): string => {
   if (genreType === 'all-genre') {
-    return '音声合成オールジャンル';
+    return '音声合成オールキャラ';
   }
   return genreType;
 };
@@ -75,7 +75,7 @@ const convertEventType = (eventType: string): { name: string; color: string } =>
     };
   } else if (eventType === 'special') {
     return {
-      name: '特別イベント',
+      name: 'その他のイベント',
       color: '#2d8965',
     };
   }
@@ -99,7 +99,7 @@ const convertEventTypeShorten = (eventType: string): { name: string; color: stri
     };
   } else if (eventType === 'special') {
     return {
-      name: '特別',
+      name: 'その他',
       color: '#2d8965',
     };
   }

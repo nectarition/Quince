@@ -3,6 +3,7 @@ import eventLib from '../libs/event';
 import dateLib from '../libs/date';
 import type { PearEventAppModel, PearEventLink } from '@types';
 import EventTypeLabel from './EventTypeLabel.astro';
+import { Icon } from 'astro-icon';
 
 export interface Props {
   today: Date;
@@ -15,7 +16,7 @@ const { event, today, links, isPickUp } = Astro.props;
 
 const span = Math.floor(dateLib.getSpan(event.date, today.getTime()) / 86400000);
 const eventType = eventLib.convertEventType(event.type);
-const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER)) ;
+const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER));
 ---
 
 <div class="cardWrap" id={event.id}>
@@ -27,18 +28,22 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
         <div class="card_dateArea_day">{dateLib.format(event.date, '(ddd)')}</div>
       </div>
       <div class="card_countArea">
-      {span === 0
-        ? <span class="badge badge-nearly">本日開催</span>
-        : span > 0
-          ? <span class={`badge badge-${span <= 14 ? 'nearly' : 'upcoming'}`}>
+        {
+          span === 0 ? (
+            <span class="badge badge-nearly">本日開催</span>
+          ) : span > 0 ? (
+            <span class={`badge badge-${span <= 14 ? 'nearly' : 'upcoming'}`}>
               <span class="badge-label">あと </span>
               <span class="badge-number">{span}</span>
               <span class="badge-label"> 日</span>
             </span>
-          : <span class="badge badge-ended">{Math.abs(span)} 日前に終了</span>}
+          ) : (
+            <span class="badge badge-ended">{Math.abs(span)} 日前に終了</span>
+          )
+        }
       </div>
     </div>
-    
+
     <div class="card_content">
       <div class="card_header">
         <div class="card_labelArea">
@@ -51,56 +56,69 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
               {event.name}
             </a>
           </h3>
-          {event.pickUpMessage && isPickUp && (
-            <div class="pickUpMessage">
-              <div class="pickUpMessage_content">{event.pickUpMessage}</div>
-            </div>
-          )}
-          {event.subEvents.length > 0 && (
-            <div class="card_eventArea_subEvents">
-              {event.subEvents.map((subEvent) => (
-                <div class="subEvent-item">
-                  <span class="subEvent-genre">{subEvent.genre}</span>
-                  <span class="subEvent-name">
-                    {(
-                      subEvent.url
-                        ? <a href={subEvent.url} target="_blank">{subEvent.name}</a> 
-                        : subEvent.name
-                    )}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        
-        {sortedLinks.length > 0 && (
-          <div class="card_linkArea">
-            <ul class="link-list">
-              {sortedLinks
-                .map((l) => {
-                const limitSpan = l.limit !== null
-                  ? Math.floor(dateLib.getSpan(l.limit, today.getTime()) / 86400000)
-                  : null;
-                return (
-                  <li class="link-item">
-                    <span class="link-item_content">
-                      <a href={l.url} target="_blank" class={!l.limit || (limitSpan ?? -1) >= 0 ? '' : 'link-expired'}>
-                        {!l.limit || (limitSpan ?? -1) >= 0 ? l.name : `${l.name} (締切済)`}
-                      </a>
+          {
+            event.subEvents.length > 0 && (
+              <div class="card_eventArea_subEvents">
+                {event.subEvents.map((subEvent) => (
+                  <div class="subEvent-item">
+                    <span class="subEvent-genre">{subEvent.genre}</span>
+                    <span class="subEvent-name">
+                      {subEvent.url ? (
+                        <a href={subEvent.url} target="_blank">
+                          {subEvent.name}
+                        </a>
+                      ) : (
+                        subEvent.name
+                      )}
                     </span>
-                    {l.limit && limitSpan !== null && limitSpan >= 0 && (
-                      <span class="deadline">
-                        <span class="deadline-date">{dateLib.format(l.limit, 'YYYY/M/D')}</span>
-                        <span class="deadline-remaining">あと {limitSpan} 日</span>
+                  </div>
+                ))}
+              </div>
+            )
+          }
+          {
+            event.pickUpMessage && isPickUp && (
+              <div class="pickUpMessage">
+                <div class="pickUpMessage_content">{event.pickUpMessage}</div>
+              </div>
+            )
+          }
+        </div>
+        {
+          sortedLinks.length > 0 && (
+            <div class="card_linkArea">
+              <ul class="link-list">
+                {sortedLinks.map((l) => {
+                  const limitSpan = l.limit !== null ? Math.floor(dateLib.getSpan(l.limit, today.getTime()) / 86400000) : null;
+                  return (
+                    <li class="link-item">
+                      <span class="link-item_content">
+                        <a href={l.url} target="_blank" class={!l.limit || (limitSpan ?? -1) >= 0 ? '' : 'link-expired'}>
+                          {!l.limit || (limitSpan ?? -1) >= 0 ? l.name : `${l.name} (締切済)`}
+                        </a>
                       </span>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        )}
+                      {l.limit && limitSpan !== null && limitSpan >= 0 && (
+                        <span class="deadline">
+                          <span class="deadline-date">{dateLib.format(l.limit, 'YYYY/M/D')}</span>
+                          <span class="deadline-remaining">あと {limitSpan} 日</span>
+                        </span>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )
+        }
+        {
+          event.bannerURL && isPickUp && (
+            <div class="card_bannerArea">
+              <a href={event.websiteURL}>
+                <img src={event.bannerURL} alt={`${event.name} バナー`} class="card_bannerArea_image" />
+              </a>
+            </div>
+          )
+        }
       </div>
 
       <div class="card_body">
@@ -111,20 +129,28 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
           </div>
           <div class="card_placeArea_placeDetail">
             <a href={`https://www.google.co.jp/maps/search/${encodeURIComponent(event.venue.address)}`} target="_blank">
-              〒{eventLib.convertPostalCode(event.venue.postalCode)} {event.venue.address}
+              〒{eventLib.convertPostalCode(event.venue.postalCode)}
+              {event.venue.address}
             </a>
           </div>
         </div>
 
         <div class="card_remarksArea">
           <div class="card_remarksArea_item">
-            <span class="card_remarksArea_label">備考:</span> {event.remarks}
+            <span class="card_remarksArea_label">備考:</span>
+            {event.remarks}
           </div>
           <div class="card_remarksArea_item">
-            <span class="card_remarksArea_label">運営:</span> {event.organizer.name}
+            <span class="card_remarksArea_label">運営:</span>
+            {event.organizer.name}
           </div>
         </div>
       </div>
+    </div>
+    <div class="card_reportArea">
+      <a href={`https://admin.vo.nrsy.jp/report?eventId=${event.id}`} target="_blank" class="toolTip" data-tooltip="誤りを報告する">
+        <Icon name="ic:outline-flag" />
+      </a>
     </div>
   </article>
 </div>
@@ -137,15 +163,55 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
   .card {
     background: white;
     border-radius: 10px;
-    overflow: hidden;
+    overflow: visible;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     border: 1px solid var(--border-color);
     border-left: 3px solid var(--event-color);
     display: grid;
     grid-template-columns: 140px 1fr;
 
+    position: relative;
+
     @media screen and (max-width: 840px) {
       grid-template-columns: 1fr;
+    }
+
+    &_reportArea {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      color: #c0c0c0;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .toolTip {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      position: relative;
+      color: #c0c0c0;
+      &::after {
+        position: absolute;
+        opacity: 0;
+        content: attr(data-tooltip);
+        bottom: 100%;
+        right: 0;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 6px 8px;
+        border-radius: 4px;
+        font-size: 0.85em;
+        white-space: nowrap;
+        margin-bottom: 8px;
+        transition: opacity 0.2s;
+        pointer-events: none;
+        z-index: 9999;
+      }
+
+      &:hover::after {
+        opacity: 1;
+      }
     }
   }
 
@@ -264,7 +330,8 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
   }
 
   @keyframes pulse {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 1;
     }
     50% {
@@ -345,7 +412,7 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
         color: #666;
         font-size: 0.9em;
         white-space: nowrap;
-        
+
         &::after {
           content: ':';
           margin-left: 1px;
@@ -376,6 +443,14 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
     font-weight: 600;
     color: #666;
     margin-bottom: 8px;
+  }
+
+  .card_bannerArea {
+    text-align: center;
+    &_image {
+      height: 80px;
+      border-radius: 5px;
+    }
   }
 
   .card_placeArea {
@@ -495,6 +570,7 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
 
   .pickUpMessage {
     margin: 10px 0 0 0;
+    margin-bottom: 5px;
     padding: 10px 14px;
     background: linear-gradient(135deg, #fff8e1 0%, #fff3cd 100%);
     border: 1px solid #ffecb3;
