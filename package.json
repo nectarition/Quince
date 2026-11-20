@@ -1,7 +1,7 @@
 {
   "name": "quince",
   "type": "module",
-  "version": "2026.6.0",
+  "version": "2026.11.0",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@astrojs/check": "0.9.6",
+    "@phosphor-icons/web": "^2.1.2",
     "@types/node": "^20.11.24",
     "@types/tsv": "^0.2.4",
     "astro": "5.16.6",
-    "astro-icon": "0.8.0",
     "dayjs": "^1.11.10",
     "firebase-admin": "12.0.0",
     "ical-generator": "^7.1.0",

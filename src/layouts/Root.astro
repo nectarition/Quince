@@ -1,6 +1,6 @@
 ---
 import siteConfig from '../config';
-import { Sprite } from 'astro-icon';
+import '@phosphor-icons/web/bold';
 
 import '../styles/color.scss';
 import '../styles/style.scss';
@@ -50,8 +50,6 @@ const title = (Astro.props.title && `${Astro.props.title} - ${siteName}`) ?? sit
     <title>{title}</title>
   </head>
   <body>
-    <Sprite.Provider>
-      <slot />
-    </Sprite.Provider>
+    <slot />
   </body>
 </html>

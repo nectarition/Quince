@@ -1,31 +1,30 @@
 ---
-import { Sprite } from 'astro-icon';
-type AlertType = 'info' | 'success' | 'warning' | 'error'
+type AlertType = 'info' | 'success' | 'warning' | 'error';
 
 const iconMap: Record<AlertType, string> = {
-  info: 'mdi:information-outline',
-  success: 'mdi:check',
-  warning: 'mdi:warning-outline',
-  error: 'mdi:warning-octagon-outline'
-}
+  info: 'info',
+  success: 'check',
+  warning: 'warning',
+  error: 'warning-octagon',
+};
 
 export interface Props {
-  type: AlertType
-  title: string
+  type: AlertType;
+  title: string;
 }
 
-const props = Astro.props
+const props = Astro.props;
 ---
 
 <div class={`container container-${props.type}`}>
   <div class="header">
     <div class={`header_icon header_icon-${props.type}`}>
-      <Sprite name={iconMap[props.type]} />
+      <i class={`ph-bold ph-${iconMap[props.type]}`}></i>
     </div>
     <div class="header_title">
       {props.title}
     </div>
-  </Header>
+  </div>
   <div class="body">
     <slot />
   </div>
@@ -63,27 +62,24 @@ const props = Astro.props
   .header {
     display: grid;
     grid-template-columns: 24px 1fr;
-    gap: 10px;
+    gap: 5px;
 
     &_icon {
       display: flex;
       align-items: center;
       justify-content: center;
-      svg {
-        width: 24px;
-        height: 24px;
-      }
+      font-size: 24px;
 
-      &-info svg {
+      &-info {
         color: var(--info-color);
       }
-      &-success svg {
+      &-success {
         color: var(--success-color);
       }
-      &-warning svg {
+      &-warning {
         color: var(--warning-color);
       }
-      &-error svg {
+      &-error {
         color: var(--danger-color);
       }
     }
@@ -92,5 +88,6 @@ const props = Astro.props
       font-weight: bold;
     }
   }
-  .body {}
+  .body {
+  }
 </style>
