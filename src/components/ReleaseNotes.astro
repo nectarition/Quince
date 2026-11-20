@@ -8,6 +8,12 @@ interface ReleaseNote {
 
 const releases: ReleaseNote[] = [
   {
+    date: '2026/11/20',
+    version: 'v2026.11.0',
+    title: 'アイコン変更',
+    items: ['一部のアイコンを変更しました'],
+  },
+  {
     date: '2026/06/08',
     version: 'v2026.6.0',
     title: 'デザイン刷新',
@@ -271,11 +277,9 @@ const sortedYears = Object.keys(releasesByYear).sort((a, b) => parseInt(b) - par
       }
 
       &::before {
-        content: '▸';
+        content: '・';
         position: absolute;
         left: 0;
-        color: var(--primary-brand-color);
-        font-weight: bold;
       }
 
       a {

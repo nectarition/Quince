@@ -3,7 +3,6 @@ import eventLib from '../libs/event';
 import dateLib from '../libs/date';
 import type { PearEventAppModel, PearEventLink } from '@types';
 import EventTypeLabel from './EventTypeLabel.astro';
-import { Icon } from 'astro-icon';
 
 export interface Props {
   today: Date;
@@ -149,7 +148,7 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
     </div>
     <div class="card_reportArea">
       <a href={`https://admin.vo.nrsy.jp/report?eventId=${event.id}`} target="_blank" class="toolTip" data-tooltip="誤りを報告する">
-        <Icon name="ic:outline-flag" />
+        <i class="ph-bold ph-flag"></i>
       </a>
     </div>
   </article>
@@ -186,11 +185,15 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
     }
 
     .toolTip {
-      display: inline-block;
-      width: 24px;
-      height: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
       position: relative;
       color: #c0c0c0;
+      &:hover {
+        text-decoration: none;
+      }
       &::after {
         position: absolute;
         opacity: 0;
@@ -201,7 +204,7 @@ const sortedLinks = links.sort((a, b) => (a.order ?? Number.MIN_SAFE_INTEGER) - 
         color: white;
         padding: 6px 8px;
         border-radius: 4px;
-        font-size: 0.85em;
+        font-size: 0.85rem;
         white-space: nowrap;
         margin-bottom: 8px;
         transition: opacity 0.2s;
